@@ -5,7 +5,58 @@ import PythonLib
 #endif
 
 
+extension PyPointer {
+    @inlinable public static var PyNone: PyPointer {
+        Py_IncRef(PythonNone)
+        return PythonNone
+    }
+    @inlinable public static var True: PyPointer {
+        Py_IncRef(PythonTrue)
+        return PythonTrue
+    }
+    @inlinable public static var False: PyPointer {
+        Py_IncRef(PythonFalse)
+        return PythonFalse
+        
+    }
+    
+    public static let StringIO = pythonImport(from: "io", import_name: "StringIO")
+    
+    public var xINCREF: PyPointer {
+            Py_IncRef(self)
+            return self
+        }
+    public var xDECREF: PyPointer {
+        Py_DecRef(self)
+        return self
+    }
+    
+    //@inlinable public static func Dict: Pyk
+}
 
+@inlinable public func PyObject_GetAttr(_ o: PyPointer, _ key: String) -> PyPointer {
+    key.withCString { string in
+        PyObject_GetAttrString(o, string)
+    }
+}
+
+@inlinable public func PyObject_GetAttr(_ o: PyPointer, _ key: CodingKey) -> PyPointer {
+    key.stringValue.withCString { string in
+        PyObject_GetAttrString(o, string)
+    }
+}
+
+@inlinable public func PyObject_HasAttr(_ o: PyPointer, _ key: String) -> Bool {
+    key.withCString { string in
+        PyObject_HasAttrString(o, string) == 1
+    }
+}
+
+@inlinable public func PyObject_HasAttr(_ o: PyPointer, _ key: CodingKey) -> Bool {
+    key.stringValue.withCString { string in
+        PyObject_HasAttrString(o, string) == 1
+    }
+}
 
 extension PythonPointer: Sequence, IteratorProtocol {
 
@@ -32,49 +83,14 @@ extension PythonPointer: Sequence, IteratorProtocol {
     
 }
 
-extension Optional where Wrapped == UnsafeMutablePointer<PyObject> {
-    func both_now() {
-        
-    }
-}
 
 //extension Optional: ExpressibleByStringLiteral where Wrapped == UnsafeMutablePointer<PyObject> {
 //
 //}
 
-extension Optional: ExpressibleByUnicodeScalarLiteral where Wrapped == UnsafeMutablePointer<PyObject> {
-    public typealias UnicodeScalarLiteralType = String
-    @inlinable public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        self = value.pyStringUTF8
-    }
-}
 
-extension Optional: ExpressibleByExtendedGraphemeClusterLiteral where Wrapped == UnsafeMutablePointer<PyObject> {
-    public typealias ExtendedGraphemeClusterLiteralType = String
-    @inlinable public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-        self = value.pyStringUTF8
-    }
-}
 
-extension PythonPointer: ExpressibleByStringLiteral  {
 
-    @inlinable public init(stringLiteral value: StringLiteralType) {
-        self = value.pyStringUTF8
-    }
-}
-
-extension PythonPointer: ExpressibleByArrayLiteral {
-    public typealias ArrayLiteralElement = PythonPointer
-    
-    public init(arrayLiteral elements: PythonPointer...) {
-        let list = PyList_New(elements.count)
-        for (i, element) in elements.enumerated() {
-            //PyList_Append(list, element)
-            PyList_Insert(list, i, element)
-        }
-        self = list
-    }
-}
 
 
 
@@ -178,10 +194,16 @@ extension PythonPointer {
     }
     
     @inlinable public func callAsFunction(method name: String) -> PythonPointer {
-        let name = name.pyStringUTF8
-        let rtn = PyObject_CallMethodNoArgs(self, name)
-        Py_DecRef(name)
-        return rtn
+        name.withCString { string in
+            let key = PyUnicode_FromString(string)
+            let rtn = PyObject_CallMethodNoArgs(self, key)
+            Py_DecRef(key)
+            return rtn
+        }
+//        let name = name.pyStringUTF8
+//        let rtn = PyObject_CallMethodNoArgs(self, name)
+//        Py_DecRef(name)
+//        return rtn
     }
     
 //    @inlinable

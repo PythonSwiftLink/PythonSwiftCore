@@ -80,13 +80,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = String(cString: PyUnicode_AsUTF8(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = String(cString: PyUnicode_AsUTF8(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -96,12 +96,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyUnicode_FromString(newValue)
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyUnicode_FromString(newValue)
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -112,7 +112,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [String] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -133,13 +133,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = PyLong_AsLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = PyLong_AsLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -149,12 +149,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromLong(newValue)
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromLong(newValue)
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -165,7 +165,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [Int] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -186,13 +186,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = PyLong_AsUnsignedLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = PyLong_AsUnsignedLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -202,12 +202,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromUnsignedLong(newValue)
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromUnsignedLong(newValue)
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -218,7 +218,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [UInt] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -239,13 +239,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = PyLong_AsLongLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = PyLong_AsLongLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -255,12 +255,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromLongLong(newValue)
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromLongLong(newValue)
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -271,7 +271,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [Int64] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -292,13 +292,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = PyLong_AsUnsignedLongLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = PyLong_AsUnsignedLongLong(temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -308,12 +308,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromUnsignedLongLong(newValue)
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromUnsignedLongLong(newValue)
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -324,7 +324,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [UInt64] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -345,13 +345,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = Int32(PyLong_AsLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = Int32(PyLong_AsLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -361,12 +361,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromLong(Int(newValue))
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromLong(Int(newValue))
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -377,7 +377,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [Int32] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -398,13 +398,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = UInt32(PyLong_AsUnsignedLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = UInt32(PyLong_AsUnsignedLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -414,12 +414,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromUnsignedLong(UInt(newValue))
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromUnsignedLong(UInt(newValue))
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -430,7 +430,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [UInt32] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -451,13 +451,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = Int16(PyLong_AsLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = Int16(PyLong_AsLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -467,12 +467,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromLong(Int(newValue))
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromLong(Int(newValue))
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -483,7 +483,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [Int16] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -504,13 +504,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = UInt16(PyLong_AsUnsignedLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = UInt16(PyLong_AsUnsignedLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -520,12 +520,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromUnsignedLong(UInt(newValue))
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromUnsignedLong(UInt(newValue))
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -536,7 +536,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [UInt16] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -557,13 +557,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = Int8(PyLong_AsLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = Int8(PyLong_AsLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -573,12 +573,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromLong(Int(newValue))
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromLong(Int(newValue))
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -589,7 +589,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [Int8] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -610,13 +610,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = UInt8(PyLong_AsUnsignedLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = UInt8(PyLong_AsUnsignedLong(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -626,12 +626,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyLong_FromUnsignedLong(UInt(newValue))
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyLong_FromUnsignedLong(UInt(newValue))
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -642,7 +642,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [UInt8] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -663,13 +663,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = Float(PyFloat_AsDouble(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = Float(PyFloat_AsDouble(temp))
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -679,12 +679,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyFloat_FromDouble(Double(newValue))
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyFloat_FromDouble(Double(newValue))
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -695,7 +695,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [Float] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()
@@ -716,13 +716,13 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetItem(self, index)
                 let value = Double(PyFloat_AsDouble(temp))
-                Py_DecRef(temp)
+                ////Py_DecRef(temp)
                 return value
             }
             if PythonTuple_Check(self) {
                 let temp = PyTuple_GetItem(self, index)
                 let value = Double(PyFloat_AsDouble(temp))
-                Py_DecRef(temp)
+                ////Py_DecRef(temp)
                 return value
             }
             fatalError()
@@ -732,12 +732,12 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyFloat_FromDouble(newValue)
                 PyList_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
             if PythonTuple_Check(self) {
                 let temp = PyFloat_FromDouble(newValue)
                 PyTuple_SetItem(self, index, temp)
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
             }
         }
     }
@@ -748,7 +748,7 @@ extension PythonPointer {
             if PythonList_Check(self) {
                 let temp = PyList_GetSlice(self, bounds.lowerBound, bounds.upperBound)
                 let array: [Double] = temp.array()
-                Py_DecRef(temp)
+                //Py_DecRef(temp)
                 return array
             }
             fatalError()

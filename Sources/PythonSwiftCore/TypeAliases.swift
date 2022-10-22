@@ -14,6 +14,11 @@ import PythonLib
 public typealias PythonType = UnsafeMutablePointer<PyTypeObject>?
 public typealias PySwiftObjectPointer = UnsafeMutablePointer<PySwiftObject>?
 public typealias PythonPointer = UnsafeMutablePointer<PyObject>?
+public typealias PyPointer = PythonPointer
+
+protocol PyObjectProtocol {}
+extension PythonPointer: PyObjectProtocol {}
+
 public typealias PythonPointerU = UnsafeMutablePointer<PyObject>
 public typealias PySequenceBuffer = UnsafeBufferPointer<UnsafeMutablePointer<PyObject>?>
 

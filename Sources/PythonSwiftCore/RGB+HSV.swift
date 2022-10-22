@@ -4,9 +4,9 @@
 
 import Foundation
 import CoreGraphics
-#if BEEWARE
-import PythonLib
-#endif
+//#if BEEWARE
+//import PythonLib
+//#endif
 
 // https://www.cs.rit.edu/~ncs/color/t_convert.html
 public struct RGB {
@@ -28,8 +28,9 @@ public struct RGB {
         
         let hue: (Float, Float) -> Float = { max, delta -> Float in
             if r == max { return (g-b)/delta } // between yellow & magenta
-            else if g == max { return 2 + (b-r)/delta } // between cyan & yellow
-            else { return 4 + (r-g)/delta } // between magenta & cyan
+            //else if g == max { return 2.0 + (b-r)/delta } // between cyan & yellow
+            //else { return 4.0 + (r-g)/delta } // between magenta & cyan
+            return 4
         }
         
         let h = hue(max, delta) * 60 // In degrees
