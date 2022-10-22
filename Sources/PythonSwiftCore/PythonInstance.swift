@@ -66,7 +66,7 @@ class PythonInstance {
 
         PyMem_RawFree(wtmp_str)
 
-        print("Initializing Python runtime...")
+        print("Initializing Python runtime...",status)
         status = Py_InitializeFromConfig(&config)
     }
     

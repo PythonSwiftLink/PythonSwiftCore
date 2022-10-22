@@ -14,6 +14,7 @@ import PythonLib
 public class PythonPointerAutoRelease {
     let ptr: PythonPointer
     private let keep: Bool
+    let createdOn = Date()
     
     public init(pointer: PythonPointer, keep: Bool = true) {
         self.ptr = pointer
@@ -31,8 +32,15 @@ public class PythonPointerAutoRelease {
     
     deinit {
         if keep {
+//            let dateFormatter_ = DateFormatter()
+//            dateFormatter_.locale = Locale(identifier: "en_DK")
+//            dateFormatter_.setLocalizedDateFormatFromTemplate("yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+//            print(dateFormatter_.string(from: Date()))
             Py_DecRef(ptr)
-            print("PythonPointerAutoRelease ref count:",ptr ?? "nil", ptr?.pointee.ob_refcnt ?? "ref nil")
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "en_DK")
+            dateFormatter.setLocalizedDateFormatFromTemplate("'T'HH:mm:ssZZZZZ")
+            print("PythonPointerAutoRelease ref count:",ptr ?? "nil", ptr?.pointee.ob_refcnt ?? "ref nil", dateFormatter.string(from: createdOn))
             //print("deinit \(ptr!) ref count is now \(ptr!.pointee.ob_refcnt)")
         }
     }
@@ -76,6 +84,23 @@ public struct PythonObject {
         
     }
     
+    public func IncRef() {
+        Py_IncRef(ptr)
+    }
+    
+    public func DecRef() {
+        Py_DecRef(ptr)
+    }
+    
+    public var xINCREF: PyPointer {
+        Py_IncRef(ptr)
+        return ptr
+    }
+    public var xDECREF: PyPointer {
+        Py_DecRef(ptr)
+        return ptr
+    }
+    
     var module_dict: PythonObject { .init(ptr: PyModule_GetDict(ptr), from_getter: true) }
     
     @inlinable public func callAsFunction(method name: String) -> String {
@@ -101,10 +126,10 @@ public struct PythonObject {
             return obj
         }
         set {
-            if member.withCString({ key in PyObject_SetAttrString(ptr, key, newValue) }) == 0 {
-                
+            let state =  member.withCString({ key -> Int32 in PyObject_SetAttrString(ptr, key, newValue) })
+            if state == 0 {
+                PyErr_Print()
             }
-            
         }
     }
 
@@ -112,10 +137,16 @@ public struct PythonObject {
     
     @inlinable public subscript(dynamicMember member: String) -> PythonObject {
         get {
-            PythonObject(ptr: PyObject_GetAttrString(ptr, member) , from_getter: true)
+            let obj: PythonPointer = member.withCString { key in
+                PyObject_GetAttrString(ptr, key)
+            }
+            return PythonObject(ptr: obj , from_getter: true)
         }
         set {
-            PyObject_SetAttrString(ptr, member, newValue.ptr)
+            let state =  member.withCString({ key -> Int32 in PyObject_SetAttrString(ptr, key, newValue.ptr) })
+            if state == 0 {
+                PyErr_Print()
+            }
         }
     }
     

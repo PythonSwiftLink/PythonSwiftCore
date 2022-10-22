@@ -1289,9 +1289,9 @@ extension String {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyUnicode_FromString(lhs), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyUnicode_FromString(lhs), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyUnicode_FromString(lhs), rhs, Py_NE) == 1
     }
 
@@ -1420,9 +1420,9 @@ extension Int {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(lhs), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(lhs), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromLong(lhs), rhs, Py_NE) == 1
     }
 
@@ -1593,9 +1593,9 @@ extension UInt {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(lhs), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(lhs), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromUnsignedLong(lhs), rhs, Py_NE) == 1
     }
 
@@ -1766,9 +1766,9 @@ extension Int64 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromLongLong(lhs), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromLongLong(lhs), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromLongLong(lhs), rhs, Py_NE) == 1
     }
 
@@ -1939,9 +1939,9 @@ extension UInt64 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLongLong(lhs), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLongLong(lhs), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromUnsignedLongLong(lhs), rhs, Py_NE) == 1
     }
 
@@ -2112,9 +2112,9 @@ extension Int32 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(Int(lhs)), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(Int(lhs)), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromLong(Int(lhs)), rhs, Py_NE) == 1
     }
 
@@ -2285,9 +2285,9 @@ extension UInt32 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(UInt(lhs)), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(UInt(lhs)), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromUnsignedLong(UInt(lhs)), rhs, Py_NE) == 1
     }
 
@@ -2458,9 +2458,9 @@ extension Int16 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(Int(lhs)), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(Int(lhs)), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromLong(Int(lhs)), rhs, Py_NE) == 1
     }
 
@@ -2631,9 +2631,9 @@ extension UInt16 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(UInt(lhs)), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(UInt(lhs)), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromUnsignedLong(UInt(lhs)), rhs, Py_NE) == 1
     }
 
@@ -2804,9 +2804,9 @@ extension Int8 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(Int(lhs)), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromLong(Int(lhs)), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromLong(Int(lhs)), rhs, Py_NE) == 1
     }
 
@@ -2977,9 +2977,9 @@ extension UInt8 {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(UInt(lhs)), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyLong_FromUnsignedLong(UInt(lhs)), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyLong_FromUnsignedLong(UInt(lhs)), rhs, Py_NE) == 1
     }
 
@@ -3150,9 +3150,9 @@ extension Float {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyFloat_FromDouble(Double(lhs)), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyFloat_FromDouble(Double(lhs)), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyFloat_FromDouble(Double(lhs)), rhs, Py_NE) == 1
     }
 
@@ -3323,9 +3323,9 @@ extension Double {
     }
     
     @inlinable static func != (lhs: Self, rhs: PythonPointerU) -> Bool {
-        if rhs == nil {
-            return PyObject_RichCompareBool(PythonNone, PyFloat_FromDouble(lhs), Py_NE) == 1
-        }
+//        if rhs == nil {
+//            return PyObject_RichCompareBool(PythonNone, PyFloat_FromDouble(lhs), Py_NE) == 1
+//        }
         return PyObject_RichCompareBool(PyFloat_FromDouble(lhs), rhs, Py_NE) == 1
     }
 

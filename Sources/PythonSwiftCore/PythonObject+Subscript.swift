@@ -68,22 +68,22 @@ extension PythonPointer {
 //    
 //    }
     
-    @inlinable
-    subscript(index: String) -> PythonPointer {
-        
-        get {
-            if PythonDict_Check(self) { return PyDict_GetItemString(self, index)! }
-            fatalError()
-                // Return an appropriate subscript value here.
-            }
-        set {
-            // Perform a suitable setting action here.
-            if PythonDict_Check(self) { PyDict_SetItemString(self, index, newValue) } else {
-                print("\(String(describing: self))")
-            }
-        }
-    
-    }
+//    @inlinable
+//    subscript(index: String) -> PythonPointer {
+//        
+//        get {
+//            if PythonDict_Check(self) { return PyDict_GetItemString(self, index)! }
+//            fatalError()
+//                // Return an appropriate subscript value here.
+//            }
+//        set {
+//            // Perform a suitable setting action here.
+//            if PythonDict_Check(self) { PyDict_SetItemString(self, index, newValue) } else {
+//                print("\(String(describing: self))")
+//            }
+//        }
+//    
+//    }
     
 //    @inlinable
 //    subscript(index: PythonPointer?) -> PythonPointer? {

@@ -50,17 +50,7 @@ extension UnsafeMutablePointer where Pointee == PythonPointer {
     var test: String {""}
 }
 
-extension Dictionary where Key == String, Value == String {
-    
-    var pythonDict: PythonPointer {
-        let dict = PyDict_New()
-        for (key, value) in self {
-            PyDict_SetItem(dict, key.python_str, value.python_str)
-        }
-        
-        return dict
-    }
-}
+
 
 
 
