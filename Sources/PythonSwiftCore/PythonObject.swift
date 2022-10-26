@@ -27,7 +27,6 @@ public class PythonPointerAutoRelease {
     public init(from_getattr pointer: PythonPointer) {
         ptr = pointer
         self.keep = true
-        print("from_getattr ref count:", ptr?.pointee.ob_refcnt ?? "nil")
     }
     
     deinit {
@@ -37,10 +36,10 @@ public class PythonPointerAutoRelease {
 //            dateFormatter_.setLocalizedDateFormatFromTemplate("yyyy-MM-dd'T'HH:mm:ssZZZZZ")
 //            print(dateFormatter_.string(from: Date()))
             Py_DecRef(ptr)
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_DK")
-            dateFormatter.setLocalizedDateFormatFromTemplate("'T'HH:mm:ssZZZZZ")
-            print("PythonPointerAutoRelease ref count:",ptr ?? "nil", ptr?.pointee.ob_refcnt ?? "ref nil", dateFormatter.string(from: createdOn))
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.locale = Locale(identifier: "en_DK")
+//            dateFormatter.setLocalizedDateFormatFromTemplate("'T'HH:mm:ssZZZZZ")
+//            print("PythonPointerAutoRelease ref count:",ptr ?? "nil", ptr?.pointee.ob_refcnt ?? "ref nil", dateFormatter.string(from: createdOn))
             //print("deinit \(ptr!) ref count is now \(ptr!.pointee.ob_refcnt)")
         }
     }
