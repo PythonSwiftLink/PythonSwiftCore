@@ -83,6 +83,11 @@ public struct PythonObject {
         
     }
     
+    public init(getter ptr: PythonPointer) {
+        self.ptr = ptr
+        object_autorelease = .init(from_getattr: ptr)
+    }
+    
     public func IncRef() {
         Py_IncRef(ptr)
     }
