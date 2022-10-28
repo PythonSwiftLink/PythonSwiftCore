@@ -260,14 +260,6 @@ public struct PythonObject {
 
 
 
-extension PythonObject: ExpressibleByStringLiteral {
-    //public typealias StringLiteralType = String
-    
-    public init(stringLiteral value: String) {
-        self.init(ptr: value.pyStringUTF8)
-    }
-    
-}
 
 
 extension PythonObject {
