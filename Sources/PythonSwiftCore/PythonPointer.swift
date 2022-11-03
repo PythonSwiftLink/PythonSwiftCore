@@ -527,8 +527,8 @@ extension PythonPointer {
 
 extension Bool {
     @inlinable public var object: PythonPointer {
-        if self { return PythonTrue }
-        return PythonFalse
+        if self { return PythonTrue.xINCREF }
+        return PythonFalse.xINCREF
     }
 }
 
