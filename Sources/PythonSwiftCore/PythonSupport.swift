@@ -14,13 +14,14 @@ import PythonLib
 extension String {
     @inlinable public var python_str: PythonPointer { withCString(PyUnicode_FromString) }
     @inlinable public var py_object: PythonPointer { withCString(PyUnicode_FromString) }
-    @inlinable public var py_string: PythonPointer { withCString(PyUnicode_FromString)
+    @inlinable public var py_string: PythonPointer { withCString(PyUnicode_FromString) }
+    @inlinable public var _pyBytes: PythonPointer { withCString(PyBytes_FromString) }
 //        var py_str: PythonPointer = nil
 //        self.withCString { ptr in
 //            py_str = PyUnicode_FromString(ptr)
 //        }
 //        return py_str
-    }
+    
 }
 extension Data {
     @inlinable public var python_str_utf8: PythonPointer { PyUnicode_FromString(String.init(data: self, encoding: .utf8)) }

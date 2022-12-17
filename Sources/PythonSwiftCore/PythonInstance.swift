@@ -78,6 +78,8 @@ class PythonInstance {
 
 
 public struct NewPyObjectTypeFlag {
+    
+    
     //#if os(OSX)
     static public let DEFAULT = UInt(Py_TPFLAGS_DEFAULT)
 //    #elseif os(iOS)

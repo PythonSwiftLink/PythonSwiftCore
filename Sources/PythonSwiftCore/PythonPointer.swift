@@ -20,7 +20,7 @@ extension PyPointer {
         
     }
     
-    public static let StringIO = pythonImport(from: "io", import_name: "StringIO")
+    public static let StringIO: PyPointer = pythonImport(from: "io", import_name: "StringIO")
     
     public var xINCREF: PyPointer {
             Py_IncRef(self)
@@ -232,12 +232,40 @@ extension PythonPointer {
         return PyObject_VectorcallMethod(name, _args , _args.count, nil)
     }
     
+    @inlinable public func callAsFunction(method name: String ,_ arg: PyConvertible) -> PyConvertible {
+        //PyObject_Vectorcall(self, args, arg_count, nil)
+        let py_name = name.pyPointer
+        let v = arg.pyPointer
+        let rtn = PyObject_CallMethodOneArg(self, py_name, v)
+        py_name.decref()
+        v.decref()
+        return rtn
+    }
+    
     @inlinable public func callAsFunction(method name: String ,args: [PythonPointer]) -> PythonPointer {
         //PyObject_Vectorcall(self, args, arg_count, nil)
         var _args = [self]
         let py_name = name.pyStringUTF8
         _args.append(contentsOf: args)
         let rtn = PyObject_VectorcallMethod(py_name, _args , _args.count, nil)
+        py_name.decref()
+        return rtn
+    }
+    
+    @inlinable public func callAsFunction(method name: String ,_ args: [PyConvertible]) -> PyConvertible {
+        //PyObject_Vectorcall(self, args, arg_count, nil)
+        var _args = [self]
+        let py_name = name.pyPointer
+        for a in args {
+            let v = a.pyPointer
+            _args.append(v)
+        }
+        let rtn = PyObject_VectorcallMethod(py_name, _args , _args.count, nil)
+        for a in _args {
+            if a != self {
+                Py_DecRef(a)
+            }
+        }
         py_name.decref()
         return rtn
     }
@@ -252,8 +280,18 @@ extension PythonPointer {
     }
     
     @discardableResult
+    @inlinable public func callAsFunction() -> PyConvertible {
+        PyObject_CallNoArgs(self)
+    }
+    
+    @discardableResult
     @inlinable public func callAsFunction(_ arg: PythonPointer) -> PythonPointer {
         PyObject_CallOneArg(self, arg)
+    }
+    
+    @discardableResult
+    @inlinable public func callAsFunction(_ arg: PyConvertible) -> PyConvertible {
+        PyObject_CallOneArg(self, arg.pyPointer)
     }
     
     
@@ -643,6 +681,7 @@ extension Array where Element == PythonPointer {
         let tuple = PyTuple_New(self.count)
         for (i, element) in self.enumerated() {
             PyTuple_SetItem(tuple, i, element)
+            Py_DecRef(element)
         }
         return tuple
     }
