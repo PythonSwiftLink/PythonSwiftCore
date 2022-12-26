@@ -7,7 +7,9 @@
 
 import Foundation
 
+#if BEEWARE
 import PythonLib
+#endif
 
 
 extension PythonObject: Sequence {

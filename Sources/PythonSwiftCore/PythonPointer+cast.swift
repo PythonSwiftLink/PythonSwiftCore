@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import PythonLib
 
 #if BEEWARE
 import PythonLib

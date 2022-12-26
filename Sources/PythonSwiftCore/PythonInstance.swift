@@ -12,7 +12,53 @@ import PythonLib
 
 
 
+public let pyBuiltins = PyEval_GetBuiltins()
+public let print_obj = PyDict_GetItemString(pyBuiltins, "print")
 
+
+public func pyPrint(_ o: PyPointer) {
+    PyObject_CallOneArg(print_obj, o)
+}
+extension PyPointer {
+    
+    public func IsInstance(_ type: PyPointer) -> Bool {
+        PyObject_IsInstance(self, type) == 1
+    }
+    
+}
+
+extension PythonObject {
+    
+    public func IsInstance(_ type: PyPointer) -> Bool {
+        PyObject_IsInstance(ptr, type) == 1
+    }
+    
+    public func IsInstance(_ type: PythonObject) -> Bool {
+        PyObject_IsInstance(ptr, type.ptr) == 1
+    }
+    
+    public func _print() {
+        PyObject_CallOneArg(print_obj, ptr)
+    }
+    
+    public func print_dict() {
+        let dict: PythonObject = self.__dict__
+        guard dict.ptr != nil else {
+            Swift.print("nil")
+            return
+        }
+        PyObject_CallOneArg(print_obj, dict.ptr)
+    }
+    
+    public func print_dir() {
+        let dir = PyObject_Dir(ptr)
+        pyPrint(dir)
+        dir.decref()
+    }
+    public var isNone: Bool {
+        ptr == PythonNone
+    }
+}
 
 class PythonInstance {
     
@@ -81,7 +127,11 @@ public struct NewPyObjectTypeFlag {
     
     
     //#if os(OSX)
+    #if BEEWARE
     static public let DEFAULT = UInt(Py_TPFLAGS_DEFAULT)
+    #else
+    static public let DEFAULT = UInt(Python_TPFLAGS_DEFAULT)
+    #endif
 //    #elseif os(iOS)
 //    static public let DEFAULT = UInt(Python_TPFLAGS_DEFAULT)
 //    #endif

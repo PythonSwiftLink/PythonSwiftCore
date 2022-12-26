@@ -34,6 +34,27 @@ extension PyPointer {
     //@inlinable public static func Dict: Pyk
 }
 
+public extension PyPointer {
+    init(_ string: String) {
+        self = string.withCString(PyUnicode_FromString)
+    }
+    
+    init(_ v: Int) {
+        self = PyLong_FromLong(v)
+    }
+    
+    init(_ v: Int32) {
+        self = PyLong_FromLong(.init(v))
+    }
+    init(_ v: Double) {
+        self = PyFloat_FromDouble(v)
+    }
+}
+
+public extension Double {
+    
+}
+
 @inlinable public func PyObject_GetAttr(_ o: PyPointer, _ key: String) -> PyPointer {
     key.withCString { string in
         PyObject_GetAttrString(o, string)
@@ -583,6 +604,9 @@ extension Data {
 
 
 extension String {
+    
+    
+    
     @inlinable public var pyStringUTF8: PythonPointer {
         guard let data = self.data(using: .utf8) else { return nil }
         return data.withUnsafeBytes { buf in

@@ -1,8 +1,9 @@
 
 
 import Foundation
+#if BEEWARE
 import PythonLib
-
+#endif
 
 public protocol PyConvertible {
     /// A `PythonObject` instance representing this value.
@@ -17,15 +18,21 @@ public protocol ConvertibleFromPython {
     ///   incompatible (e.g. a Python `string` object cannot be converted into an
     ///   `Int`).
     init(_ object: PythonObject)
-    init(_ ptr: PyPointer)
+    init?(_ ptr: PyPointer)
+    
+}
+
+public protocol ConvertibleFromPython_WithCheck {
+    init?(withCheck p: PyPointer)
 }
 
 
-
 extension PythonObject : PyConvertible, ConvertibleFromPython {
-    public init(_ ptr: PyPointer) {
-        self.init(getter: ptr)
-    }
+    
+    
+//    public init(_ ptr: PyPointer) {
+//        self.init(getter: ptr)
+//    }
     
     public var pyPointer: PyPointer {
         ptr
@@ -40,10 +47,16 @@ extension PythonObject : PyConvertible, ConvertibleFromPython {
         self = object
     }
     
+    public init?(_ ptr: PyPointer) {
+        if ptr == PythonNone {
+            return nil
+        }
+        self = .init(getter: ptr)
+    }
 
 }
 
-extension PyPointer : PyConvertible, ConvertibleFromPython {
+extension PyPointer : PyConvertible, ConvertibleFromPython, ConvertibleFromPython_WithCheck {
     
     
     public var pyObject: PythonObject {
@@ -58,9 +71,21 @@ extension PyPointer : PyConvertible, ConvertibleFromPython {
         self = object.ptr
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        if ptr == PythonNone {
+            return nil
+        }
         self = ptr
     }
+    
+
+    public init?(withCheck p: PyPointer) {
+        if p == PythonNone {
+            return nil
+        }
+        self = p
+    }
+    
     
 }
 
@@ -111,11 +136,13 @@ extension Bool : PyConvertible, ConvertibleFromPython {
             self = false
         }
     }
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
         if ptr == .True {
             self = true
-        } else {
+        } else if ptr == .False {
             self = false
+        } else {
+            return nil
         }
     }
 }
@@ -133,10 +160,16 @@ extension String : PyConvertible, ConvertibleFromPython {
     }
     
     public init(_ object: PythonObject) {
-        self.init(cString: PyUnicode_AsUTF8(object.ptr))
+        if object.isNone {
+            self = "None"
+        } else {
+            self.init(cString: PyUnicode_AsUTF8(object.ptr))
+        }
+        
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonUnicode_Check(ptr) else { return nil }
         self.init(cString: PyUnicode_AsUTF8(ptr))
     }
 }
@@ -154,8 +187,9 @@ extension URL : PyConvertible, ConvertibleFromPython {
         self.init(string: .init(object))!
     }
     
-    public init(_ ptr: PyPointer) {
-        self.init(string: .init(ptr))!
+    public init?(_ ptr: PyPointer) {
+        guard let string = String(ptr) else { return nil }
+        self.init(string: string)
     }
     
     
@@ -175,7 +209,8 @@ extension Int : PyConvertible, ConvertibleFromPython {
         self = PyLong_AsLong(object.ptr)
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self = PyLong_AsLong(ptr)
     }
 }
@@ -194,7 +229,8 @@ extension UInt : PyConvertible, ConvertibleFromPython {
     public init(_ object: PythonObject) {
         self = PyLong_AsUnsignedLong(object.ptr)
     }
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self = PyLong_AsUnsignedLong(ptr)
     }
 }
@@ -213,7 +249,8 @@ extension Int64: PyConvertible, ConvertibleFromPython {
         self = PyLong_AsLongLong(object.ptr)
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self = PyLong_AsLongLong(ptr)
     }
 }
@@ -233,7 +270,8 @@ extension UInt64: PyConvertible, ConvertibleFromPython {
         self.init(PyLong_AsUnsignedLongLong(object.ptr))
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self.init(PyLong_AsUnsignedLongLong(ptr))
     }
 }
@@ -253,7 +291,8 @@ extension Int32: PyConvertible, ConvertibleFromPython {
         self = _PyLong_AsInt(object.ptr)
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self = _PyLong_AsInt(ptr)
     }
 }
@@ -272,7 +311,7 @@ extension UInt32: PyConvertible, ConvertibleFromPython {
         self.init(PyLong_AsUnsignedLong(object.ptr))
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
         self.init(PyLong_AsUnsignedLong(ptr))
     }
 }
@@ -292,7 +331,8 @@ extension Int16: PyConvertible, ConvertibleFromPython {
         self.init(clamping: PyLong_AsLong(object.ptr))
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self.init(clamping: PyLong_AsLong(ptr))
     }
     
@@ -312,7 +352,8 @@ extension UInt16: PyConvertible, ConvertibleFromPython {
     public init(_ object: PythonObject) {
         self.init(clamping: PyLong_AsUnsignedLong(object.ptr))
     }
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self.init(clamping: PyLong_AsUnsignedLong(ptr))
     }
     
@@ -333,7 +374,8 @@ extension Int8: PyConvertible, ConvertibleFromPython {
         self.init(clamping: PyLong_AsLong(object.ptr))
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self.init(clamping: PyLong_AsLong(ptr))
     }
     
@@ -353,7 +395,8 @@ extension UInt8: PyConvertible, ConvertibleFromPython {
     public init(_ object: PythonObject) {
         self.init(clamping: PyLong_AsUnsignedLong(object.ptr))
     }
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonLong_Check(ptr) else { return nil }
         self.init(clamping: PyLong_AsUnsignedLong(ptr))
     }
 }
@@ -376,6 +419,14 @@ extension Double: PyConvertible, ConvertibleFromPython {
     public init(_ ptr: PyPointer) {
         self = PyFloat_AsDouble(ptr)
     }
+    
+    init?(p: PyPointer) {
+        if PythonFloat_Check(p) {
+            self = PyFloat_AsDouble(p)
+        } else {
+            return nil
+        }
+    }
 }
 
 extension Float32: PyConvertible, ConvertibleFromPython {
@@ -392,7 +443,8 @@ extension Float32: PyConvertible, ConvertibleFromPython {
         self.init(PyFloat_AsDouble(object.ptr))
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
+        guard PythonFloat_Check(ptr) else { return nil }
         self.init(PyFloat_AsDouble(ptr))
     }
 }
@@ -400,7 +452,28 @@ extension Float32: PyConvertible, ConvertibleFromPython {
 
 
 
-extension Array : PyConvertible where Element : PyConvertible {
+extension Array : PyConvertible, ConvertibleFromPython where Element : PyConvertible & ConvertibleFromPython {
+    public init?(_ ptr: PyPointer) {
+        if PythonList_Check(ptr) {
+            self = ptr.getBuffer().compactMap(Element.init)
+        } else if PythonTuple_Check(ptr) {
+            self = ptr.getBuffer().compactMap(Element.init)
+        } else {
+            return nil
+        }
+    }
+    
+    public init(_ object: PythonObject) {
+        let ptr = object.ptr
+        if PythonList_Check(ptr) {
+            self = ptr.getBuffer().compactMap(Element.init)
+        } else if PythonTuple_Check(ptr) {
+            self = ptr.getBuffer().compactMap(Element.init)
+        } else {
+            self.init()
+        }
+    }
+    
     public var pyPointer: PyPointer {
         let list = PyList_New(count)
         for (index, element) in enumerated() {
@@ -444,3 +517,6 @@ extension Dictionary<String,PyConvertible>: PyConvertible  {
     
     
 }
+
+
+

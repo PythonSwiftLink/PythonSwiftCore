@@ -22,6 +22,13 @@ extension PythonObject {
             PyList_SetItem(ptr, index, newValue.pyPointer)
         }
     }
+    
+    public var first: PythonObject? {
+        if let element = PySequence_GetItem(ptr, 0) {
+            return .init(ptr: element, keep_alive: true)
+        }
+        return nil
+    }
 }
 
 //extension PythonPointer: Collection {
