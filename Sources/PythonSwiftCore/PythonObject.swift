@@ -27,7 +27,6 @@ public class PythonPointerAutoRelease {
     public init(from_getattr pointer: PythonPointer) {
         ptr = pointer
         self.keep = true
-        print("from_getattr ref count:", ptr?.pointee.ob_refcnt ?? "nil")
     }
     
     deinit {
@@ -37,10 +36,10 @@ public class PythonPointerAutoRelease {
 //            dateFormatter_.setLocalizedDateFormatFromTemplate("yyyy-MM-dd'T'HH:mm:ssZZZZZ")
 //            print(dateFormatter_.string(from: Date()))
             Py_DecRef(ptr)
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_DK")
-            dateFormatter.setLocalizedDateFormatFromTemplate("'T'HH:mm:ssZZZZZ")
-            print("PythonPointerAutoRelease ref count:",ptr ?? "nil", ptr?.pointee.ob_refcnt ?? "ref nil", dateFormatter.string(from: createdOn))
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.locale = Locale(identifier: "en_DK")
+//            dateFormatter.setLocalizedDateFormatFromTemplate("'T'HH:mm:ssZZZZZ")
+//            print("PythonPointerAutoRelease ref count:",ptr ?? "nil", ptr?.pointee.ob_refcnt ?? "ref nil", dateFormatter.string(from: createdOn))
             //print("deinit \(ptr!) ref count is now \(ptr!.pointee.ob_refcnt)")
         }
     }
@@ -64,13 +63,23 @@ public class PythonObjectSlim {
     
 }
 
-
+public protocol PythonConvertible {
+    /// A `PythonObject` instance representing this value.
+    var pythonObject: PythonObject { get }
+}
 
 @dynamicMemberLookup
-//@dynamicCallable
+@dynamicCallable
 public struct PythonObject {
     public let ptr: PythonPointer
     public let object_autorelease: PythonPointerAutoRelease
+    
+    private var _iter: PySequenceBuffer.Iterator? = nil
+    public var iter: PySequenceBuffer.Iterator?
+    //private var iter_count: Int = 0
+    
+    
+    
     
     public init(ptr: PythonPointer, keep_alive: Bool = false, from_getter: Bool = false) {
         //print("initing PythonObject",ptr as Any, ptr!.pointee.ob_refcnt)
@@ -82,6 +91,12 @@ public struct PythonObject {
         }
         
         
+    }
+    //func dynamicallyCall(
+    
+    public init(getter ptr: PythonPointer) {
+        self.ptr = ptr
+        object_autorelease = .init(from_getattr: ptr)
     }
     
     public func IncRef() {
@@ -103,36 +118,28 @@ public struct PythonObject {
     
     var module_dict: PythonObject { .init(ptr: PyModule_GetDict(ptr), from_getter: true) }
     
-    @inlinable public func callAsFunction(method name: String) -> String {
-            let name = name.pyStringUTF8
-            let rtn = PyObject_CallMethodNoArgs(ptr, name)
-            Py_DecRef(name)
-        return rtn.string ?? ""
-        }
-    @inlinable public func callAsFunction() -> String {
- 
-        return PyObject_CallNoArgs(ptr).string ?? ""
-        }
     
     
-    @inlinable public subscript(dynamicMember member: String) -> PythonPointer {
-        get {
-            //guard PyObject_HasAttrString(ptr, member) == 1 else { return nil }
-            let obj: PythonPointer = member.withCString { key in
-                PyObject_GetAttrString(ptr, key)
-            }
-            //let obj: PythonPointer = PyObject_GetAttrString(ptr, member)
-            Py_DecRef(ptr)
-            return obj
-        }
-        set {
-            let state =  member.withCString({ key -> Int32 in PyObject_SetAttrString(ptr, key, newValue) })
-            if state == 0 {
-                PyErr_Print()
-            }
-        }
-    }
-
+//    @inlinable public subscript(dynamicMember member: String) -> PythonPointer {
+//        get {
+//            //guard PyObject_HasAttrString(ptr, member) == 1 else { return nil }
+//            let obj: PythonPointer = member.withCString { key in
+//                PyObject_GetAttrString(ptr, key)
+//            }
+//            //let obj: PythonPointer = PyObject_GetAttrString(ptr, member)
+//            Py_DecRef(ptr)
+//            return obj
+//        }
+//        set {
+//            let state =  member.withCString({ key -> Int32 in PyObject_SetAttrString(ptr, key, newValue) })
+//            if state == 0 {
+//                PyErr_Print()
+//            }
+//        }
+//    }
+//    public func test(_ args: KeyValuePairs<String, PyPointer>) {
+//        
+//    }
     
     
     @inlinable public subscript(dynamicMember member: String) -> PythonObject {
@@ -140,7 +147,7 @@ public struct PythonObject {
             let obj: PythonPointer = member.withCString { key in
                 PyObject_GetAttrString(ptr, key)
             }
-            return PythonObject(ptr: obj , from_getter: true)
+            return .init(getter: obj)
         }
         set {
             let state =  member.withCString({ key -> Int32 in PyObject_SetAttrString(ptr, key, newValue.ptr) })
@@ -149,33 +156,33 @@ public struct PythonObject {
             }
         }
     }
-    
-    @inlinable public subscript(dynamicMember member: String) -> String {
-        get {
-            ptr.string ?? ""
-        }
-        set {
-            let obj = newValue.pyStringUTF8
-            PyObject_SetAttrString(ptr, member, obj)
-            obj.decref()
-        }
-    }
-    
-  
-    
-    @inlinable public subscript(dynamicMember member: String) -> Int {
-        get {
-            let obj = PyObject_GetAttrString(ptr, member)
-            Py_DecRef(obj)
-            return PyLong_AsLong(obj)
-        }
-        set {
-            let obj = PyLong_FromLong(newValue)
-            PyObject_SetAttrString(ptr, member, obj)
-            Py_DecRef(obj)
-        }
-    }
-    
+//    
+//    @inlinable public subscript(dynamicMember member: String) -> String {
+//        get {
+//            ptr.string ?? ""
+//        }
+//        set {
+//            let obj = newValue.pyStringUTF8
+//            PyObject_SetAttrString(ptr, member, obj)
+//            obj.decref()
+//        }
+//    }
+//    
+//  
+//    
+//    @inlinable public subscript(dynamicMember member: String) -> Int {
+//        get {
+//            let obj = PyObject_GetAttrString(ptr, member)
+//            Py_DecRef(obj)
+//            return PyLong_AsLong(obj)
+//        }
+//        set {
+//            let obj = PyLong_FromLong(newValue)
+//            PyObject_SetAttrString(ptr, member, obj)
+//            Py_DecRef(obj)
+//        }
+//    }
+
     
 //    @inlinable public subscript(dynamicMember member: PythonPointer) -> PythonPointer {
 //        get {
@@ -261,17 +268,22 @@ public struct PythonObject {
 
 
 
-extension PythonObject: ExpressibleByStringLiteral {
-    //public typealias StringLiteralType = String
+extension String {
     
-    public init(stringLiteral value: String) {
-        self.init(ptr: value.pyStringUTF8)
+    @inlinable public var pyBytes: PythonObject {
+        .init(getter: withCString(PyBytes_FromString))
+    }
+    @inlinable public var pyUnicode: PythonObject {
+        .init(getter: withCString(PyUnicode_FromString))
     }
     
 }
 
-
 extension PythonObject {
+    
+    static public var None: PythonObject {
+        .init(getter: .PyNone)
+    }
     
     @inlinable public var ref_count: Int { ptr!.pointee.ob_refcnt }
     

@@ -11,6 +11,26 @@ import CoreGraphics
 import PythonLib
 #endif
 
+
+
+extension PythonObject {
+    public subscript(index: Int) -> PyConvertible {
+        get {
+            PyList_GetItem(ptr, index)
+        }
+        set {
+            PyList_SetItem(ptr, index, newValue.pyPointer)
+        }
+    }
+    
+    public var first: PythonObject? {
+        if let element = PySequence_GetItem(ptr, 0) {
+            return .init(ptr: element, keep_alive: true)
+        }
+        return nil
+    }
+}
+
 //extension PythonPointer: Collection {
 // 
 //    
@@ -50,7 +70,7 @@ import PythonLib
 extension PythonPointer {
 
 
-       
+    
 //    @inlinable
 //    public subscript(index: String) -> PythonPointer? {
 //        
