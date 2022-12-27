@@ -22,12 +22,12 @@ extension PythonPointer: PyObjectProtocol {}
 public typealias PythonPointerU = UnsafeMutablePointer<PyObject>
 public typealias PySequenceBuffer = UnsafeBufferPointer<UnsafeMutablePointer<PyObject>?>
 
+public typealias CString = UnsafePointer<CChar>
+public typealias MutableCString = UnsafeMutablePointer<CChar>
 
 public typealias PythonModuleImportFunc = @convention(c) () -> PythonPointer
+public typealias PySwiftModuleImport = (CString, PythonModuleImportFunc)
 
-public typealias CString = UnsafePointer<CChar>
-
-public typealias MutableCString = UnsafeMutablePointer<CChar>
 
 public typealias PyGetter = (@convention(c) (_ s: PythonPointer, _ raw: UnsafeMutableRawPointer?) -> PythonPointer)?
 public typealias PySetter = (@convention(c) (_ s: PythonPointer,_ key: PythonPointer, _ raw: UnsafeMutableRawPointer?) -> Int32)?
