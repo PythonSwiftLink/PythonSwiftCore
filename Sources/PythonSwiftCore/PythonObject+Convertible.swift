@@ -416,7 +416,7 @@ extension Double: PyConvertible, ConvertibleFromPython {
         self = PyFloat_AsDouble(object.ptr)
     }
     
-    public init(_ ptr: PyPointer) {
+    public init?(_ ptr: PyPointer) {
         self = PyFloat_AsDouble(ptr)
     }
     
