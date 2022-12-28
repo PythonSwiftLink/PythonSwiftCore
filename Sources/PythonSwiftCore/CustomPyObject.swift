@@ -329,10 +329,48 @@ class PyBufferProcsHandler {
     
 }
 
+func buf_test() -> CVPixelBuffer? {
+    nil
+}
+
+extension CVPixelBuffer {
+    
+    public func fill_Py_Buffer(s: PyPointer, buf: UnsafeMutablePointer<Py_buffer>) -> Int32 {
+        let element_size = MemoryLayout<UInt8>.size
+        let size = CVPixelBufferGetDataSize(self) * element_size
+        guard let pixel_buf = CVPixelBufferGetBaseAddress(self) else {
+            PyErr_SetString(PyExc_MemoryError, "CVPixelBuffer has no buffer")
+            return -1
+        }
+        buf.pointee.obj = s
+        buf.pointee.buf = pixel_buf
+        buf.pointee.len = size
+        buf.pointee.itemsize = element_size
+        buf.pointee.format = nil
+        buf.pointee.ndim = 1
+        buf.pointee.shape.pointee = MemoryLayout<UInt8>.stride
+        buf.pointee.suboffsets = nil
+        buf.pointee.internal = nil
+        
+        return 0
+    }
+    
+}
+
 let Whatever_Buffer = PyBufferProcsHandler(
     getBuffer: { s, buf, flags in
-    
-        return 1
+        if let buf = buf {
+            let pixels = buf_test()!
+            
+            let result = pixels.fill_Py_Buffer(s: s, buf: buf)
+            if result != -1 {
+                s.incref()
+            }
+            return result
+        }
+        PyErr_SetString(PyExc_ValueError, "view in getbuffer is nil")
+        return -1
+        
     },
     releaseBuffer: { s, buf in
     
