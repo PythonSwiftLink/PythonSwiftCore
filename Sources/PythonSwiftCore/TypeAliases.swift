@@ -49,3 +49,7 @@ public typealias PySequence_Ass_Item_func = (@convention(c) (_ s: PyPointer,_ id
 public typealias PySequence_Contains_func = (@convention(c) (_ s: PyPointer,_ o: PyPointer) -> Int32)?
 public typealias PySequence_Inplace_Concat_func = (@convention(c) (_ lhs: PyPointer,_ rhs: PyPointer) -> PyPointer)?
 public typealias PySequence_Inplace_Repeat_func = (@convention(c) (_ s: PyPointer,_ count: Py_ssize_t) -> PyPointer)?
+
+
+public typealias PyBuf_Get = (@convention(c) (_ s: PyPointer,_ buf: UnsafeMutablePointer<Py_buffer>?,_ flags: Int32) -> Int32)?
+public typealias PyBuf_Release = (@convention(c) (_ s: PyPointer,_ buf: UnsafeMutablePointer<Py_buffer>?) -> Void )?

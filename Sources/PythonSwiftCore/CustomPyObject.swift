@@ -289,40 +289,56 @@ class PyBufferProcsHandler {
     
     let buffer_ptr: UnsafeMutablePointer<PyBufferProcs>
     
-    init() {
+    init(getBuffer: PyBuf_Get, releaseBuffer: PyBuf_Release) {
         
  
-        var pixelBuffer : CVImageBuffer?
-        let status = CVPixelBufferCreate(kCFAllocatorDefault, 0, 0, kCVPixelFormatType_32ARGB, .none, &pixelBuffer)
-        let buffer = CVPixelBufferGetBaseAddress(pixelBuffer!)!
-        let size = 0
+//        var pixelBuffer : CVImageBuffer?
+//        let status = CVPixelBufferCreate(kCFAllocatorDefault, 0, 0, kCVPixelFormatType_32ARGB, .none, &pixelBuffer)
+//        let buffer = CVPixelBufferGetBaseAddress(pixelBuffer!)!
+//        let size = 0
         
         buffer_ptr = .allocate(capacity: 1)
+        
         buffer_ptr.pointee = .init(
-            
-            
-            
-            // same as a function
-            bf_getbuffer: { _self, input_buf, count in
-                
-//                if let buffer = CVPixelBufferGetBaseAddress(pixelBuffer!) {
-//                    var pybuf = Py_buffer()
-//                    PyBuffer_FillInfo(&pybuf, nil, buffer, size , 0, PyBUF_WRITE)
-//                    pybuf.format = nil // becomes uint8 by default
+            bf_getbuffer: getBuffer,
+            bf_releasebuffer: releaseBuffer
+        )
+//        buffer_ptr.pointee = .init(
 //
-//                    input_buf?.pointee = pybuf
 //
-//                    return 0
-//                }
-                return 1
-                
-                
-            }, bf_releasebuffer: { s, buf in
-                
-            })
+//
+//            // same as a function
+//            bf_getbuffer: { _self, input_buf, count in
+//
+////                if let buffer = CVPixelBufferGetBaseAddress(pixelBuffer!) {
+////                    var pybuf = Py_buffer()
+////                    PyBuffer_FillInfo(&pybuf, nil, buffer, size , 0, PyBUF_WRITE)
+////                    pybuf.format = nil // becomes uint8 by default
+////
+////                    input_buf?.pointee = pybuf
+////
+////                    return 0
+////                }
+//                return 1
+//
+//
+//            }, bf_releasebuffer: { s, buf in
+//
+//            })
     }
     
 }
+
+let Whatever_Buffer = PyBufferProcsHandler(
+    getBuffer: { s, buf, flags in
+    
+        return 1
+    },
+    releaseBuffer: { s, buf in
+    
+    }
+)
+
 
 struct PyTypeFunctions {
     let tp_init: initproc!
@@ -335,6 +351,7 @@ struct PyTypeFunctions {
     let tp_call: ternaryfunc!
     let tp_str: reprfunc!
     let tp_repr: reprfunc!
+    let tp_as_buffer: PyBufferProcsHandler
     
 }
 
