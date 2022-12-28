@@ -388,11 +388,14 @@ public final class SwiftPyType {
     let getsets: PyGetSetDefHandler?
     let funcs: PyTypeFunctions
     let sequence: PySequenceMethodsHandler?
+    let buffer: PyBufferProcsHandler?
+    
     init(
         name: String, functions: PyTypeFunctions,
         methods: PyMethodDefHandler?,
         getsets: PyGetSetDefHandler?,
         sequence: PySequenceMethodsHandler? = nil,
+        buffer: PyBufferProcsHandler? = nil,
         module_target: PythonPointer = nil) {
             PyErr_Print()
             print("SwiftPyType:")
@@ -401,7 +404,7 @@ public final class SwiftPyType {
             self.getsets = getsets
             self.funcs = functions
             self.sequence = sequence
-            
+            self.buffer = buffer
             pytype = .allocate(capacity: 1)
             
             createPyType()
@@ -417,6 +420,7 @@ public final class SwiftPyType {
         self.getsets = getsets
         self.funcs = functions
         self.sequence = nil
+        self.buffer = nil
         pytype = .allocate(capacity: 1)
         createPyType()
         //#if os(OSX)
@@ -441,6 +445,9 @@ public final class SwiftPyType {
             py_type.tp_as_sequence = sequence.methods
         }
         
+        if let buffer = buffer {
+            py_type.tp_as_buffer = buffer.buffer_ptr
+        }
         //py_type.tp_members = members
         py_type.tp_flags =  flag.rawValue
         
@@ -483,7 +490,7 @@ public final class SwiftPyType {
 //            return returnPyNone()
 //        }
         //print(String(cString: tp_name))
-        PyErr_Print()
+        //PyErr_Print()
         pytype.pointee = py_type
         
         
