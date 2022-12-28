@@ -351,7 +351,7 @@ struct PyTypeFunctions {
     let tp_call: ternaryfunc!
     let tp_str: reprfunc!
     let tp_repr: reprfunc!
-    let tp_as_buffer: PyBufferProcsHandler
+    //let tp_as_buffer: PyBufferProcsHandler
     
 }
 
