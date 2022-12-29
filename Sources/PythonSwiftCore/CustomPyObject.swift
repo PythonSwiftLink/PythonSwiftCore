@@ -12,7 +12,6 @@ import PythonLib
 
 #endif
 //import PythonSwiftCore
-import CoreMedia
 //#endif
 
 //
@@ -45,10 +44,6 @@ import CoreMedia
 
 public class PyMethodDefWrap {
     
-    
-    
-    
-    
     public struct Flags: RawRepresentable {
         public var rawValue: Int32
         
@@ -64,21 +59,21 @@ public class PyMethodDefWrap {
         public static let COEXIST = Flags(rawValue: METH_COEXIST)!
         public static let FASTCALL = Flags(rawValue: METH_FASTCALL)!
         public static let METHOD = Flags(rawValue: METH_METHOD)!
-
+        
         public static let FAST_KEYWORDS: Flags = FASTCALL | KEYWORDS
         
         public static let METHOD_FAST_KEYWORDS: Flags = METHOD | FASTCALL | KEYWORDS
-//        static let CLASS_NOARGS: Flags = CLASS | NOARGS
-//        static let CLASS_VARARGS: Flags = CLASS | VARARGS
-//        static let CLASS_KEYWORDS: Flags = CLASS | KEYWORDS
-//
-//        static let CLASS_FAST_VARARGS: Flags = CLASS | FASTCALL | VARARGS
-//        static let CLASS_FAST_KEYWORDS: Flags = CLASS | FASTCALL | KEYWORDS
+        //        static let CLASS_NOARGS: Flags = CLASS | NOARGS
+        //        static let CLASS_VARARGS: Flags = CLASS | VARARGS
+        //        static let CLASS_KEYWORDS: Flags = CLASS | KEYWORDS
+        //
+        //        static let CLASS_FAST_VARARGS: Flags = CLASS | FASTCALL | VARARGS
+        //        static let CLASS_FAST_KEYWORDS: Flags = CLASS | FASTCALL | KEYWORDS
         
         public init?(rawValue: Int32) {
             self.rawValue = rawValue
         }
-
+        
         
         public static func |(lhs: Flags, rhs: Flags) -> Int32 {
             return lhs.rawValue | rhs.rawValue
@@ -291,91 +286,16 @@ class PyBufferProcsHandler {
     
     init(getBuffer: PyBuf_Get, releaseBuffer: PyBuf_Release) {
         
- 
-//        var pixelBuffer : CVImageBuffer?
-//        let status = CVPixelBufferCreate(kCFAllocatorDefault, 0, 0, kCVPixelFormatType_32ARGB, .none, &pixelBuffer)
-//        let buffer = CVPixelBufferGetBaseAddress(pixelBuffer!)!
-//        let size = 0
-        
         buffer_ptr = .allocate(capacity: 1)
         
         buffer_ptr.pointee = .init(
             bf_getbuffer: getBuffer,
             bf_releasebuffer: releaseBuffer
         )
-//        buffer_ptr.pointee = .init(
-//
-//
-//
-//            // same as a function
-//            bf_getbuffer: { _self, input_buf, count in
-//
-////                if let buffer = CVPixelBufferGetBaseAddress(pixelBuffer!) {
-////                    var pybuf = Py_buffer()
-////                    PyBuffer_FillInfo(&pybuf, nil, buffer, size , 0, PyBUF_WRITE)
-////                    pybuf.format = nil // becomes uint8 by default
-////
-////                    input_buf?.pointee = pybuf
-////
-////                    return 0
-////                }
-//                return 1
-//
-//
-//            }, bf_releasebuffer: { s, buf in
-//
-//            })
-    }
-    
-}
-
-func buf_test() -> CVPixelBuffer? {
-    nil
-}
-
-extension CVPixelBuffer {
-    
-    public func fill_Py_Buffer(s: PyPointer, buf: UnsafeMutablePointer<Py_buffer>) -> Int32 {
-        let element_size = MemoryLayout<UInt8>.size
-        let size = CVPixelBufferGetDataSize(self) * element_size
-        guard let pixel_buf = CVPixelBufferGetBaseAddress(self) else {
-            PyErr_SetString(PyExc_MemoryError, "CVPixelBuffer has no buffer")
-            return -1
-        }
-        buf.pointee.obj = s
-        buf.pointee.buf = pixel_buf
-        buf.pointee.len = size
-        buf.pointee.itemsize = element_size
-        buf.pointee.format = nil
-        buf.pointee.ndim = 1
-        buf.pointee.shape.pointee = MemoryLayout<UInt8>.stride
-        buf.pointee.suboffsets = nil
-        buf.pointee.internal = nil
         
-        return 0
     }
     
 }
-
-let Whatever_Buffer = PyBufferProcsHandler(
-    getBuffer: { s, buf, flags in
-        if let buf = buf {
-            let pixels = buf_test()!
-            
-            let result = pixels.fill_Py_Buffer(s: s, buf: buf)
-            if result != -1 {
-                s.incref()
-            }
-            return result
-        }
-        PyErr_SetString(PyExc_ValueError, "view in getbuffer is nil")
-        return -1
-        
-    },
-    releaseBuffer: { s, buf in
-    
-    }
-)
 
 
 struct PyTypeFunctions {
@@ -407,11 +327,11 @@ public final class SwiftPyType {
         static func |(lhs: Self, rhs: Self) -> Self {
             .init(rawValue: lhs.rawValue | rhs.rawValue)!
         }
-        #if BEEWARE
+#if BEEWARE
         static public let DEFAULT = TpFlag(rawValue: UInt(Py_TPFLAGS_DEFAULT))!
-        #else
+#else
         static public let DEFAULT = TpFlag(rawValue: UInt(Python_TPFLAGS_DEFAULT))!
-        #endif
+#endif
         
         static let BASE = TpFlag(rawValue: Py_TPFLAGS_BASETYPE)!
         static let GC = TpFlag(rawValue: Py_TPFLAGS_HAVE_GC)!
@@ -450,7 +370,7 @@ public final class SwiftPyType {
             //#if os(OSX)
             //PyModule_AddType(python_handler.python_module, pytype)
             //#endif
-    }
+        }
     
     init(name: String, functions: PyTypeFunctions, methods: PyMethodDefHandler?, getsets: PyGetSetDefHandler?, module_target: PythonPointer ) {
         self.tp_name = makeCString(from: name)
@@ -461,9 +381,7 @@ public final class SwiftPyType {
         self.buffer = nil
         pytype = .allocate(capacity: 1)
         createPyType()
-        //#if os(OSX)
-        //PyModule_AddType(python_handler.python_module, pytype)
-        //#endif
+        
     }
     
     func createPyType(_ flag: TpFlag = .DEFAULT_BASE) {
@@ -493,13 +411,13 @@ public final class SwiftPyType {
         py_type.tp_init = funcs.tp_init
         
         //py_type.tp_vectorcall = nil
-//        py_type.tp_vectorcall = {s, a, n, k  in
-//            print("tp_vectorcall")
-//            pyPrint(s)
-//            pyPrint(a![0])
-//            
-//            return returnPyNone()
-//        }
+        //        py_type.tp_vectorcall = {s, a, n, k  in
+        //            print("tp_vectorcall")
+        //            pyPrint(s)
+        //            pyPrint(a![0])
+        //
+        //            return returnPyNone()
+        //        }
         //py_type.tp_vectorcall_offset = -1
         //py_type.tp_alloc = NewPyObject_Alloc
         py_type.tp_basicsize = PySwiftObject_size
@@ -512,25 +430,7 @@ public final class SwiftPyType {
         py_type.tp_getattro = PyObject_GenericGetAttr
         py_type.tp_setattro = PyObject_GenericSetAttr
         
-//        py_type.tp_repr = { s in
-//            return "name".withCString(PyUnicode_FromString())
-//        }
-//
-//        py_type.tp_str = { s in
-//            return "name"
-//        }
-        
-
-        
-        //py_type
-//        {s, v in
-//            print("getattr", v.printString)
-//            return returnPyNone()
-//        }
-        //print(String(cString: tp_name))
-        //PyErr_Print()
         pytype.pointee = py_type
-        
         
         if PyType_Ready(pytype) < 0 {
             PyErr_Print()
@@ -553,9 +453,9 @@ extension PySwiftObjectPointer {
         }
     }
     
-//    func setSwiftPointer<T: AnyObject>(_ value: T) {
-//        self?.pointee.swift_ptr = Unmanaged.passRetained(value).toOpaque()
-//    }
+    //    func setSwiftPointer<T: AnyObject>(_ value: T) {
+    //        self?.pointee.swift_ptr = Unmanaged.passRetained(value).toOpaque()
+    //    }
 }
 
 extension PythonPointer {
@@ -564,39 +464,39 @@ extension PythonPointer {
     
     
     
-    func getSwiftPointer<T: Hashable>() -> T {
-        let ptr = PySwiftObject_Cast(self).pointee.swift_ptr!
-        return ptr.assumingMemoryBound(to: T.self).pointee
-    }
-    
-//
-//    func getSwiftPointer<T: AnyObject>() -> T {
-//        return Unmanaged<T>.fromOpaque(
-//            PySwiftObject_Cast(self).pointee.swift_ptr
-//        ).takeUnretainedValue()
+//    func getSwiftPointer<T: Hashable>() -> T {
+//        let ptr = PySwiftObject_Cast(self).pointee.swift_ptr!
+//        return ptr.assumingMemoryBound(to: T.self).pointee
 //    }
-    
-    func setSwiftPointer_cls<T: AnyObject>(_ value: T) {
-        PySwiftObject_Cast(self).pointee.swift_ptr = Unmanaged.passUnretained(value).toOpaque()
-    }
-    
-    func setSwiftPointer<T: Hashable>(_ value: T) {
-        let ptr: UnsafeMutablePointer<T> = .allocate(capacity: 1)
-        ptr.pointee = value
-        PySwiftObject_Cast(self).pointee.swift_ptr = .init(ptr)
-    }
-//
-//    func setSwiftPointer<T: AnyObject>(_ value: T) {
-//        PySwiftObject_Cast(self).pointee.swift_ptr = Unmanaged.passRetained(value).toOpaque()
+//    
+//    //
+//    //    func getSwiftPointer<T: AnyObject>() -> T {
+//    //        return Unmanaged<T>.fromOpaque(
+//    //            PySwiftObject_Cast(self).pointee.swift_ptr
+//    //        ).takeUnretainedValue()
+//    //    }
+//    
+//    func setSwiftPointer_cls<T: AnyObject>(_ value: T) {
+//        PySwiftObject_Cast(self).pointee.swift_ptr = Unmanaged.passUnretained(value).toOpaque()
 //    }
+//    
+//    func setSwiftPointer<T: Hashable>(_ value: T) {
+//        let ptr: UnsafeMutablePointer<T> = .allocate(capacity: 1)
+//        ptr.pointee = value
+//        PySwiftObject_Cast(self).pointee.swift_ptr = .init(ptr)
+//    }
+//    //
+//    //    func setSwiftPointer<T: AnyObject>(_ value: T) {
+//    //        PySwiftObject_Cast(self).pointee.swift_ptr = Unmanaged.passRetained(value).toOpaque()
+//    //    }
     
     func releaseSwiftPointer<T: AnyObject>(_ value: T.Type) {
         PySwiftObject_Cast(self).releaseSwiftPointer(value)
     }
     
-//    func releaseSwiftPointer<T: AnyObject>() {
-////        Unmanaged<T>.fromOpaque(
-////            PySwiftObject_Cast(self).pointee.swift_ptr
-////        )
-//    }
+    //    func releaseSwiftPointer<T: AnyObject>() {
+    ////        Unmanaged<T>.fromOpaque(
+    ////            PySwiftObject_Cast(self).pointee.swift_ptr
+    ////        )
+    //    }
 }
