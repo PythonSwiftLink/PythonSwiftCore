@@ -76,7 +76,7 @@ extension PyPointer: ExpressibleByDictionaryLiteral {
     
     public typealias Value = PyPointer
     
-    public init(dictionaryLiteral elements: (Key, Value)...) {
+    public init(dictionaryLiteral elements: (Key, PyPointer)...) {
         self = PyDict_New()
         for (k, v) in elements {
             k.withCString{ key -> Void in
