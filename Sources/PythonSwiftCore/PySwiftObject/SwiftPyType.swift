@@ -5,7 +5,20 @@ import PythonLib
 #endif
 
 
-struct PyTypeFunctions {
+public struct PyTypeFunctions {
+    public init(tp_init: initproc? = nil, tp_new: newfunc? = nil, tp_dealloc: destructor? = nil, tp_getattr: getattrfunc? = nil, tp_setattr: setattrfunc? = nil, tp_as_number: UnsafeMutablePointer<PyNumberMethods>? = nil, tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>? = nil, tp_call: ternaryfunc? = nil, tp_str: reprfunc? = nil, tp_repr: reprfunc? = nil) {
+        self.tp_init = tp_init
+        self.tp_new = tp_new
+        self.tp_dealloc = tp_dealloc
+        self.tp_getattr = tp_getattr
+        self.tp_setattr = tp_setattr
+        self.tp_as_number = tp_as_number
+        self.tp_as_sequence = tp_as_sequence
+        self.tp_call = tp_call
+        self.tp_str = tp_str
+        self.tp_repr = tp_repr
+    }
+    
     let tp_init: initproc!
     let tp_new: newfunc!
     let tp_dealloc: destructor!
@@ -47,7 +60,7 @@ public final class SwiftPyType {
     }
     
     let tp_name: UnsafePointer<CChar>!
-    let pytype: UnsafeMutablePointer<PyTypeObject>
+    public let pytype: UnsafeMutablePointer<PyTypeObject>
     
     let methods: PyMethodDefHandler?
     let getsets: PyGetSetDefHandler?
@@ -55,7 +68,7 @@ public final class SwiftPyType {
     let sequence: PySequenceMethodsHandler?
     let buffer: PyBufferProcsHandler?
     
-    init(
+    public init(
         name: String, functions: PyTypeFunctions,
         methods: PyMethodDefHandler?,
         getsets: PyGetSetDefHandler?,
@@ -79,7 +92,7 @@ public final class SwiftPyType {
             //#endif
         }
     
-    init(name: String, functions: PyTypeFunctions, methods: PyMethodDefHandler?, getsets: PyGetSetDefHandler?, module_target: PythonPointer ) {
+    public init(name: String, functions: PyTypeFunctions, methods: PyMethodDefHandler?, getsets: PyGetSetDefHandler?, module_target: PythonPointer ) {
         self.tp_name = makeCString(from: name)
         self.methods = methods
         self.getsets = getsets

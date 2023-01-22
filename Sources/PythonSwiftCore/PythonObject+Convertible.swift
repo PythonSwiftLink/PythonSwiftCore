@@ -155,7 +155,7 @@ extension Data: ConvertibleFromPython, PyConvertible {
     }
     
     public init(object: PyPointer) throws {
-        self.init()
+        self = object.memoryViewAsData() ?? .init()
     }
 }
 

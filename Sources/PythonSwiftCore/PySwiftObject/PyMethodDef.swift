@@ -119,7 +119,7 @@ public class PyMethodDefWrap {
 
 public class PyMethodDefHandler {
     
-    let methods_ptr: UnsafeMutablePointer<PyMethodDef>
+    public let methods_ptr: UnsafeMutablePointer<PyMethodDef>
     var methods_container: [PyMethodDefWrap]
     
     public init(methods: [PyMethodDefWrap]) {

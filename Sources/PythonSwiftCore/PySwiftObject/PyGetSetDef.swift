@@ -5,12 +5,12 @@ import PythonLib
 #endif
 
 
-class PyGetSetDefWrap {
+public final class PyGetSetDefWrap {
     let name: UnsafePointer<CChar>
     let doc_string: UnsafePointer<CChar>!
     let getset: PyGetSetDef
     
-    init(name: String, doc: String? = nil, getter: PyGetter) {
+    public init(name: String, doc: String? = nil, getter: PyGetter) {
         let _name: UnsafePointer<CChar> = .init(makeCString(from: name))
         self.name = _name
         var _doc_string: UnsafePointer<CChar>!
@@ -22,7 +22,7 @@ class PyGetSetDefWrap {
         getset = .init(name: _name, get: getter, set: nil, doc: _doc_string, closure: nil)
     }
     
-    init(name: String, doc: String? = nil, getter: PyGetter, setter: PySetter) {
+    public init(name: String, doc: String? = nil, getter: PyGetter, setter: PySetter) {
         let _name: UnsafePointer<CChar> = .init(makeCString(from: name))
         self.name = _name
         var _doc_string: UnsafePointer<CChar>!
@@ -34,7 +34,7 @@ class PyGetSetDefWrap {
         getset = .init(name: _name, get: getter, set: setter, doc: _doc_string, closure: nil)
     }
     // self: PySwiftObjectPointer
-    init(pySwift name: String, doc: String? = nil, getter: PySwiftGetter) {
+    public init(pySwift name: String, doc: String? = nil, getter: PySwiftGetter) {
         let _name: UnsafePointer<CChar> = .init(makeCString(from: name))
         self.name = _name
         var _doc_string: UnsafePointer<CChar>!
@@ -46,7 +46,7 @@ class PyGetSetDefWrap {
         getset = .init(name: _name, get: unsafeBitCast(getter, to: PyGetter.self), set: nil, doc: _doc_string, closure: nil)
     }
     
-    init(pySwift name: String, doc: String? = nil, getter: PySwiftGetter, setter: PySwiftSetter) {
+    public init(pySwift name: String, doc: String? = nil, getter: PySwiftGetter, setter: PySwiftSetter) {
         let _name: UnsafePointer<CChar> = .init(makeCString(from: name))
         self.name = _name
         var _doc_string: UnsafePointer<CChar>!
@@ -65,12 +65,12 @@ class PyGetSetDefWrap {
     }
 }
 
-class PyGetSetDefHandler {
+public final class PyGetSetDefHandler {
     
     let getsets_ptr: UnsafeMutablePointer<PyGetSetDef>
     var getsets_container: [PyGetSetDefWrap]
     
-    init(getsets: [PyGetSetDefWrap]) {
+    public init(getsets: [PyGetSetDefWrap]) {
         
         getsets_container = getsets
         let count = getsets.count
@@ -81,7 +81,7 @@ class PyGetSetDefHandler {
         getsets_ptr[count] = .init()
     }
     
-    init(_ getsets: PyGetSetDefWrap...) {
+    public init(_ getsets: PyGetSetDefWrap...) {
         
         getsets_container = getsets
         let count = getsets.count

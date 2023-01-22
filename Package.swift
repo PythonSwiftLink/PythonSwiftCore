@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "PythonSwiftCore",
-    platforms: [.macOS(.v11)],
+    platforms: [.macOS(.v11), .iOS(.v13)],
     products: [
 //        .library(
 //            name: "PythonSwiftCore",
@@ -20,8 +20,8 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         //.package(path: "../PythonLib"),
-        //.package(url: "https://github.com/PythonSwiftLink/PythonLib", branch: "iOS"),
-        .package(path: "../PythonLib")
+        .package(url: "https://github.com/PythonSwiftLink/PythonLib", branch: "main"),
+        //.package(path: "../PythonLib")
         //.package(url: "https://github.com/PythonSwiftLink/PythonLib-iOS", branch: "main")
     ],
     targets: [
