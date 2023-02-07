@@ -20,7 +20,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         //.package(path: "../PythonLib"),
-        .package(url: "https://github.com/PythonSwiftLink/PythonLib", branch: "main"),
+        .package(url: "https://github.com/PythonSwiftLink/PythonLib", from: "0.1.0"),
         //.package(path: "../PythonLib")
         //.package(url: "https://github.com/PythonSwiftLink/PythonLib-iOS", branch: "main")
     ],
