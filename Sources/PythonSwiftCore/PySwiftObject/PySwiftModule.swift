@@ -25,13 +25,13 @@ import PythonLib
 
 public class PyModuleDefHandler {
     
-    let name: UnsafePointer<CChar>
+    public let name: UnsafePointer<CChar>
     
-    let module: UnsafeMutablePointer<PyModuleDef>!
+    public let module: UnsafeMutablePointer<PyModuleDef>!
     
     private let methods: PyMethodDefHandler?
     
-    init(name: String, methods: PyMethodDefHandler?) {
+    public init(name: String, methods: PyMethodDefHandler?) {
         self.name = makeCString(from: name)
         self.methods = methods
         module = .allocate(capacity: 1)
@@ -51,21 +51,3 @@ public class PyModuleDefHandler {
     
 }
 
-
-fileprivate let fib_module = PyModuleDefHandler(
-    name: "fib",
-    methods: nil
-)
-fileprivate let py_module = fib_module.module
-
-func PyInitFib() -> PythonPointer {
-    
-    if let m = Py_Module_Create(py_module) {
-        
-        //PyModule_AddObject(m, "fib", "")
-        //PyModule_AddType(m, <#T##type: UnsafeMutablePointer<PyTypeObject>!##UnsafeMutablePointer<PyTypeObject>!#>)
-        
-        return m
-    }
-    return nil
-}

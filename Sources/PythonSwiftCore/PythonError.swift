@@ -77,3 +77,82 @@ public func PyErr_Printer() -> PyScriptError {
     
 }
 
+
+
+public enum PythonError: Error {
+    case unicode
+    case long
+    case float
+    case call
+    case attribute
+    case index
+    case sequence
+}
+
+extension PythonError: PyConvertible {
+    public var pyObject: PythonObject {
+        .init(getter: pyPointer)
+    }
+    public var pyPointer: PyPointer {
+        switch self {
+            
+        case .unicode:
+            return PyExc_UnicodeError
+        case .long:
+            return PyExc_MemoryError
+        case .float:
+            return PyExc_FloatingPointError
+        case .call:
+            return PyExc_RuntimeError
+        case .attribute:
+            return PyExc_AttributeError
+        case .index:
+            return PyExc_IndexError
+        case .sequence:
+            return PyExc_BufferError
+        }
+    }
+    
+}
+
+extension Error {
+    public func pyExceptionError() {
+        localizedDescription.withCString { PyErr_SetString(PyExc_Exception, $0) }
+    }
+}
+
+extension PythonError {
+    public func triggerError(_ msg: String) {
+        msg.withCString { PyErr_SetString(pyPointer, $0) }
+    }
+}
+
+
+extension String {
+    
+}
+
+
+
+// example
+
+fileprivate func PythonToSwift(input: PythonPointer) -> PythonPointer {
+    
+    let nargs = Int.random(in: 0...16)
+    do {
+        guard nargs > 0 else { throw PythonError.call }
+        try String(object: input) // throws Unicode error
+    }
+    catch let err as PythonError {
+        switch err {
+        case .call: err.triggerError("wanted \(5) got \(nargs)")
+        default: err.triggerError("PythonToSwift fucked up")
+        }
+        return nil
+    }
+    catch let other_error {
+        other_error.pyExceptionError()
+        return nil
+    }
+    return .PyNone
+}

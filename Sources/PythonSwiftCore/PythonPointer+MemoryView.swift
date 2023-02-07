@@ -95,7 +95,7 @@ extension CVPixelBuffer {
     }
 }
 
-extension Data {
+public extension Data {
     @inlinable
     mutating func withMemoryView(_ completion: @escaping (PythonPointer)->Void ) -> Void  {
         let size = self.count //* uint8_size
@@ -111,7 +111,7 @@ extension Data {
     }
     
     @inlinable
-    mutating func memoryView() -> PythonPointer {
+    public mutating func memoryView() -> PythonPointer {
         let size = self.count //* uint8_size
         let buffer = self.withUnsafeMutableBytes {$0.baseAddress}
         var pybuf = Py_buffer()
@@ -120,7 +120,7 @@ extension Data {
     }
     
     @inlinable
-    mutating func pythonBytes() -> PythonPointer {
+    public mutating func pythonBytes() -> PythonPointer {
         let size = self.count //* uint8_size
         let buffer = self.withUnsafeMutableBytes {$0.baseAddress}
         var pybuf = Py_buffer()
