@@ -63,7 +63,45 @@ extension PythonObject {
 //        
 //        return .init(getter: nil)
 //    }
-//    
+//
+    
+    @discardableResult
+    public func dynamicallyCall<R: ConvertibleFromPython>(withKeywordArguments args: KeyValuePairs<String, PyConvertible>) throws -> R {
+        //var keys = [PyPointer]()
+        var values = [PyPointer]()
+        let kw = PyDict_New()
+        
+        for (key,value) in args {
+            let v = value.pyPointer
+            if key.isEmpty {
+                //PyTuple_SetItem(tuple, i, v)
+                values.append(value.pyPointer)
+                continue
+            }
+            PyDict_SetItem(kw, key, v)
+            Py_DecRef(v)
+            
+            
+        }
+        let tuple = PyTuple_New(values.count)
+        for (i, element) in values.enumerated() {
+            PyTuple_SetItem(tuple, i, element)
+            Py_DecRef(element)
+        }
+        //print(ptr.printString)
+        let result = PyObject_VectorcallDict(ptr, values, values.count, kw)
+        if result == nil {
+            PyErr_Print()
+        }
+        //let result = PyObject_Call(ptr, tuple, kw)
+        //for k in keys { Py_DecRef(k) }
+        for v in values { Py_DecRef(v)}
+        Py_DecRef(tuple)
+        Py_DecRef(kw)
+        let rtn = try R(object: result)
+        result?.decref()
+        return rtn
+    }
     
     @discardableResult
     public func dynamicallyCall(withKeywordArguments args: KeyValuePairs<String, PyConvertible>) -> PyConvertible {
