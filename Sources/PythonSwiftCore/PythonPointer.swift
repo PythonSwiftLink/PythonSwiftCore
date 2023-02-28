@@ -113,7 +113,14 @@ extension PythonPointer: Sequence, IteratorProtocol {
 
 
 
-
+extension PythonPointerU {
+    @inlinable public func decref() {
+        Py_DecRef(self)
+    }
+    @inlinable public func incref() {
+        Py_IncRef(self)
+    }
+}
 
 extension PythonPointer {
     
@@ -325,11 +332,11 @@ extension PythonPointer {
 //    }
     
     
-    @inlinable public func callAsFunction(_ args: PythonPointer...){
+    @inlinable public func callAsFunction(_ args: PyPointer...) -> PyPointer {
         PyObject_Vectorcall(self, args, args.count, nil)
     }
     
-    @inlinable public func callAsFunction(_ args: [PythonPointer]){
+    @inlinable public func callAsFunction(_ args: [PythonPointer]) -> PyPointer {
         PyObject_Vectorcall(self, args, args.count, nil)
     }
     
