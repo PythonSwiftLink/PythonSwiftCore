@@ -66,7 +66,7 @@ extension PythonObject {
 //
     
     @discardableResult
-    public func dynamicallyCall<R: ConvertibleFromPython>(withKeywordArguments args: KeyValuePairs<String, PyConvertible>) throws -> R {
+    public func dynamicallyCall<R: ConvertibleFromPython, T: PyConvertible>(withKeywordArguments args: KeyValuePairs<String, T>) throws -> R {
         //var keys = [PyPointer]()
         var values = [PyPointer]()
         let kw = PyDict_New()

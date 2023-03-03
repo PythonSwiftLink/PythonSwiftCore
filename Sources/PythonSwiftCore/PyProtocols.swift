@@ -4,6 +4,21 @@ import Foundation
 import PythonLib
 #endif
 
+
+
+public protocol PyConvertible {
+    
+    var pyObject: PythonObject { get }
+    var pyPointer: PyPointer { get }
+}
+
+
+public protocol ConvertibleFromPython {
+    
+    init(object: PyPointer) throws
+}
+
+
 public protocol PyBufferProtocol {
     func __buffer__(s: PyPointer, buffer: UnsafeMutablePointer<Py_buffer>) -> Int32
 }
