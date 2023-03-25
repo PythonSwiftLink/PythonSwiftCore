@@ -4,6 +4,17 @@ import PythonLib
 #endif
 
 
+
+extension PyConvertible {
+    
+    @inlinable static public func < (lhs: Self, rhs: PythonPointer) -> Bool {
+        let l = lhs.pyPointer
+        let result = PyObject_RichCompareBool(lhs.pyPointer, rhs, Py_LT) == 1
+        Py_DecRef(l)
+        return result
+    }
+}
+
 extension PythonPointer {
 
 //    @inlinable static func == (lhs: Self, rhs: PythonPointer) -> Bool {

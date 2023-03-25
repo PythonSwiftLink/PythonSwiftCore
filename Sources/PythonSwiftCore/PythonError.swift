@@ -19,6 +19,23 @@ import PythonLib
 //    return (type,value,tb)
 //}
 
+
+extension Error {
+    public var pyPointer: PyPointer {
+        localizedDescription.pyPointer
+    }
+}
+
+extension Optional where Wrapped == Error {
+    public var pyPointer: PyPointer {
+        if let this = self {
+            return this.localizedDescription.pyPointer
+        }
+        return .PyNone
+    }
+}
+
+
 public func PyErr_Printer(_ com: @escaping (_ type: PyPointer,_ value: PyPointer,_ tb: PyPointer) -> () ) {
     var type: PyPointer = nil
     var value: PyPointer = nil
@@ -60,14 +77,15 @@ public func PyErr_Printer() -> PyScriptError {
     var text = ""
     
     PyErr_Printer { type, value, tb in
-        except_string = PyTuple_GetItem(value, 0).string ?? ""
-        let line_tuple = PyTuple_GetItem(value, 1)
-
-        line_no = PyTuple_GetItem(line_tuple, 1).int
-        start = PyTuple_GetItem(line_tuple, 2).int
-        text = PyTuple_GetItem(line_tuple, 3).string ?? ""
-        end = PyTuple_GetItem(line_tuple, 5).int
-        
+        do {
+            except_string = try PyTuple_GetItem(value, 0)
+            let line_tuple = PyTuple_GetItem(value, 1)
+            
+            line_no = try PyTuple_GetItem(line_tuple, 1)
+            start = try PyTuple_GetItem(line_tuple, 2)
+            text = try PyTuple_GetItem(line_tuple, 3)
+            end = try PyTuple_GetItem(line_tuple, 5)
+        } catch _ { }
     }
     //print(except_string)
     text.removeFirst()

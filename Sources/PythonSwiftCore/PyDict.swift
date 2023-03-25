@@ -74,9 +74,19 @@ extension PyPointer {
         }
     }
     
+    subscript<T: ConvertibleFromPython & PyConvertible>(index: String) -> T? {
+        get {
+            index.withCString { try? T(object: PyDict_GetItemString(self, $0) ) }
+        }
+        set(newValue) {
+            guard let newValue = newValue else { return }
+            _ = index.withCString { PyDict_SetItemString(self, $0, newValue.pyPointer) }
+        }
+    }
+    
     subscript(index: String) -> String {
         get {
-            index.withCString { PyDict_GetItemString(self, $0).string ?? "<Null>" }
+            index.withCString { (try? String(object: PyDict_GetItemString(self, $0) )) ?? "<Null>" }
         }
         set(newValue) {
             let item = newValue.withCString(PyUnicode_FromString)
@@ -108,7 +118,7 @@ extension PythonObject {
     
     subscript(index: String) -> String {
         get {
-            index.withCString { PyDict_GetItemString(ptr, $0).string ?? "<Null>" }
+            index.withCString { (try? String(object: PyDict_GetItemString(ptr, $0) )) ?? "<Null>" }
         }
         set(newValue) {
             let item = newValue.withCString(PyUnicode_FromString)

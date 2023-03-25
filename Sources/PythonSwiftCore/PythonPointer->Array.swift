@@ -83,7 +83,7 @@ extension PythonPointer {
         var array = [String]()
         array.reserveCapacity(buffer.count)
         for element in buffer {
-            guard let str = element.string else {
+            guard let str = try? String(object: element) else {
                 print("Sequence contains none PyUnicode item")
                 return []
             }

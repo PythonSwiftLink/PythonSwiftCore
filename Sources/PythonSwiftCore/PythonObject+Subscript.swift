@@ -124,57 +124,57 @@ extension PythonPointer {
 }
 
 extension PythonPointer {
-    @inlinable public func append(_ value: Int) { PyList_Append(self, value.python_int) }
-    @inlinable public func append(_ value: UInt) { PyList_Append(self, value.python_int) }
-    @inlinable public func append<T: SignedInteger>(_ value: T) { PyList_Append(self, value.python_int) }
-    @inlinable public func append<T: UnsignedInteger>(_ value: T) { PyList_Append(self, value.python_int) }
+    @inlinable public func append(_ value: Int) { PyList_Append(self, value.pyPointer) }
+    @inlinable public func append(_ value: UInt) { PyList_Append(self, value.pyPointer) }
+//    @inlinable public func append<T: SignedInteger>(_ value: T) { PyList_Append(self, value) }
+//    @inlinable public func append<T: UnsignedInteger>(_ value: T) { PyList_Append(self, value.python_int) }
     //func append(_ value: String) { PyList_Append(self, value.python_str) }
-    @inlinable public func append(_ value: Double) { PyList_Append(self, value.python_float) }
-    @inlinable public func append(_ value: Float) { PyList_Append(self, value.python_float) }
+//    @inlinable public func append(_ value: Double) { PyList_Append(self, value.python_float) }
+//    @inlinable public func append(_ value: Float) { PyList_Append(self, value.python_float) }
     #if os(iOS)
-    @available(iOS 14, *)
-    @inlinable public func append(_ value: Float16) { PyList_Append(self, value.python_float) }
+//    @available(iOS 14, *)
+//    @inlinable public func append(_ value: Float16) { PyList_Append(self, value.python_float) }
     #endif
-    @inlinable public func append(_ value: CGFloat) { PyList_Append(self, value.python_float) }
+//    @inlinable public func append(_ value: CGFloat) { PyList_Append(self, value.python_float) }
     
     
     //Content of:
     @inlinable public func append(contentsOf: [Int]) {
-        for value in contentsOf { PyList_Append(self, value.python_int) }
+        for value in contentsOf { PyList_Append(self, value.pyPointer) }
     }
     @inlinable public func append(contentsOf: [UInt]) {
-        for value in contentsOf { PyList_Append(self, value.python_int) }
+        for value in contentsOf { PyList_Append(self, value.pyPointer) }
     }
     
-    @inlinable public func append<T: SignedInteger>(contentsOf: [T]) {
-        for value in contentsOf { PyList_Append(self, value.python_int) }
-    }
-    @inlinable public func append<T: UnsignedInteger>(contentsOf: [T]) {
-        for value in contentsOf { PyList_Append(self, value.python_int) }
-    }
+//    @inlinable public func append<T: SignedInteger>(contentsOf: [T]) {
+//        for value in contentsOf { PyList_Append(self, value.description.pyPointer) }
+//    }
+//    @inlinable public func append<T: UnsignedInteger>(contentsOf: [T]) {
+//        for value in contentsOf { PyList_Append(self, value.py) }
+//    }
     
-    @inlinable public func append(contentsOf: [Double]) {
-        for value in contentsOf { PyList_Append(self, value.python_float) }
-    }
+//    @inlinable public func append(contentsOf: [Double]) {
+//        for value in contentsOf { PyList_Append(self, value.python_float) }
+//    }
     
-    @inlinable public func append(contentsOf: [Float]) {
-        for value in contentsOf { PyList_Append(self, value.python_float) }
-    }
+//    @inlinable public func append(contentsOf: [Float]) {
+//        for value in contentsOf { PyList_Append(self, value.python_float) }
+//    }
 #if os(iOS)
-    @available(iOS 14, *)
-    @inlinable public func append(contentsOf: [Float16]) {
-        for value in contentsOf { PyList_Append(self, value.python_float) }
-    }
+//    @available(iOS 14, *)
+//    @inlinable public func append(contentsOf: [Float16]) {
+//        for value in contentsOf { PyList_Append(self, value.python_float) }
+//    }
     #endif
-    @inlinable public func append(contentsOf: [CGFloat]) {
-        for value in contentsOf { PyList_Append(self, value.python_float) }
-    }
-    @inlinable public func append(contentsOf: Data) {
-        for value in contentsOf { PyList_Append(self, value.python_int) }
-    }
-    @inlinable public func append(contentsOf: [String]) {
-        //for value in contentsOf { PyList_Append(self, value.python_str) }
-    }
+//    @inlinable public func append(contentsOf: [CGFloat]) {
+//        for value in contentsOf { PyList_Append(self, value) }
+//    }
+//    @inlinable public func append(contentsOf: Data) {
+//        for value in contentsOf { PyList_Append(self, value.python_int) }
+//    }
+//    @inlinable public func append(contentsOf: [String]) {
+//        //for value in contentsOf { PyList_Append(self, value.python_str) }
+//    }
     @inlinable public func append(contentsOf: [PythonPointer]) {
         for value in contentsOf { PyList_Append(self, value) }
     }

@@ -307,6 +307,14 @@ extension Array : PyConvertible where Element : PyConvertible & ConvertibleFromP
         return .init(getter: list)
     }
     
+    @inlinable public var pythonTuple: PythonPointer {
+        let tuple = PyTuple_New(self.count)
+        for (i, element) in self.enumerated() {
+            PyTuple_SetItem(tuple, i, element.pyPointer)
+        }
+        return tuple
+    }
+    
 }
 
 
