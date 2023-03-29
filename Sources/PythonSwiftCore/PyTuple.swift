@@ -11,3 +11,8 @@ import PythonLib
 #endif
 
 
+@inlinable public func PyTuple_GetItem<R: ConvertibleFromPython>(_ object: PyPointer,_ index: Int) throws -> R {
+    
+    return try R(object: PyTuple_GetItem(object, index))
+    
+}

@@ -33,7 +33,9 @@ let package = Package(
                 //"PythonLib-iOS",
                 //.product(name: "PythonLib-iOS", package: "PythonLib-iOS", condition: .when(platforms: [.iOS])),
             ],
-            
+            resources: [
+                
+            ],
             swiftSettings: [ .define("BEEWARE", nil)]
         ),
 //        .target(
@@ -42,8 +44,8 @@ let package = Package(
 //            path: "./Sources/PythonSwiftCore",
 //            swiftSettings: [ .define("BEEWARE", nil)]
 //        )
-//        .testTarget(
-//            name: "PSL_CoreTests",
-//            dependencies: ["PSL_Core"]),
+        .testTarget(
+            name: "PythonSwiftCoreTests",
+            dependencies: ["PythonSwiftCore","PythonLib"]),
     ]
 )

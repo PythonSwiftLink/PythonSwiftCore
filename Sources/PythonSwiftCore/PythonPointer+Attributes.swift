@@ -3,6 +3,9 @@ import PythonLib
 #endif
 extension PythonPointer {
     
+
+    
+    
     @inlinable
     public func set(key: String, value: PythonPointer) {
         PyObject_SetAttrString(self, key, value)
@@ -279,13 +282,13 @@ extension PythonPointer {
     }
 
     
-    @inlinable
-    public func get(key: String) -> String {
-        let attr = key.withCString { PyObject_GetAttrString(self, $0) }
-        let value = attr.string//String(cString: PyUnicode_AsUTF8(attr))
-        Py_DecRef(attr)
-        return value ?? ""
-    }
+//    @inlinable
+//    public func get(key: String) -> String {
+//        let attr = key.withCString { PyObject_GetAttrString(self, $0) }
+//        let value = attr.string//String(cString: PyUnicode_AsUTF8(attr))
+//        Py_DecRef(attr)
+//        return value ?? ""
+//    }
 
     @inlinable
     public func get(key: PythonPointerU) -> String {

@@ -14,14 +14,14 @@ import PythonLib
 extension PythonPointer: ExpressibleByUnicodeScalarLiteral {
     public typealias UnicodeScalarLiteralType = String
     @inlinable public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        self = value.pyStringUTF8
+        self = value.withCString(PyUnicode_FromString)
     }
 }
 
 extension Optional: ExpressibleByExtendedGraphemeClusterLiteral where Wrapped == UnsafeMutablePointer<PyObject> {
     public typealias ExtendedGraphemeClusterLiteralType = String
     @inlinable public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-        self = value.pyStringUTF8
+        self = value.withCString(PyUnicode_FromString)
     }
 }
 

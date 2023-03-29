@@ -91,49 +91,44 @@ extension PythonPointer: Sequence, IteratorProtocol {
     @inlinable
         public func getBuffer() -> UnsafeBufferPointer<PythonPointer> {
             let fast_list = PySequence_Fast(self, nil)
-            //PySequence_Fast(UnsafeMutablePointer<PyObject>!, UnsafePointer<CChar>!)
             let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
             let fast_items = PythonSequence_Fast_ITEMS(fast_list)
             let buffer = PySequenceBuffer(start: fast_items, count: list_count)
-            //buffer.makeIterator()
-//            defer {
-//                print("Dec Ref \(fast_list)")
             Py_DecRef(fast_list)
             return buffer
         }
     
+    @inlinable public var sequence: UnsafeBufferPointer<PythonPointer> {
+        let fast_list = PySequence_Fast(self, nil)
+        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
+        let fast_items = PythonSequence_Fast_ITEMS(fast_list)
+        let buffer = PySequenceBuffer(start: fast_items, count: list_count)
+        Py_DecRef(fast_list)
+        return buffer
+    }
 }
 
 
-//extension Optional: ExpressibleByStringLiteral where Wrapped == UnsafeMutablePointer<PyObject> {
-//
-//}
 
 
 
-
-
-
+extension PythonPointerU {
+    @inlinable public func decref() {
+        Py_DecRef(self)
+    }
+    @inlinable public func incref() {
+        Py_IncRef(self)
+    }
+}
 
 extension PythonPointer {
     
-    @inlinable public var int: Int { PyLong_AsLong(self) }
-    @inlinable public var uint: UInt { PyLong_AsUnsignedLong(self)}
-    @inlinable public var int32: Int32 { Int32(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var uint32: UInt32 { UInt32(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var int16: Int16 { Int16(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var uint16: UInt16 { UInt16(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var short: Int16 { Int16(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var ushort: UInt16 { UInt16(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var int8: Int8 { Int8(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var uint8: UInt8 { UInt8(clamping: PyLong_AsUnsignedLong(self)) }
-    @inlinable public var double: Double { PyFloat_AsDouble(self) }
-    @inlinable public var float: Float { Float(PyFloat_AsDouble(self)) }
-    @inlinable public var bool: Bool { return PyObject_IsTrue(self) == 1}
-    
-    @inlinable public var string: String? {
+    @inlinable public var unicodeString: String? {
         
-        guard let ptr = PythonUnicode_DATA(self) else { return nil }
+        guard
+            PythonUnicode_Check(self),
+            let ptr = PythonUnicode_DATA(self)
+        else { return nil }
         
         let kind = PythonUnicode_KIND(self)
         let length = PyUnicode_GetLength(self)
@@ -160,12 +155,12 @@ extension PythonPointer {
     
     
     
-    @inlinable public var jsonData: Data? {
+    @inlinable public var unicodeData: Data? {
         guard let ptr = PythonUnicode_DATA(self) else { return nil }
         return Data(bytes: ptr, count: PyUnicode_GetLength(self))
     }
     
-    @inlinable public var jsonDataNoCopy: Data? {
+    @inlinable public var unicodeDataNoCopy: Data? {
         guard let ptr = PythonUnicode_DATA(self) else { return nil }
         return Data(bytesNoCopy: ptr, count: PyUnicode_GetLength(self), deallocator: .none)
     }
@@ -203,154 +198,9 @@ extension PythonPointer {
 //        PyObject_CallMethodNoArgs(self, name)
 //    }
     
-    @discardableResult
-    @inlinable public func callAsFunction(method name: PythonPointer) -> PythonPointer {
-        PyObject_CallMethodNoArgs(self, name)
-    }
-    
-    @inlinable public func callAsFunction(method name: String) {
-        let name = name.pyStringUTF8
-        PyObject_CallMethodNoArgs(self, name)
-        Py_DecRef(name)
-    }
-    
-    @inlinable public func callAsFunction(method name: String) -> PythonPointer {
-        name.withCString { string in
-            let key = PyUnicode_FromString(string)
-            let rtn = PyObject_CallMethodNoArgs(self, key)
-            Py_DecRef(key)
-            return rtn
-        }
-//        let name = name.pyStringUTF8
-//        let rtn = PyObject_CallMethodNoArgs(self, name)
-//        Py_DecRef(name)
-//        return rtn
-    }
-    
-//    @inlinable
-//    func callAsFunction(method name: PythonPointer ,args: [PythonPointer]) -> Void {
-//        //PyObject_Vectorcall(self, args, arg_count, nil)
-//        var _args = [self]
-//        _args.append(contentsOf: args)
-//        PyObject_VectorcallMethod(name, _args , _args.count, nil)
-//    }
-    
-    @inlinable public func callAsFunction(method name: String ,args: [PythonPointer]) {
-        //PyObject_Vectorcall(self, args, arg_count, nil)
-        var _args = [self]
-        let py_name = name.pyStringUTF8
-        _args.append(contentsOf: args)
-        PyObject_VectorcallMethod(py_name, _args , _args.count, nil)
-        py_name.decref()
-        
-    }
-    
-    @discardableResult
-    @inlinable public func callAsFunction(method name: PythonPointer ,args: [PythonPointer]) -> PythonPointer {
-        //PyObject_Vectorcall(self, args, arg_count, nil)
-        var _args = [self]
-        _args.append(contentsOf: args)
-        return PyObject_VectorcallMethod(name, _args , _args.count, nil)
-    }
-    
-    @inlinable public func callAsFunction(method name: String ,_ arg: PyConvertible) -> PyConvertible {
-        //PyObject_Vectorcall(self, args, arg_count, nil)
-        let py_name = name.pyPointer
-        let v = arg.pyPointer
-        let rtn = PyObject_CallMethodOneArg(self, py_name, v)
-        py_name.decref()
-        v.decref()
-        return rtn
-    }
-    
-    @inlinable public func callAsFunction(method name: String ,args: [PythonPointer]) -> PythonPointer {
-        //PyObject_Vectorcall(self, args, arg_count, nil)
-        var _args = [self]
-        let py_name = name.pyStringUTF8
-        _args.append(contentsOf: args)
-        let rtn = PyObject_VectorcallMethod(py_name, _args , _args.count, nil)
-        py_name.decref()
-        return rtn
-    }
-    
-    @inlinable public func callAsFunction(method name: String ,_ args: [PyConvertible]) -> PyConvertible {
-        //PyObject_Vectorcall(self, args, arg_count, nil)
-        var _args = [self]
-        let py_name = name.pyPointer
-        for a in args {
-            let v = a.pyPointer
-            _args.append(v)
-        }
-        let rtn = PyObject_VectorcallMethod(py_name, _args , _args.count, nil)
-        for a in _args {
-            if a != self {
-                Py_DecRef(a)
-            }
-        }
-        py_name.decref()
-        return rtn
-    }
-    
-    @inlinable public func callAsFunction(_ args: [PythonPointer], arg_count: Int) {
-        PyObject_Vectorcall(self, args, arg_count, nil)
-    }
-    
-    @discardableResult
-    @inlinable public func callAsFunction() -> PythonPointer {
-        PyObject_CallNoArgs(self)
-    }
-    
-    @discardableResult
-    @inlinable public func callAsFunction() -> PyConvertible {
-        PyObject_CallNoArgs(self)
-    }
-    
-    @discardableResult
-    @inlinable public func callAsFunction(_ arg: PythonPointer) -> PythonPointer {
-        PyObject_CallOneArg(self, arg)
-    }
-    
-    @discardableResult
-    @inlinable public func callAsFunction(_ arg: PyConvertible) -> PyConvertible {
-        PyObject_CallOneArg(self, arg.pyPointer)
-    }
-    
-    
-//    @inlinable public func callAsFunction() -> Void {
-//        PyObject_CallNoArgs(self)
-//    }
-//    
-//    @inlinable public func callAsFunction(_ arg: PythonPointer) -> Void {
-//        PyObject_CallOneArg(self, arg)
-//    }
-    
-    
-    @inlinable public func callAsFunction(_ args: PythonPointer...){
-        PyObject_Vectorcall(self, args, args.count, nil)
-    }
-    
-    @inlinable public func callAsFunction(_ args: [PythonPointer]){
-        PyObject_Vectorcall(self, args, args.count, nil)
-    }
-    
-    @inlinable public func callAsFunction(_ args: [PythonPointer], arg_names: PythonPointer){
-        PyObject_Vectorcall(self, args, args.count, arg_names)
-    }
-    
-    @inlinable public func callAsFunction(_ args: PythonPointer..., arg_names: PythonPointer){
-        PyObject_Vectorcall(self, args, args.count, nil)
-    }
-    
-    @inlinable public func withCall(_ code: @escaping ()->[PythonPointer] ) -> PythonPointer {
-        let args = code()
-        return PyObject_Vectorcall(self, args, args.count, nil)
-    }
+
 }
 
-extension String {
-    
-    
-}
 
 
 public enum PythonUnicode_Kind: UInt32 {
@@ -645,61 +495,61 @@ extension Data {
     }
 }
 
-extension SignedInteger {
-    @inlinable public var python_int: PythonPointer {PyLong_FromLong(Int(self)) }
-    @inlinable public var pyInt: PythonPointer {PyLong_FromLong(Int(self)) }
-    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
-}
-
-extension UnsignedInteger {
-    @inlinable public var python_int: PythonPointer { PyLong_FromUnsignedLong(UInt(self)) }
-    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
-}
-
-extension Int {
-    @inlinable public var python_int: PythonPointer { PyLong_FromLong(self) }
-    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
-}
-
-extension UInt {
-    @inlinable public var python_int: PythonPointer { PyLong_FromUnsignedLong(self) }
-    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
-
-}
-
-extension Double {
-    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(self) }
-    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
-}
-
-extension Float {
-    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(Double(self)) }
-    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
-}
-#if os(iOS)
-@available(iOS 14, *)
-extension Float16 {
-    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(Double(self)) }
-    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
-}
-#endif
-extension CGFloat {
-    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(self) }
-    //var python_str: PythonPointer { PyUnicode_FromString("\(self)") }
-}
+//extension SignedInteger {
+//    @inlinable public var python_int: PythonPointer {PyLong_FromLong(Int(self)) }
+//    @inlinable public var pyInt: PythonPointer {PyLong_FromLong(Int(self)) }
+//    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
+//}
+//
+//extension UnsignedInteger {
+//    @inlinable public var python_int: PythonPointer { PyLong_FromUnsignedLong(UInt(self)) }
+//    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
+//}
+//
+//extension Int {
+//    @inlinable public var python_int: PythonPointer { PyLong_FromLong(self) }
+//    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
+//}
+//
+//extension UInt {
+//    @inlinable public var python_int: PythonPointer { PyLong_FromUnsignedLong(self) }
+//    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
+//
+//}
+//
+//extension Double {
+//    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(self) }
+//    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
+//}
+//
+//extension Float {
+//    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(Double(self)) }
+//    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
+//}
+//#if os(iOS)
+//@available(iOS 14, *)
+//extension Float16 {
+//    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(Double(self)) }
+//    //var python_str: PythonPointer { PyUnicode_FromString(String(self)) }
+//}
+//#endif
+//extension CGFloat {
+//    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(self) }
+//    //var python_str: PythonPointer { PyUnicode_FromString("\(self)") }
+//}
 
 
 extension Array where Element == PythonPointer {
     
     
-    
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, element)
-        }
-        return list
-    }
+//
+//    @inlinable public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, element)
+//        }
+//        return list
+//    }
     
     @inlinable public var pythonTuple: PythonPointer {
         let tuple = PyTuple_New(self.count)
