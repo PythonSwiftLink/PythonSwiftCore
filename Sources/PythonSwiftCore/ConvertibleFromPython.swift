@@ -48,7 +48,6 @@ extension Bool : ConvertibleFromPython {
             self = false
         } else {
             throw PythonError.attribute
-            return
         }
         
     }
