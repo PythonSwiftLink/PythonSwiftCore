@@ -12,9 +12,11 @@ python3.10 -m venv venv
 . venv/bin/activate
 pip install git+https://github.com/PythonSwiftLink/kivy-ios
 
+toolchain build swiftonize
+toolchain build pythonswiftlink
 toolchain build python3 
 toolchain build kivy
-toolchain build swiftonize
+
 ```
 
 # temporary test folder for this tutorial
