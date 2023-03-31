@@ -10,19 +10,29 @@ cd my_ios_folder
 
 python3.10 -m venv venv
 . venv/bin/activate
+
 pip install git+https://github.com/PythonSwiftLink/kivy-ios
-pip install git+
+pip install git+https://github.com/PythonSwiftLink/SwiftTools
+
+deactivate
+```
+
+```
+. venv/bin/activate
+toolchain build swiftonize
+toolchain build pythonswiftcore
+
 toolchain build python3 
 toolchain build kivy
-toolchain build swiftonize
 ```
+
+
 
 ##### temporary test folder for this tutorial
 
 ```
 mkdir py_src
 touch py_src/main.py
-
 
 toolchain create my_app py_src
 toolchain xcode my_app-ios
