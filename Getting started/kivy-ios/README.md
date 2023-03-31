@@ -11,25 +11,18 @@ cd my_ios_folder
 python3.10 -m venv venv
 . venv/bin/activate
 pip install git+https://github.com/PythonSwiftLink/kivy-ios
-
+pip install git+
 toolchain build python3 
 toolchain build kivy
 toolchain build swiftonize
 ```
 
-<<<<<<< Updated upstream
-# temporary test folder for this tutorial
+##### temporary test folder for this tutorial
 
-```shell
-mkdir py_src
-touch py_src/main.py
-toolchain create my_app py_src
-```
-=======
 ```
 mkdir py_src
 touch py_src/main.py
->>>>>>> Stashed changes
+
 
 toolchain create my_app py_src
 toolchain xcode my_app-ios
@@ -37,7 +30,7 @@ toolchain xcode my_app-ios
 
 
 
-everytime u add a new wrapper.py to wrapper_sources
+everytime u add a new wrapper.py to wrapper_sources inside **my_app-ios/**
 
 run this:
 
