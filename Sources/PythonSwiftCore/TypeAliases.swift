@@ -26,7 +26,7 @@ public typealias CString = UnsafePointer<CChar>
 public typealias MutableCString = UnsafeMutablePointer<CChar>
 
 public typealias PythonModuleImportFunc = @convention(c) () -> PythonPointer
-public typealias PySwiftModuleImport = (CString, PythonModuleImportFunc)
+//public typealias PySwiftModuleImport = (CString, PythonModuleImportFunc)
 
 
 public typealias PyGetter = (@convention(c) (_ s: PythonPointer, _ raw: UnsafeMutableRawPointer?) -> PythonPointer)?
