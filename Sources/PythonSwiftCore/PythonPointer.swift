@@ -79,14 +79,8 @@ public extension Double {
     }
 }
 
-extension PythonPointer: Sequence, IteratorProtocol {
 
-    public typealias Element = PythonPointer
-    public typealias Iterator = PythonPointer
-    @inlinable
-    public mutating func next() -> PythonPointer? {
-        PyIter_Next(self)
-    }
+extension PythonPointer {
     
     @inlinable
         public func getBuffer() -> UnsafeBufferPointer<PythonPointer> {
@@ -100,9 +94,10 @@ extension PythonPointer: Sequence, IteratorProtocol {
     
     @inlinable public var sequence: UnsafeBufferPointer<PythonPointer> {
         let fast_list = PySequence_Fast(self, nil)
-        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
-        let fast_items = PythonSequence_Fast_ITEMS(fast_list)
-        let buffer = PySequenceBuffer(start: fast_items, count: list_count)
+        let buffer = PySequenceBuffer(
+            start: PythonSequence_Fast_ITEMS(fast_list),
+            count: PythonSequence_Fast_GET_SIZE(fast_list)
+        )
         Py_DecRef(fast_list)
         return buffer
     }

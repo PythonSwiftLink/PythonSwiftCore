@@ -4,42 +4,42 @@ import PythonLib
 #endif
 extension PythonPointer {
 
-    @inlinable
-    public func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
+//    @inlinable
+//    public func map<T>(_ transform: (Element) throws -> T) rethrows -> [T] {
+//
+//        let fast_list = PySequence_Fast(self, "fastMap only accepts Lists or Tuples")
+//        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
+//        let fast_items = PythonSequence_Fast_ITEMS(fast_list)
+//        let buffer = UnsafeBufferPointer(start: fast_items,
+//                                         count: list_count)
+//        let initialCapacity = list_count
+//        var result = ContiguousArray<T>()
+//        result.reserveCapacity(initialCapacity)
+//        for element in buffer {
+//            guard let element = element else {return []}
+//            result.append(try transform(element))
+//        }
+//        Py_DecRef(fast_list)
+//        return Array(result)
+//    }
 
-        let fast_list = PySequence_Fast(self, "fastMap only accepts Lists or Tuples")
-        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
-        let fast_items = PythonSequence_Fast_ITEMS(fast_list)
-        let buffer = UnsafeBufferPointer(start: fast_items,
-                                         count: list_count)
-        let initialCapacity = list_count
-        var result = ContiguousArray<T>()
-        result.reserveCapacity(initialCapacity)
-        for element in buffer {
-            guard let element = element else {return []}
-            result.append(try transform(element))
-        }
-        Py_DecRef(fast_list)
-        return Array(result)
-    }
 
-
-    @inlinable
-    public func map2<T>( _ transform: (Element) throws -> T) rethrows -> [T] {
-        let initialCapacity = underestimatedCount
-        var result = ContiguousArray<T>()
-        result.reserveCapacity(initialCapacity)
-
-        let fast_list = PySequence_Fast(self, "fastMap only accepts Lists or Tuples")
-        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
-        let fast_items = PythonSequence_Fast_ITEMS(fast_list)!
-        //let buffer = UnsafeBufferPointer(start: fast_items, count: list_count)
-        for i in 0..<list_count {
-            result.append(try transform(fast_items[i]!))
-        }
-        Py_DecRef(fast_list)
-        return Array(result)
-    }
+//    @inlinable
+//    public func map2<T>( _ transform: (Element) throws -> T) rethrows -> [T] {
+//        let initialCapacity = underestimatedCount
+//        var result = ContiguousArray<T>()
+//        result.reserveCapacity(initialCapacity)
+//
+//        let fast_list = PySequence_Fast(self, "fastMap only accepts Lists or Tuples")
+//        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
+//        let fast_items = PythonSequence_Fast_ITEMS(fast_list)!
+//        //let buffer = UnsafeBufferPointer(start: fast_items, count: list_count)
+//        for i in 0..<list_count {
+//            result.append(try transform(fast_items[i]!))
+//        }
+//        Py_DecRef(fast_list)
+//        return Array(result)
+//    }
 
 
     @inlinable

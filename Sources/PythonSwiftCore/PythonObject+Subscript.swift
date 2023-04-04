@@ -225,11 +225,11 @@ extension PythonPointer {
         PyList_Insert(self, i, PyFloat_FromDouble(Double(newElement)))
     }
     #endif
-    @inlinable public mutating func insert<C>(contentsOf newElements: C, at i: Int) where C : Collection, Element == C.Element {
-        for element in newElements {
-            PyList_Insert(self, i, element)
-        }
-    }
+//    @inlinable public mutating func insert<C>(contentsOf newElements: C, at i: Int) where C : Collection, Element == C.Element {
+//        for element in newElements {
+//            PyList_Insert(self, i, element)
+//        }
+//    }
     
     @inlinable public mutating func insert<C>(contentsOf newElements: C, at i: Int) where C : Collection, C.Element == String {
         for element in newElements {
