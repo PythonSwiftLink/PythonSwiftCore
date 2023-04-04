@@ -11,5 +11,6 @@ In addition, PythonSwiftLink allows for two-way communication between Python and
 
 Overall, PythonSwiftLink provides developers with a powerful toolkit for creating robust and efficient applications that leverage the strengths of both Python and Swift. Whether building machine learning models, developing data-driven iOS apps, or creating web applications with Flask and Swift, this bridging framework offers a powerful solution for seamless integration between the two languages.
 
+[Getting started - Kivy-ios](Getting%20started/kivy-ios/README.md)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/psychowasp)
