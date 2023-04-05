@@ -69,3 +69,5 @@ https://github.com/PythonSwiftLink/SwiftTools/tree/main/src/swift_tools/standard
 examples of wrapping an existing apple class directly 
 
 https://github.com/PythonSwiftLink/SwiftTools/tree/main/src/swift_tools/apple
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/psychowasp)
