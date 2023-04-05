@@ -20,8 +20,6 @@ deactivate
 
 ```
 . venv/bin/activate
-toolchain build swiftonize
-toolchain build pythonswiftcore
 
 toolchain build swiftonize
 toolchain build pythonswiftcore
