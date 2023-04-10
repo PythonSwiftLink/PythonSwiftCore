@@ -11,6 +11,8 @@ import PythonLib
 #endif
 
 
+
+
 extension PythonObject {
 //    @inlinable public func callAsFunction(method name: String) -> String {
 //        let name = name.pyStringUTF8
@@ -68,7 +70,7 @@ extension PythonObject {
     @discardableResult
     public func dynamicallyCall<R: ConvertibleFromPython, T: PyConvertible>(withKeywordArguments args: KeyValuePairs<String, T>) throws -> R {
         //var keys = [PyPointer]()
-        var values = [PyPointer]()
+        var values = [PyPointer?]()
         let kw = PyDict_New()
         
         for (key,value) in args {
@@ -89,9 +91,10 @@ extension PythonObject {
             Py_DecRef(element)
         }
         //print(ptr.printString)
-        let result = PyObject_VectorcallDict(ptr, values, values.count, kw)
-        if result == nil {
+        guard let result = PyObject_VectorcallDict(ptr, values, values.count, kw) else {
+        //if result == nil {
             PyErr_Print()
+            throw PythonError.call
         }
         //let result = PyObject_Call(ptr, tuple, kw)
         //for k in keys { Py_DecRef(k) }
@@ -99,14 +102,14 @@ extension PythonObject {
         Py_DecRef(tuple)
         Py_DecRef(kw)
         let rtn = try R(object: result)
-        result?.decref()
+        result.decref()
         return rtn
     }
     
     @discardableResult
-    public func dynamicallyCall(withKeywordArguments args: KeyValuePairs<String, PyConvertible>) -> PyConvertible {
+    public func dynamicallyCall(withKeywordArguments args: KeyValuePairs<String, PyConvertible>) -> PyConvertible? {
         //var keys = [PyPointer]()
-        var values = [PyPointer]()
+        var values = [PyPointer?]()
         let kw = PyDict_New()
         
         for (key,value) in args {
@@ -127,9 +130,10 @@ extension PythonObject {
             Py_DecRef(element)
         }
         //print(ptr.printString)
-        let result = PyObject_VectorcallDict(ptr, values, values.count, kw)
-        if result == nil {
+        guard let result = PyObject_VectorcallDict(ptr, values, values.count, kw) else {
+        //if result == nil {
             PyErr_Print()
+            return nil
         }
         //let result = PyObject_Call(ptr, tuple, kw)
         //for k in keys { Py_DecRef(k) }
@@ -158,7 +162,7 @@ extension PythonObject {
             // Add key-value pair to the dictionary object.
             // TODO: Handle duplicate keys.
             // In Python, `SyntaxError: keyword argument repeated` is thrown.
-            let k: PyPointer = key.py_string
+            let k: PyPointer = key.pyPointer
             let v = value.pythonObject.ptr
             PyDict_SetItem(kwdictObject, k, v)
             Py_DecRef(k)
@@ -169,7 +173,7 @@ extension PythonObject {
         
         // Positional arguments are passed as a tuple of objects.
         //let argTuple = pyTuple(positionalArgs)
-        let argTuple = positionalArgs.map(\.ptr).pythonTuple
+        let argTuple = positionalArgs.compactMap(\.ptr).pythonTuple
         defer { Py_DecRef(argTuple) }
         
         // Python calls always return a non-null object when successful. If the
@@ -202,7 +206,7 @@ extension PythonObject {
             // Add key-value pair to the dictionary object.
             // TODO: Handle duplicate keys.
             // In Python, `SyntaxError: keyword argument repeated` is thrown.
-            let k: PyPointer = key.py_string
+            let k: PyPointer = key.pyPointer
             let v = value
             PyDict_SetItem(kwdictObject, k, value)
             Py_DecRef(k)

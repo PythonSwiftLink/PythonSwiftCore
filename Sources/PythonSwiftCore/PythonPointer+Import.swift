@@ -13,15 +13,15 @@ import PythonLib
 private var importedModules = [String: PythonPointer]()
 private var importedModulesItems = [String: PythonPointer]()
 
-public func pythonImport(from mod: String, import_name: String) -> PythonPointer {
+public func pythonImport(from mod: String, import_name: String) -> PythonPointer? {
     let module_item_name = "\(mod)_\(import_name)"
     
     if let _import_ = importedModulesItems[module_item_name] {
         return _import_
     }
     
-    var module: PythonPointer
-    var module_item: PythonPointer
+    var module: PythonPointer?
+    var module_item: PythonPointer?
     
     if let _module = importedModules[mod] {
         module = _module
@@ -57,8 +57,8 @@ public func pythonImport(from mod: String, import_name: String) -> PythonObject?
         return .init(getter: _import_)
     }
     
-    var module: PythonPointer
-    var module_item: PythonPointer
+    var module: PythonPointer?
+    var module_item: PythonPointer?
     
     if let _module = importedModules[mod] {
         module = _module

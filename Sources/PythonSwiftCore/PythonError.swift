@@ -22,7 +22,7 @@ import PythonLib
 
 extension Error {
     public var pyPointer: PyPointer {
-        localizedDescription.pyPointer
+        localizedDescription.pyPointer ?? .PyNone
     }
 }
 
@@ -36,15 +36,16 @@ extension Optional where Wrapped == Error {
 }
 
 
-public func PyErr_Printer(_ com: @escaping (_ type: PyPointer,_ value: PyPointer,_ tb: PyPointer) -> () ) {
-    var type: PyPointer = nil
-    var value: PyPointer = nil
-    var tb: PyPointer = nil
+public func PyErr_Printer(_ com: @escaping (_ type: PyPointer?,_ value: PyPointer?,_ tb: PyPointer?) -> () ) {
+    var type: PyPointer? = nil
+    var value: PyPointer? = nil
+    var tb: PyPointer? = nil
     PyErr_Fetch(&type, &value, &tb)
     com(type,value,tb)
-    if type != nil { type.decref() }
-    if value != nil { value.decref() }
-    if tb != nil { tb.decref() }
+    
+    if let type = type { type.decref() }
+    if let value = value { value.decref() }
+    if let tb = tb { tb.decref() }
     //PyErr_Restore(type, value, tb)
     //PyErr_Clear()
 }
@@ -153,24 +154,24 @@ extension String {
 
 
 // example
-
-fileprivate func PythonToSwift(input: PythonPointer) -> PythonPointer {
-    
-    let nargs = Int.random(in: 0...16)
-    do {
-        guard nargs > 0 else { throw PythonError.call }
-        try String(object: input) // throws Unicode error
-    }
-    catch let err as PythonError {
-        switch err {
-        case .call: err.triggerError("wanted \(5) got \(nargs)")
-        default: err.triggerError("PythonToSwift fucked up")
-        }
-        return nil
-    }
-    catch let other_error {
-        other_error.pyExceptionError()
-        return nil
-    }
-    return .PyNone
-}
+//
+//fileprivate func PythonToSwift(input: PythonPointer) -> PythonPointer {
+//    
+//    let nargs = Int.random(in: 0...16)
+//    do {
+//        guard nargs > 0 else { throw PythonError.call }
+//        try String(object: input) // throws Unicode error
+//    }
+//    catch let err as PythonError {
+//        switch err {
+//        case .call: err.triggerError("wanted \(5) got \(nargs)")
+//        default: err.triggerError("PythonToSwift fucked up")
+//        }
+//        return nil
+//    }
+//    catch let other_error {
+//        other_error.pyExceptionError()
+//        return nil
+//    }
+//    return .PyNone
+//}

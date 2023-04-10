@@ -12,10 +12,10 @@ import PythonLib
 #endif
 
 extension String {
-    @inlinable public var python_str: PythonPointer { withCString(PyUnicode_FromString) }
-    @inlinable public var py_object: PythonPointer { withCString(PyUnicode_FromString) }
-    @inlinable public var py_string: PythonPointer { withCString(PyUnicode_FromString) }
-    @inlinable public var _pyBytes: PythonPointer { withCString(PyBytes_FromString) }
+//    @inlinable public var python_str: PythonPointer { withCString(PyUnicode_FromString) }
+//    @inlinable public var py_object: PythonPointer { withCString(PyUnicode_FromString) }
+//    @inlinable public var py_string: PythonPointer { withCString(PyUnicode_FromString) }
+    @inlinable public var _pyBytes: PythonPointer? { withCString(PyBytes_FromString) }
 //        var py_str: PythonPointer = nil
 //        self.withCString { ptr in
 //            py_str = PyUnicode_FromString(ptr)
@@ -33,7 +33,7 @@ extension Data {
         for element in self {
             PyList_Append(list, PyLong_FromUnsignedLong(UInt(element)))
         }
-        return list
+        return list ?? .PyNone
     }
         
     public var pythonTuple: PythonPointer {
@@ -41,7 +41,7 @@ extension Data {
         for (i, element) in self.enumerated() {
             PyTuple_SetItem(tuple, i, PyLong_FromUnsignedLong(UInt(element)))
         }
-        return tuple
+        return tuple ?? .PyNone
     }
 }
 
@@ -58,11 +58,11 @@ extension UnsafeMutablePointer where Pointee == PythonPointer {
 
 
 
-func test3434() {
-    let array: [Int8] = [1,2,3,4,5,6,7,8,9,0]
-    let list = array.pythonList
-    list.decref()
-    let array2: [Int] = [1,2,3,4,5,6,7,8,9,0]
-    let tuple = array2.pythonTuple
-    tuple.decref()
-}
+//func test3434() {
+//    let array: [Int8] = [1,2,3,4,5,6,7,8,9,0]
+//    let list = array.pythonList
+//    list.decref()
+//    let array2: [Int] = [1,2,3,4,5,6,7,8,9,0]
+//    let tuple = array2.pythonTuple
+//    tuple.decref()
+//}

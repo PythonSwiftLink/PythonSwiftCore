@@ -5,31 +5,31 @@ import PythonLib
 
 
 
-extension PythonObject : ConvertibleFromPython {
-    
-    public init(object: PyPointer) throws {
-        self = .init(getter: object)
-    }
-    
-}
+//extension PythonObject : ConvertibleFromPython {
+//    
+//    public init(object: PyPointer) throws {
+//        self = .init(getter: object)
+//    }
+//    
+//}
 
 extension PyPointer : ConvertibleFromPython {
-    
+
     public init(object: PyPointer) throws {
-        self = object
+        self = object.xINCREF
     }
-    
-    
+
+
 }
 
-extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
-    
-    public init(object: PyPointer) throws {
-        guard let o = object else { throw PythonError.attribute }
-        self = o
-    }
-    
-}
+//extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
+//    
+//    public init(object: PyPointer) throws {
+//        guard let o = object else { throw PythonError.attribute }
+//        self = o
+//    }
+//    
+//}
 
 
 extension Data: ConvertibleFromPython {
@@ -180,13 +180,20 @@ extension Float32: ConvertibleFromPython {
 }
 
 
-extension Array : ConvertibleFromPython where Element : PyConvertible & ConvertibleFromPython {
+
+extension Array : ConvertibleFromPython where Element : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         if PythonList_Check(object) {
-            self = try object.getBuffer().map(Element.init)
+            self = try object.getBuffer().map {
+                guard let element = $0 else { throw PythonError.index }
+                return try Element(object: element)
+            }//(Element.init)
         } else if PythonTuple_Check(object) {
-            self = try object.getBuffer().map(Element.init)
+            self = try object.getBuffer().map {
+                guard let element = $0 else { throw PythonError.index }
+                return try Element(object: element)
+            }//(Element.init)
         } else {
             throw PythonError.sequence
         }

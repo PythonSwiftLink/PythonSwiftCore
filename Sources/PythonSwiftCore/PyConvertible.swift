@@ -9,7 +9,7 @@ extension PythonObject : PyConvertible {
     
     
     public var pyPointer: PyPointer {
-        ptr
+        ptr ?? .PyNone
     }
     
     public var pyObject: PythonObject {
@@ -26,25 +26,25 @@ extension PyPointer : PyConvertible {
     }
     
     public var pyPointer: PyPointer {
-        self
+        xINCREF
     }
     
 }
 
-extension UnsafeMutablePointer<_object> : PyConvertible {
-    public var pyObject: PythonObject {
-        .init(getter: self)
-    }
-    
-    public var pyPointer: PyPointer {
-        self
-    }
-    
-}
+//extension UnsafeMutablePointer<_object> : PyConvertible {
+//    public var pyObject: PythonObject {
+//        .init(getter: self)
+//    }
+//
+//    public var pyPointer: PyPointer {
+//        self
+//    }
+//
+//}
 
 extension Data? {
     public var pyPointer: PyPointer {
-        self?.pyPointer
+        self?.pyPointer ?? .PyNone
     }
 }
 
@@ -62,7 +62,7 @@ extension Data: PyConvertible {
             let mem = PyMemoryView_FromBuffer(&pybuf)
             let bytes = PyBytes_FromObject(mem)
             Py_DecRef(mem)
-            return bytes
+            return bytes ?? .PyNone
         }
     }
     
@@ -90,7 +90,7 @@ extension Bool : PyConvertible {
 extension String? {
     public var pyPointer: PyPointer {
         if let this = self {
-            return this.withCString(PyUnicode_FromString)
+            return this.withCString(PyUnicode_FromString) ?? .PyNone
         }
         return .PyNone
     }
@@ -100,7 +100,7 @@ extension String : PyConvertible {
     
     
     public var pyPointer: PyPointer {
-        withCString(PyUnicode_FromString)
+        withCString(PyUnicode_FromString) ?? .PyNone
     }
     
     public var pyObject: PythonObject {
@@ -125,7 +125,7 @@ extension URL : PyConvertible {
     }
     
     public var pyPointer: PyPointer {
-        path.withCString(PyUnicode_FromString)
+        path.withCString(PyUnicode_FromString) ?? .PyNone
     }
     
 }
@@ -283,7 +283,7 @@ extension Float32: PyConvertible {
 }
 
 
-extension Array : PyConvertible where Element : PyConvertible & ConvertibleFromPython {
+extension Array: PyConvertible where Element : PyConvertible {
 
     public var pyPointer: PyPointer {
         let list = PyList_New(count)
@@ -293,7 +293,7 @@ extension Array : PyConvertible where Element : PyConvertible & ConvertibleFromP
             PyList_SetItem(list, index, obj)
             Py_DecRef(obj)
         }
-        return list
+        return list ?? .PyNone
     }
     
     public var pyObject: PythonObject {
@@ -312,7 +312,7 @@ extension Array : PyConvertible where Element : PyConvertible & ConvertibleFromP
         for (i, element) in self.enumerated() {
             PyTuple_SetItem(tuple, i, element.pyPointer)
         }
-        return tuple
+        return tuple ?? .PyNone
     }
     
 }
@@ -332,7 +332,7 @@ extension Dictionary: PyConvertible where Key == StringLiteralType, Value == PyC
             _ = key.withCString{PyDict_SetItemString(dict, $0, v)}
             Py_DecRef(v)
         }
-        return dict
+        return dict ?? .PyNone
     }
     
     

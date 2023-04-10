@@ -75,7 +75,7 @@ extension CVPixelBuffer {
     }
     
     @inlinable
-    public func withTextureData(_ completion: @escaping (_ data: PythonPointer,_ w: PythonPointer,_ h: PythonPointer,_ size: PythonPointer)->Void )  {
+    public func withTextureData(_ completion: @escaping (_ data: PythonPointer?,_ w: PythonPointer?,_ h: PythonPointer?,_ size: PythonPointer?)->Void )  {
         CVPixelBufferLockBaseAddress(self, [])
         let buffer = CVPixelBufferGetBaseAddress(self)
         let w = PyLong_FromLong(CVPixelBufferGetBytesPerRow(self) / 4)
@@ -126,7 +126,7 @@ public extension Data {
         var pybuf = Py_buffer()
         PyBuffer_FillInfo(&pybuf, nil, buffer, size , 0, PyBUF_WRITE)
         let mem = PyMemoryView_FromBuffer(&pybuf)
-        let bytes = PyBytes_FromObject(mem)
+        let bytes = PyBytes_FromObject(mem) ?? .PyNone
         Py_DecRef(mem)
         return bytes
     }

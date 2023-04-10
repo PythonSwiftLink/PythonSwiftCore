@@ -28,7 +28,7 @@ public protocol PyBufferStructProtocol {
 
 
 public protocol PySequenceProtocol {
-    
+    func __getitem__(index: Int) -> PyPointer?
 }
 
 public protocol PyMappingProtocol {

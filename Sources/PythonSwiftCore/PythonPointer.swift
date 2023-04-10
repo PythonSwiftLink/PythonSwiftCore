@@ -20,7 +20,7 @@ extension PyPointer {
         
     }
     
-    public static let StringIO: PyPointer = pythonImport(from: "io", import_name: "StringIO")
+    public static let StringIO: PyPointer? = pythonImport(from: "io", import_name: "StringIO")
     
     public var xINCREF: PyPointer {
             Py_IncRef(self)
@@ -35,9 +35,9 @@ extension PyPointer {
 }
 
 public extension PyPointer {
-    init(_ string: String) {
-        self = string.withCString(PyUnicode_FromString)
-    }
+//    init(_ string: String) {
+//        self = string.withCString(PyUnicode_FromString)
+//    }
     
     init(_ v: Int) {
         self = PyLong_FromLong(v)
@@ -83,7 +83,7 @@ public extension Double {
 extension PythonPointer {
     
     @inlinable
-        public func getBuffer() -> UnsafeBufferPointer<PythonPointer> {
+        public func getBuffer() -> UnsafeBufferPointer<PythonPointer?> {
             let fast_list = PySequence_Fast(self, nil)
             let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
             let fast_items = PythonSequence_Fast_ITEMS(fast_list)
@@ -92,7 +92,7 @@ extension PythonPointer {
             return buffer
         }
     
-    @inlinable public var sequence: UnsafeBufferPointer<PythonPointer> {
+    @inlinable public var sequence: UnsafeBufferPointer<PythonPointer?> {
         let fast_list = PySequence_Fast(self, nil)
         let buffer = PySequenceBuffer(
             start: PythonSequence_Fast_ITEMS(fast_list),
@@ -107,14 +107,14 @@ extension PythonPointer {
 
 
 
-extension PythonPointerU {
-    @inlinable public func decref() {
-        Py_DecRef(self)
-    }
-    @inlinable public func incref() {
-        Py_IncRef(self)
-    }
-}
+//extension PythonPointerU {
+//    @inlinable public func decref() {
+//        Py_DecRef(self)
+//    }
+//    @inlinable public func incref() {
+//        Py_IncRef(self)
+//    }
+//}
 
 extension PythonPointer {
     
@@ -452,19 +452,19 @@ extension String {
     
     
     
-    @inlinable public var pyStringUTF8: PythonPointer {
+    @inlinable public var pyStringUTF8: PythonPointer? {
         guard let data = self.data(using: .utf8) else { return nil }
         return data.withUnsafeBytes { buf in
             PyUnicode_FromKindAndData(1, buf.baseAddress, data.count)
         }
     }
-    @inlinable public var pyStringUTF16: PythonPointer {
+    @inlinable public var pyStringUTF16: PythonPointer? {
         guard let data = self.data(using: .utf16LittleEndian) else { return nil }
         return data.withUnsafeBytes { buf in
             PyUnicode_FromKindAndData(2, buf.baseAddress, data.count)
         }
     }
-    @inlinable public var pyStringUTF32: PythonPointer {
+    @inlinable public var pyStringUTF32: PythonPointer? {
         guard let data = self.data(using: .utf32LittleEndian) else { return nil }
         return data.withUnsafeBytes { buf in
             PyUnicode_FromKindAndData(4, buf.baseAddress, data.count)
@@ -532,190 +532,199 @@ extension Data {
 //    @inlinable public var python_float: PythonPointer { PyFloat_FromDouble(self) }
 //    //var python_str: PythonPointer { PyUnicode_FromString("\(self)") }
 //}
+//extension Array where Element == PyConvertible {
+//        @inlinable public var pythonList: PythonPointer {
+//            let list = PyList_New(0)
+//            for element in self {
+//                PyList_Append(list, element.pyPointer)
+//            }
+//            return list
+//        }
+//}
+
+//extension Array where Element == PythonPointer {
+//
+//
+////
+////    @inlinable public var pythonList: PythonPointer {
+////        let list = PyList_New(0)
+////        for element in self {
+////            PyList_Append(list, element)
+////        }
+////        return list
+////    }
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, element)
+//            Py_DecRef(element)
+//        }
+//        return tuple
+//    }
+//}
+
+//extension Array where Element == String {
+//    @inlinable public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, element.withCString(PyUnicode_FromString) )
+//        }
+//        return list
+//    }
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, PyUnicode_FromString(element))
+//        }
+//        return tuple
+//    }
+//}
+//
+//extension Array where Element == URL {
+//    @inlinable public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, element.path.withCString(PyUnicode_FromString) )
+//        }
+//        return list
+//    }
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, element.path.withCString(PyUnicode_FromString) )
+//        }
+//        return tuple
+//    }
+//}
+
+//extension Array where Element == Double {
+//    @inlinable public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, PyFloat_FromDouble(element))
+//        }
+//        return list
+//    }
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, PyFloat_FromDouble(element))
+//        }
+//        return tuple
+//    }
+//}
 
 
-extension Array where Element == PythonPointer {
-    
-    
+//extension Array where Element: SignedInteger  {
+//    @inlinable public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, PyLong_FromLong(Int(element)))
+//        }
+//        return list
+//    }
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, PyLong_FromLong(Int(element)))
+//        }
+//        return tuple
+//    }
+//}
+
+//extension Array where Element: UnsignedInteger {
+//    public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, PyLong_FromUnsignedLong(UInt(element)))
+//        }
+//        return list
+//    }
+//
+//    var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, PyLong_FromUnsignedLong(UInt(element)))
+//        }
+//        return tuple
+//    }
+//}
+
+
+//extension Array where Element == Int {
+//
+//    init(_ object: PythonPointer) {
+//        self.init()
+//
+//    }
 //
 //    @inlinable public var pythonList: PythonPointer {
 //        let list = PyList_New(0)
 //        for element in self {
-//            PyList_Append(list, element)
+//            PyList_Append(list, PyLong_FromLong(element))
 //        }
 //        return list
 //    }
-    
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, element)
-            Py_DecRef(element)
-        }
-        return tuple
-    }
-}
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, PyLong_FromLong(element))
+//        }
+//        return tuple
+//    }
+//}
 
-extension Array where Element == String {
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, element.withCString(PyUnicode_FromString) )
-        }
-        return list
-    }
-    
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, PyUnicode_FromString(element))
-        }
-        return tuple
-    }
-}
+//extension Array where Element == UInt {
+//    @inlinable public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, PyLong_FromUnsignedLong(element))
+//        }
+//        return list
+//    }
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, PyLong_FromUnsignedLong(element))
+//        }
+//        return tuple
+//    }
+//}
 
-extension Array where Element == URL {
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, element.path.withCString(PyUnicode_FromString) )
-        }
-        return list
-    }
-    
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, element.path.withCString(PyUnicode_FromString) )
-        }
-        return tuple
-    }
-}
-
-extension Array where Element == Double {
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, PyFloat_FromDouble(element))
-        }
-        return list
-    }
-    
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, PyFloat_FromDouble(element))
-        }
-        return tuple
-    }
-}
-
-
-extension Array where Element: SignedInteger  {
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, PyLong_FromLong(Int(element)))
-        }
-        return list
-    }
-    
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, PyLong_FromLong(Int(element)))
-        }
-        return tuple
-    }
-}
-
-extension Array where Element: UnsignedInteger {
-    public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, PyLong_FromUnsignedLong(UInt(element)))
-        }
-        return list
-    }
-    
-    var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, PyLong_FromUnsignedLong(UInt(element)))
-        }
-        return tuple
-    }
-}
-
-
-extension Array where Element == Int {
-    
-    init(_ object: PythonPointer) {
-        self.init()
-        
-    }
-    
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, PyLong_FromLong(element))
-        }
-        return list
-    }
-
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, PyLong_FromLong(element))
-        }
-        return tuple
-    }
-}
-
-extension Array where Element == UInt {
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, PyLong_FromUnsignedLong(element))
-        }
-        return list
-    }
-
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, PyLong_FromUnsignedLong(element))
-        }
-        return tuple
-    }
-}
-
-extension Array where Element == Bool {
-    @inlinable public var pythonList: PythonPointer {
-        let list = PyList_New(0)
-        for element in self {
-            PyList_Append(list, element.object)
-        }
-        return list
-    }
-
-    @inlinable public var pythonTuple: PythonPointer {
-        let tuple = PyTuple_New(self.count)
-        for (i, element) in self.enumerated() {
-            PyTuple_SetItem(tuple, i, element.object)
-        }
-        return tuple
-    }
-}
+//extension Array where Element == Bool {
+//    @inlinable public var pythonList: PythonPointer {
+//        let list = PyList_New(0)
+//        for element in self {
+//            PyList_Append(list, element.object)
+//        }
+//        return list
+//    }
+//
+//    @inlinable public var pythonTuple: PythonPointer {
+//        let tuple = PyTuple_New(self.count)
+//        for (i, element) in self.enumerated() {
+//            PyTuple_SetItem(tuple, i, element.object)
+//        }
+//        return tuple
+//    }
+//}
 
 
 extension PythonPointer {
     
     public var printString: String {
-        if let this = self {
-            return this.debugDescription
-        }
-        return "nil"
+        debugDescription
+        //if let this = self {
+            //return this.debugDescription
+        //}
+        //return "nil"
         
     }
 }
