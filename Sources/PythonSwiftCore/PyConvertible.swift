@@ -3,7 +3,11 @@ import Foundation
 import PythonLib
 #endif
 
-
+extension Optional: PyConvertible where Wrapped == PyConvertible {
+    public var pyObject: PythonObject { .init(getter: pyPointer) }
+    
+    public var pyPointer: PyPointer { self?.pyPointer ?? .PyNone }
+}
 
 extension PythonObject : PyConvertible {
     
@@ -87,14 +91,14 @@ extension Bool : PyConvertible {
     
 }
 
-extension String? {
-    public var pyPointer: PyPointer {
-        if let this = self {
-            return this.withCString(PyUnicode_FromString) ?? .PyNone
-        }
-        return .PyNone
-    }
-}
+//extension String? {
+//    public var pyPointer: PyPointer {
+//        if let this = self {
+//            return this.withCString(PyUnicode_FromString) ?? .PyNone
+//        }
+//        return .PyNone
+//    }
+//}
 
 extension String : PyConvertible {
     

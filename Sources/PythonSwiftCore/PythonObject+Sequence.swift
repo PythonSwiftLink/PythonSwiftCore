@@ -19,9 +19,9 @@ class PyArray<T: PyConvertible>: PySequenceProtocol {
         self.list = list
     }
     
-    func __getitem__(index: Int) -> PyPointer? {
-        guard index < list.count else { return nil }
-        return list[index].pyPointer
+    func __getitem__(idx: Int) -> PyPointer? {
+        guard idx < list.count else { return nil }
+        return list[idx].pyPointer
     }
 }
 
@@ -32,8 +32,8 @@ class PySequence<T: PyConvertible>: PySequenceProtocol {
         self.handler = handler
     }
     
-    func __getitem__(index: Int) -> PyPointer? {
-        guard let value = handler(index) else { return nil }
+    func __getitem__(idx: Int) -> PyPointer? {
+        guard let value = handler(idx) else { return nil }
         return value.pyPointer
     }
 }
