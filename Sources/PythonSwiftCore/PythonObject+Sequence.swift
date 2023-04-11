@@ -11,6 +11,32 @@ import Foundation
 import PythonLib
 #endif
 
+class PyArray<T: PyConvertible>: PySequenceProtocol {
+    
+    var list: [T]
+    
+    init(list: [T]) {
+        self.list = list
+    }
+    
+    func __getitem__(idx: Int) -> PyPointer? {
+        guard idx < list.count else { return nil }
+        return list[idx].pyPointer
+    }
+}
+
+class PySequence<T: PyConvertible>: PySequenceProtocol {
+    
+    let handler: (Int) -> T?
+    init(_ handler: @escaping (Int) -> T?) {
+        self.handler = handler
+    }
+    
+    func __getitem__(idx: Int) -> PyPointer? {
+        guard let value = handler(idx) else { return nil }
+        return value.pyPointer
+    }
+}
 
 extension PythonObject: Sequence {
 //    __consuming public func makeIterator() -> PySequenceBuffer.Iterator {
@@ -30,7 +56,7 @@ extension PythonObject: Sequence {
         //            defer {
         //                print("Dec Ref \(fast_list)")
         Py_DecRef(fast_list)
-        let result: [PythonObject] = buffer.map{.init(getter: $0.xINCREF)}
+        let result: [PythonObject] = buffer.map{.init(getter: $0?.xINCREF)}
         return result.makeIterator()
     }
     

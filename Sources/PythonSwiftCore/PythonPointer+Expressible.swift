@@ -14,21 +14,29 @@ import PythonLib
 extension PythonPointer: ExpressibleByUnicodeScalarLiteral {
     public typealias UnicodeScalarLiteralType = String
     @inlinable public init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        self = value.withCString(PyUnicode_FromString)
+        self = value.withCString(PyUnicode_FromString) ?? .PyNone
     }
 }
 
-extension Optional: ExpressibleByExtendedGraphemeClusterLiteral where Wrapped == UnsafeMutablePointer<PyObject> {
+//extension Optional: ExpressibleByExtendedGraphemeClusterLiteral where Wrapped == UnsafeMutablePointer<PyObject> {
+//    public typealias ExtendedGraphemeClusterLiteralType = String
+//    @inlinable public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
+//        self = value.withCString(PyUnicode_FromString)
+//    }
+//}
+
+extension PythonPointer: ExpressibleByExtendedGraphemeClusterLiteral {
     public typealias ExtendedGraphemeClusterLiteralType = String
     @inlinable public init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-        self = value.withCString(PyUnicode_FromString)
+        self = value.withCString(PyUnicode_FromString) ?? .PyNone
     }
 }
+
 
 extension PythonPointer: ExpressibleByStringLiteral  {
 
     @inlinable public init(stringLiteral value: StringLiteralType) {
-        self = value.withCString(PyUnicode_FromString)
+        self = value.withCString(PyUnicode_FromString) ?? .PyNone
     }
 }
 
@@ -67,7 +75,7 @@ extension PythonPointer: ExpressibleByArrayLiteral {
             //PyList_Append(list, element)
             PyList_Insert(list, i, element)
         }
-        self = list
+        self = list ?? .PyNone
     }
 }
 
@@ -97,7 +105,7 @@ extension Dictionary where Key == String, Value == PyPointer {
                 Py_DecRef(v)
             }
         }
-        return dict
+        return dict ?? .PyNone
     }
 }
 

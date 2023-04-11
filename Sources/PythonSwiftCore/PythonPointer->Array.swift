@@ -58,20 +58,20 @@ extension PythonPointer {
     }
 
 
-    @inlinable
-    public __consuming func array() -> [PythonPointerU] {
-        let fast_list = PySequence_Fast(self, "")
-        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
-        let fast_items = PythonSequence_Fast_ITEMS(fast_list)
-        let buffer = UnsafeBufferPointer(start: fast_items, count: list_count)
-        var array = [PythonPointerU]()
-        array.reserveCapacity(buffer.count)
-        for element in buffer {
-            array.append(element!)
-        }
-        Py_DecRef(fast_list)
-        return array
-    }
+//    @inlinable
+//    public __consuming func array() -> [PythonPointerU] {
+//        let fast_list = PySequence_Fast(self, "")
+//        let list_count = PythonSequence_Fast_GET_SIZE(fast_list)
+//        let fast_items = PythonSequence_Fast_ITEMS(fast_list)
+//        let buffer = UnsafeBufferPointer(start: fast_items, count: list_count)
+//        var array = [PythonPointerU]()
+//        array.reserveCapacity(buffer.count)
+//        for element in buffer {
+//            array.append(element!)
+//        }
+//        Py_DecRef(fast_list)
+//        return array
+//    }
 
 
     @inlinable
@@ -83,7 +83,7 @@ extension PythonPointer {
         var array = [String]()
         array.reserveCapacity(buffer.count)
         for element in buffer {
-            guard let str = try? String(object: element) else {
+            guard let element = element, let str = try? String(object: element) else {
                 print("Sequence contains none PyUnicode item")
                 return []
             }

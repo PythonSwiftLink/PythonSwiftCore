@@ -74,7 +74,7 @@ public final class SwiftPyType {
         getsets: PyGetSetDefHandler?,
         sequence: PySequenceMethodsHandler? = nil,
         buffer: PyBufferProcsHandler? = nil,
-        module_target: PythonPointer = nil) {
+        module_target: PythonPointer? = nil) {
             PyErr_Print()
             print("SwiftPyType:")
             self.tp_name = makeCString(from: name)
@@ -130,6 +130,8 @@ public final class SwiftPyType {
         py_type.tp_new = funcs.tp_new
         py_type.tp_init = funcs.tp_init
         
+        py_type.tp_repr = funcs.tp_repr
+        py_type.tp_str = funcs.tp_str
         //py_type.tp_vectorcall = nil
         //        py_type.tp_vectorcall = {s, a, n, k  in
         //            print("tp_vectorcall")
@@ -149,6 +151,8 @@ public final class SwiftPyType {
         
         py_type.tp_getattro = PyObject_GenericGetAttr
         py_type.tp_setattro = PyObject_GenericSetAttr
+        
+        
         
         pytype.pointee = py_type
         

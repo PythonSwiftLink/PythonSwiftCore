@@ -12,11 +12,11 @@ import PythonLib
 
 
 public class PythonPointerAutoRelease {
-    let ptr: PythonPointer
+    let ptr: PythonPointer?
     private let keep: Bool
     let createdOn = Date()
     
-    public init(pointer: PythonPointer, keep: Bool = true) {
+    public init(pointer: PythonPointer?, keep: Bool = true) {
         self.ptr = pointer
         self.keep = keep
         if keep {
@@ -24,7 +24,7 @@ public class PythonPointerAutoRelease {
         }
     }
     
-    public init(from_getattr pointer: PythonPointer) {
+    public init(from_getattr pointer: PythonPointer?) {
         ptr = pointer
         self.keep = true
     }
@@ -70,8 +70,9 @@ public protocol PythonConvertible {
 
 @dynamicMemberLookup
 @dynamicCallable
-public struct PythonObject {
-    public let ptr: PythonPointer
+public struct PythonObject: ConvertibleFromPython {
+  
+    public let ptr: PythonPointer?
     public let object_autorelease: PythonPointerAutoRelease
     
     private var _iter: PySequenceBuffer.Iterator? = nil
@@ -81,7 +82,7 @@ public struct PythonObject {
     
     
     
-    public init(ptr: PythonPointer, keep_alive: Bool = false, from_getter: Bool = false) {
+    public init(ptr: PythonPointer?, keep_alive: Bool = false, from_getter: Bool = false) {
         //print("initing PythonObject",ptr as Any, ptr!.pointee.ob_refcnt)
         self.ptr = ptr
         if from_getter {
@@ -93,8 +94,11 @@ public struct PythonObject {
         
     }
     //func dynamicallyCall(
+    public init(object: PyPointer) throws {
+        self = .init(getter: object)
+    }
     
-    public init(getter ptr: PythonPointer) {
+    public init(getter ptr: PythonPointer?) {
         self.ptr = ptr
         object_autorelease = .init(from_getattr: ptr)
     }
@@ -109,11 +113,11 @@ public struct PythonObject {
     
     public var xINCREF: PyPointer {
         Py_IncRef(ptr)
-        return ptr
+        return ptr ?? .PyNone
     }
     public var xDECREF: PyPointer {
         Py_DecRef(ptr)
-        return ptr
+        return ptr ?? .PyNone
     }
     
     var module_dict: PythonObject { .init(ptr: PyModule_GetDict(ptr), from_getter: true) }

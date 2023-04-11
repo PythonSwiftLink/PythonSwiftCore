@@ -51,9 +51,10 @@ extension PythonObject {
     }
     
     public func print_dir() {
-        let dir = PyObject_Dir(ptr)
-        pyPrint(dir)
-        dir.decref()
+        if let dir = PyObject_Dir(ptr) {
+            pyPrint(dir)
+            dir.decref()
+        }
     }
     public var isNone: Bool {
         ptr == PythonNone

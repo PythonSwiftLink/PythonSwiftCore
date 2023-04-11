@@ -16,7 +16,7 @@ public func PyDict_GetItem(_ dict: PyPointer, _ key: String) -> PyPointer {
     key.withCString { PyDict_GetItemString(dict, $0) }
 }
 
-public func PyDict_PopItem(_ dict: PyPointer, _ key: String) -> PyPointer {
+public func PyDict_PopItem(_ dict: PyPointer, _ key: String) -> PyPointer? {
     key.withCString {
         let item = PyDict_GetItemString(dict, $0)
         _ = PyDict_DelItemString(dict, $0)
@@ -42,17 +42,17 @@ public func PyDict_DelItem(_ dict: PyPointer, _ key: String) -> Int32 {
 
 
 @discardableResult
-public func PyDict_SetItem(_ dict: PyPointer, _ key: String, _ value: PyPointer) -> Int32 {
+public func PyDict_SetItem(_ dict: PyPointer?, _ key: String, _ value: PyPointer) -> Int32 {
     key.withCString { PyDict_SetItemString(dict, $0, value) }
 }
 
 extension PyPointer {
     @discardableResult
-    public func setPyDictItem(_ key: String, _ value: PyPointer) -> Int32 {
+    public func setPyDictItem(_ key: String, _ value: PyPointer?) -> Int32 {
         key.withCString { PyDict_SetItemString(self, $0, value) }
     }
     
-    public func getPyDictItem(_ key: String) -> PyPointer {
+    public func getPyDictItem(_ key: String) -> PyPointer? {
         key.withCString { PyDict_GetItemString(self, $0) }
     }
     
@@ -65,7 +65,7 @@ extension PyPointer {
         }
     }
     
-    subscript(index: String) -> PyPointer {
+    subscript(index: String) -> PyPointer? {
         get {
             index.withCString { PyDict_GetItemString(self, $0) }
         }
