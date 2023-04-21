@@ -22,6 +22,9 @@ extension PyPointer : ConvertibleFromPython {
 
 }
 
+
+
+
 //extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
 //    
 //    public init(object: PyPointer) throws {
@@ -57,8 +60,14 @@ extension Bool : ConvertibleFromPython {
 extension String : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
-        guard PythonUnicode_Check(object) else { throw PythonError.unicode }
-        self.init(cString: PyUnicode_AsUTF8(object))
+        //guard object.notNone else { throw PythonError.unicode }
+        if PythonUnicode_Check(object) {
+            self.init(cString: PyUnicode_AsUTF8(object))
+        } else {
+            guard let unicode = PyUnicode_AsUTF8String(object) else { throw PythonError.unicode }
+            self.init(cString: PyUnicode_AsUTF8(unicode))
+            Py_DecRef(unicode)
+        }
     }
     
 }
@@ -185,12 +194,12 @@ extension Array : ConvertibleFromPython where Element : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         if PythonList_Check(object) {
-            self = try object.getBuffer().map {
+            self = try object.map {
                 guard let element = $0 else { throw PythonError.index }
                 return try Element(object: element)
             }//(Element.init)
         } else if PythonTuple_Check(object) {
-            self = try object.getBuffer().map {
+            self = try object.map {
                 guard let element = $0 else { throw PythonError.index }
                 return try Element(object: element)
             }//(Element.init)
@@ -200,3 +209,19 @@ extension Array : ConvertibleFromPython where Element : ConvertibleFromPython {
     }
     
 }
+
+@inlinable
+public func optionalPyCast<R: ConvertibleFromPython>(from o: PyPointer?) -> R? {
+    guard let object = o, object != PythonNone else { return nil }
+    return try? R(object: object)
+}
+
+
+
+@inlinable
+public func pyCast<R: ConvertibleFromPython>(from o: PyPointer?) throws -> R {
+    guard let object = o, object != PythonNone else { throw PythonError.attribute }
+    return try R(object: object)
+}
+
+

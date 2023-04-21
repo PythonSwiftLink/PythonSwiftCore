@@ -3,10 +3,50 @@ import Foundation
 import PythonLib
 #endif
 
-extension Optional: PyConvertible where Wrapped == PyConvertible {
-    public var pyObject: PythonObject { .init(getter: pyPointer) }
+
+    func optionalPyPointer<T: PyConvertible>(_ v: T?) -> PyPointer {
+        if let this = v {
+            return this.pyPointer
+        }
+        return .PyNone
+    }
+
+@inlinable
+public func UnPackPySwiftObject<T: AnyObject>(with self: PySwiftObjectPointer, as: T.Type) -> T {
+    guard let pointee = self?.pointee else { fatalError("self is not a PySwiftObject") }
+    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
+}
+
+
+
+@inlinable
+public func UnPackPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer, as: T.Type) -> T {
+    guard
+        PythonObject_TypeCheck(self, check),
+        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
+    else { fatalError("self is not a PySwiftObject") }
+    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
+}
+
+@inlinable
+public func UnPackOptionalPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer, as: T.Type) -> T? {
+    guard
+        PythonObject_TypeCheck(self, check),
+        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
+    else { return nil }
     
-    public var pyPointer: PyPointer { self?.pyPointer ?? .PyNone }
+    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
+}
+
+@inlinable
+public func UnPackOptionalPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer?, as: T.Type) -> T? {
+    guard
+        let self = self,
+        PythonObject_TypeCheck(self, check),
+        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
+    else { fatalError() }
+    
+    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
 }
 
 extension PythonObject : PyConvertible {
@@ -114,14 +154,14 @@ extension String : PyConvertible {
 }
 
 
-extension URL? {
-    public var pyPointer: PyPointer {
-        if let this = self {
-            return this.pyPointer
-        }
-        return .PyNone
-    }
-}
+//extension URL? {
+//    public var pyPointer: PyPointer {
+//        if let this = self {
+//            return this.pyPointer
+//        }
+//        return .PyNone
+//    }
+//}
 
 extension URL : PyConvertible {
     public var pyObject: PythonObject {
@@ -291,24 +331,17 @@ extension Array: PyConvertible where Element : PyConvertible {
 
     public var pyPointer: PyPointer {
         let list = PyList_New(count)
-        for (index, element) in enumerated() {
-            // `PyList_SetItem` steals the reference of the object stored.
-            let obj = element.pyPointer
-            PyList_SetItem(list, index, obj)
-            Py_DecRef(obj)
+        var _count = 0
+        for element in self {
+            // `PyList_SetItem` steals the reference of the object stored. dont DecRef
+            PyList_SetItem(list, _count, element.pyPointer)
+            _count += 1
         }
         return list ?? .PyNone
     }
     
     public var pyObject: PythonObject {
-        let list = PyList_New(count)
-        for (index, element) in enumerated() {
-            // `PyList_SetItem` steals the reference of the object stored.
-            let obj = element.pyPointer
-            PyList_SetItem(list, index, element.pyPointer)
-            Py_DecRef(obj)
-        }
-        return .init(getter: list)
+        return .init(getter: pyPointer)
     }
     
     @inlinable public var pythonTuple: PythonPointer {
@@ -341,3 +374,6 @@ extension Dictionary: PyConvertible where Key == StringLiteralType, Value == PyC
     
     
 }
+
+
+

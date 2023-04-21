@@ -53,6 +53,7 @@ public typealias PySequence_Length_func = (@convention(c) (_ s: PyPointer?) -> P
 public typealias PySequence_Concat_func = (@convention(c) (_ lhs: PyPointer?,_ rhs: PyPointer?) -> PyPointer?)?
 public typealias PySequence_Repeat_func = (@convention(c) (_ s: PyPointer?,_ count: Py_ssize_t) -> PyPointer?)?
 public typealias PySequence_Item_func = (@convention(c) (_ s: PyPointer?,_ idx: Py_ssize_t) -> PyPointer?)?
+public typealias PySwiftSequence_Item_func = (@convention(c) (_ s: PySwiftObjectPointer,_ idx: Py_ssize_t) -> PyPointer?)?
 public typealias PySequence_Ass_Item_func = (@convention(c) (_ s: PyPointer?,_ idx: Py_ssize_t,_ item: PyPointer?) -> Int32)?
 public typealias PySequence_Contains_func = (@convention(c) (_ s: PyPointer?,_ o: PyPointer?) -> Int32)?
 public typealias PySequence_Inplace_Concat_func = (@convention(c) (_ lhs: PyPointer?,_ rhs: PyPointer?) -> PyPointer?)?

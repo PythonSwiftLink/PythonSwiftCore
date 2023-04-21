@@ -20,20 +20,20 @@ import PythonLib
 //}
 
 
-extension Error {
-    public var pyPointer: PyPointer {
-        localizedDescription.pyPointer ?? .PyNone
-    }
-}
+//extension Error {
+//    public var pyPointer: PyPointer {
+//        localizedDescription.pyPointer
+//    }
+//}
 
-extension Optional where Wrapped == Error {
-    public var pyPointer: PyPointer {
-        if let this = self {
-            return this.localizedDescription.pyPointer
-        }
-        return .PyNone
-    }
-}
+//extension Optional where Wrapped == Error {
+//    public var pyPointer: PyPointer {
+//        if let this = self {
+//            return this.localizedDescription.pyPointer
+//        }
+//        return .PyNone
+//    }
+//}
 
 
 public func PyErr_Printer(_ com: @escaping (_ type: PyPointer?,_ value: PyPointer?,_ tb: PyPointer?) -> () ) {

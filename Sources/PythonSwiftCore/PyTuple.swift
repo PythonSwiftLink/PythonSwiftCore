@@ -16,3 +16,12 @@ import PythonLib
     return try R(object: ptr)
     
 }
+
+@inlinable public func PyTuple_GetItem(_ object: PyPointer?,_ index: Int) throws -> PyPointer {
+    guard let ptr = PyTuple_GetItem(object, index) else { throw PythonError.attribute }
+    return ptr
+    
+}
+
+
+ 
