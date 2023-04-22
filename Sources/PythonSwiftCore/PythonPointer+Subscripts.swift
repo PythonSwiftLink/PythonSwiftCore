@@ -1,8 +1,69 @@
 //import Foundation
-//#if BEEWARE
-//import PythonLib
-//#endif
-//
+#if BEEWARE
+import PythonLib
+#endif
+
+
+
+extension PythonPointer: Sequence {
+
+    public typealias Iterator = PySequenceBuffer.Iterator
+
+    public func makeIterator() -> PySequenceBuffer.Iterator {
+        let fast_list = PySequence_Fast(self, nil)
+        let buffer = PySequenceBuffer(
+            start: PythonSequence_Fast_ITEMS(fast_list),
+            count: PythonSequence_Fast_GET_SIZE(fast_list)
+        )
+        Py_DecRef(fast_list)
+        return buffer.makeIterator()
+    }
+
+}
+
+extension PythonPointer {
+    
+    @inlinable
+    public subscript<R: ConvertibleFromPython & PyConvertible>(index: Int) -> R? {
+        
+        get {
+            if PythonList_Check(self) {
+                if let element = PyList_GetItem(self, index) {
+                    return try? R(object: element)
+                }
+                return nil
+            }
+            if PythonTuple_Check(self) {
+                if let element = PyTuple_GetItem(self, index) {
+                    return try? R(object: element)
+                }
+                return nil
+            }
+            return nil
+        }
+        
+        set {
+            if PythonList_Check(self) {
+                if let newValue = newValue {
+                    PyList_SetItem(self, index, newValue.pyPointer)
+                    return
+                }
+                PyList_SetItem(self, index, .PyNone)
+                return
+            }
+            if PythonTuple_Check(self) {
+                if let newValue = newValue {
+                    PyTuple_SetItem(self, index, newValue.pyPointer)
+                    return
+                }
+                PyTuple_SetItem(self, index, .PyNone)
+                return
+            }
+        }
+    }
+    
+}
+
 //extension PythonPointer {
 //
 //    @inlinable

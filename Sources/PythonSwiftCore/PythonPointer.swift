@@ -79,7 +79,6 @@ public extension Double {
     }
 }
 
-
 extension PythonPointer {
     
     @inlinable
@@ -101,6 +100,20 @@ extension PythonPointer {
         Py_DecRef(fast_list)
         return buffer
     }
+    
+    @inlinable public var _sequence: PySequenceBuffer? {
+        guard PySequence_Check(self) == 1 else { return nil }
+        
+        let fast_list = PySequence_Fast(self, nil)
+        let buffer = PySequenceBuffer(
+            start: PythonSequence_Fast_ITEMS(fast_list),
+            count: PythonSequence_Fast_GET_SIZE(fast_list)
+        )
+        Py_DecRef(fast_list)
+        return buffer
+    }
+    
+    
 }
 
 
