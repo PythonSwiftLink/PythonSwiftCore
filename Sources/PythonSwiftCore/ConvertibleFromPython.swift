@@ -22,6 +22,15 @@ extension PyPointer : ConvertibleFromPython {
 
 }
 
+//extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
+//    
+//    public init(object: PyPointer) throws {
+//        guard let o = object else { throw PythonError.attribute }
+//        self = o
+//    }
+//    
+//}
+
 
 
 
@@ -194,6 +203,7 @@ extension Array : ConvertibleFromPython where Element : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         if PythonList_Check(object) {
+
             self = try object.map {
                 guard let element = $0 else { throw PythonError.index }
                 return try Element(object: element)

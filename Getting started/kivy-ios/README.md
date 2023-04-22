@@ -20,9 +20,9 @@ deactivate
 
 ```
 . venv/bin/activate
+
 toolchain build swiftonize
 toolchain build pythonswiftcore
-
 toolchain build python3 
 toolchain build kivy
 ```
