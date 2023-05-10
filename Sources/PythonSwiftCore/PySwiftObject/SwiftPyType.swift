@@ -6,31 +6,44 @@ import PythonLib
 
 
 public struct PyTypeFunctions {
-    public init(tp_init: initproc? = nil, tp_new: newfunc? = nil, tp_dealloc: destructor? = nil, tp_getattr: getattrfunc? = nil, tp_setattr: setattrfunc? = nil, tp_as_number: UnsafeMutablePointer<PyNumberMethods>? = nil, tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>? = nil, tp_call: ternaryfunc? = nil, tp_str: reprfunc? = nil, tp_repr: reprfunc? = nil) {
-        self.tp_init = tp_init
-        self.tp_new = tp_new
-        self.tp_dealloc = tp_dealloc
-        self.tp_getattr = tp_getattr
-        self.tp_setattr = tp_setattr
-        self.tp_as_number = tp_as_number
-        self.tp_as_sequence = tp_as_sequence
-        self.tp_call = tp_call
-        self.tp_str = tp_str
-        self.tp_repr = tp_repr
-    }
     
     let tp_init: initproc!
     let tp_new: newfunc!
     let tp_dealloc: destructor!
     let tp_getattr: getattrfunc!
     let tp_setattr: setattrfunc!
-    let tp_as_number: UnsafeMutablePointer<PyNumberMethods>!
-    let tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>!
+    //let tp_as_number: UnsafeMutablePointer<PyNumberMethods>!
+    //let tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>!
     let tp_call: ternaryfunc!
     let tp_str: reprfunc!
     let tp_repr: reprfunc!
-    //let tp_as_buffer: PyBufferProcsHandler
+    let tp_hash: hashfunc!
     
+    public init(
+        tp_init: initproc? = nil,
+        tp_new: newfunc? = nil,
+        tp_dealloc: destructor? = nil,
+        tp_getattr: getattrfunc? = nil,
+        tp_setattr: setattrfunc? = nil,
+        //tp_as_number: UnsafeMutablePointer<PyNumberMethods>? = nil,
+        //tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>? = nil,
+        tp_call: ternaryfunc? = nil,
+        tp_str: reprfunc? = nil,
+        tp_repr: reprfunc? = nil,
+        tp_hash: hashfunc? = nil) {
+            self.tp_init = tp_init
+            self.tp_new = tp_new
+            self.tp_dealloc = tp_dealloc
+            self.tp_getattr = tp_getattr
+            self.tp_setattr = tp_setattr
+            //self.tp_as_number = tp_as_number
+            //self.tp_as_sequence = tp_as_sequence
+            self.tp_call = tp_call
+            self.tp_str = tp_str
+            self.tp_repr = tp_repr
+            self.tp_hash = tp_hash
+    }
+
 }
 
 public final class SwiftPyType {
@@ -75,8 +88,8 @@ public final class SwiftPyType {
         sequence: PySequenceMethodsHandler? = nil,
         buffer: PyBufferProcsHandler? = nil,
         module_target: PythonPointer? = nil) {
-            PyErr_Print()
-            print("SwiftPyType:")
+            //PyErr_Print()
+            print("SwiftPyType:", name)
             self.tp_name = makeCString(from: name)
             self.methods = methods
             self.getsets = getsets

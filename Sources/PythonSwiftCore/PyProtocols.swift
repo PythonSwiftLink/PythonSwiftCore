@@ -6,14 +6,14 @@ import PythonLib
 
 
 
-public protocol PyConvertible {
+public protocol PyEncodable {
     
     var pyObject: PythonObject { get }
     var pyPointer: PyPointer { get }
 }
 
 
-public protocol ConvertibleFromPython {
+public protocol PyDecodable {
     
     init(object: PyPointer) throws
 }

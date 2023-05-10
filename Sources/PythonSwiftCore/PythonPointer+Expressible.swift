@@ -89,7 +89,7 @@ extension PyPointer: ExpressibleByDictionaryLiteral {
         for (k, v) in elements {
             k.withCString{ key -> Void in
                 PyDict_SetItemString(self, key, v)
-                Py_DecRef(v)
+                //Py_DecRef(v)
             }
         }
     }
@@ -102,7 +102,7 @@ extension Dictionary where Key == String, Value == PyPointer {
         for (k, v) in self {
             k.withCString { key -> Void in
                 PyDict_SetItemString(dict, key, v)
-                Py_DecRef(v)
+                //Py_DecRef(v)
             }
         }
         return dict ?? .PyNone

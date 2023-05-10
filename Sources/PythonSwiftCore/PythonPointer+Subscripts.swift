@@ -64,6 +64,27 @@ extension PythonPointer {
     
 }
 
+extension PythonPointer {
+    @inlinable public func append<T: PyConvertible>(_ value: T) { PyList_Append(self, value.pyPointer) }
+    @inlinable public func append(_ value: PyPointer) { PyList_Append(self, value) }
+    @inlinable public func append<T: PyConvertible>(contentsOf: [T]) {
+        for value in contentsOf { PyList_Append(self, value.pyPointer) }
+    }
+    
+    @inlinable public func append(contentsOf: [PythonPointer]) {
+        for value in contentsOf { PyList_Append(self, value) }
+    }
+    
+    @inlinable public mutating func insert<C, T: PyConvertible>(contentsOf newElements: C, at i: Int) where C : Collection, C.Element == T {
+        for element in newElements {
+            PyList_Insert(self, i, element.pyPointer)
+        }
+    }
+    
+    
+    
+}
+
 //extension PythonPointer {
 //
 //    @inlinable

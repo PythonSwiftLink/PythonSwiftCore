@@ -45,16 +45,87 @@ extension PythonPointer {
         return result
     }
     
-    @inlinable public func callAsFunction(_ arg: PyConvertible) throws -> PyPointer {
-        //PyObject_Vectorcall(self, args, arg_count, nil)
-        let v = arg.pyPointer
-        guard let rtn = PyObject_CallOneArg(self, v) else {
-            PyErr_Print()
-            throw PythonError.call
-        }
-        v.decref()
-        return rtn
-    }
+//    @inlinable public func callAsFunction(_ arg: PyConvertible) -> PyPointer {
+//        //PyObject_Vectorcall(self, args, arg_count, nil)
+//        let v = arg.pyPointer
+//        guard let rtn = PyObject_CallOneArg(self, v) else {
+//            PyErr_Print()
+//            return PythonNone
+//        }
+//        v.decref()
+//        return rtn
+//    }
+    
+//    @inlinable public func callAsFunction<R: ConvertibleFromPython>(_ arg: PyConvertible) throws -> R {
+//        //PyObject_Vectorcall(self, args, arg_count, nil)
+//        let v = arg.pyPointer
+//        guard let result = PyObject_CallOneArg(self, v) else {
+//            PyErr_Print()
+//            throw PythonError.call
+//        }
+//        v.decref()
+//        let rtn = try R(object: result)
+//        Py_DecRef(result)
+//        return rtn
+//    }
+    
+//    @inlinable public func callAsFunction(_ arg: PyConvertible) {
+//        //PyObject_Vectorcall(self, args, arg_count, nil)
+//        let v = arg.pyPointer
+//        guard let rtn = PyObject_CallOneArg(self, v) else {
+//            PyErr_Print()
+//            throw PythonError.call
+//        }
+//        v.decref()
+//        rtn.decref()
+//    }
+//
+//    @inlinable public func callAsFunction() -> PyPointer {
+//        //PyObject_Vectorcall(self, args, arg_count, nil)
+//        //let v = arg.pyPointer
+//        guard let rtn = PyObject_CallNoArgs(self) else {
+//            PyErr_Print()
+//            return PythonNone
+//            //throw PythonError.call
+//        }
+//        return rtn
+//    }
+    
+//    public func callAsFunction(a: PyConvertible, b: PyConvertible) -> Void {
+//        let args = UnsafeMutablePointer<PyPointer?>.allocate(capacity: 2)
+//        args[0] = a.pyPointer
+//        args[1] = b.pyPointer
+//        PyObject_Vectorcall(self,args ,2, nil)
+//        if let rtn = PyObject_Vectorcall(self, args, 2, nil) {
+//            Py_DecRef(rtn)
+//        } else { PyErr_Print() }
+//        Py_DecRef(args[0])
+//        Py_DecRef(args[1])
+//        args.deallocate()
+//    }
+    
+//    public func callAsFunction<R: ConvertibleFromPython>(_ a: PyConvertible,_ b: PyConvertible) throws -> R {
+//        let args = VectorCallArgs.allocate(capacity: 2)
+//        args[0] = a.pyPointer
+//        args[1] = b.pyPointer
+//        PyObject_Vectorcall(self,args ,2, nil)
+//
+//        guard let result = PyObject_Vectorcall(self, args, 2, nil) else {
+//            PyErr_Print()
+//            Py_DecRef(args[0])
+//            Py_DecRef(args[1])
+//            args.deallocate()
+//            throw PythonError.call
+//        }
+//        let rtn = try R(object: result)
+//        Py_DecRef(result)
+//        Py_DecRef(args[0])
+//        Py_DecRef(args[1])
+//        args.deallocate()
+//        return rtn
+//    }
+    
+    
 }
 
 
