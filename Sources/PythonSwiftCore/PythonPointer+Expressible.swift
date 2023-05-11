@@ -40,19 +40,19 @@ extension PythonPointer: ExpressibleByStringLiteral  {
     }
 }
 
-extension PythonPointer: ExpressibleByIntegerLiteral {
-    
-    public init(integerLiteral value: IntegerLiteralType) {
-        self = PyLong_FromLong(value)
-    }
-}
+//extension PythonPointer: ExpressibleByIntegerLiteral {
+//    
+//    public init(integerLiteral value: IntegerLiteralType) {
+//        self = PyLong_FromLong(value)
+//    }
+//}
 
 
-extension PythonPointer: ExpressibleByFloatLiteral {
-    public init(floatLiteral value: FloatLiteralType) {
-        self = PyFloat_FromDouble(value)
-    }
-}
+//extension PythonPointer: ExpressibleByFloatLiteral {
+//    public init(floatLiteral value: FloatLiteralType) {
+//        self = PyFloat_FromDouble(value)
+//    }
+//}
 
 
 extension PythonPointer: ExpressibleByBooleanLiteral {
@@ -89,7 +89,7 @@ extension PyPointer: ExpressibleByDictionaryLiteral {
         for (k, v) in elements {
             k.withCString{ key -> Void in
                 PyDict_SetItemString(self, key, v)
-                Py_DecRef(v)
+                //Py_DecRef(v)
             }
         }
     }
@@ -102,7 +102,7 @@ extension Dictionary where Key == String, Value == PyPointer {
         for (k, v) in self {
             k.withCString { key -> Void in
                 PyDict_SetItemString(dict, key, v)
-                Py_DecRef(v)
+                //Py_DecRef(v)
             }
         }
         return dict ?? .PyNone
@@ -110,18 +110,18 @@ extension Dictionary where Key == String, Value == PyPointer {
 }
 
 fileprivate let test_expression = {
-    let pyList: PyPointer = ["",true,false,1,2.0]
-    let aDict: [String : PythonPointer] = [
-        "int": 1,
-        "string": "str",
-    ]
-    // PyDict from [String:PyPointer]
-    //
-    let pyDict0 = aDict.pythonDict
-    
-    let pyDict1: PyPointer = [
-            "int": 1,
-            "string": "str",
-        ]
+//    let pyList: PyPointer = ["",true,false,1,2.0]
+//    let aDict: [String : PythonPointer] = [
+//        "int": 1,
+//        "string": "str",
+//    ]
+//    // PyDict from [String:PyPointer]
+//    //
+//    let pyDict0 = aDict.pythonDict
+//    
+//    let pyDict1: PyPointer = [
+//            "int": 1,
+//            "string": "str",
+//        ]
     
 }

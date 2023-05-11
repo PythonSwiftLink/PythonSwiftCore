@@ -34,26 +34,9 @@ extension PyPointer {
     //@inlinable public static func Dict: Pyk
 }
 
-public extension PyPointer {
-//    init(_ string: String) {
-//        self = string.withCString(PyUnicode_FromString)
-//    }
-    
-    init(_ v: Int) {
-        self = PyLong_FromLong(v)
-    }
-    
-    init(_ v: Int32) {
-        self = PyLong_FromLong(.init(v))
-    }
-    init(_ v: Double) {
-        self = PyFloat_FromDouble(v)
-    }
-}
 
-public extension Double {
-    
-}
+
+
 
 @inlinable public func PyObject_GetAttr(_ o: PyPointer, _ key: String) -> PyPointer {
     key.withCString { string in
@@ -118,16 +101,6 @@ extension PythonPointer {
 
 
 
-
-
-//extension PythonPointerU {
-//    @inlinable public func decref() {
-//        Py_DecRef(self)
-//    }
-//    @inlinable public func incref() {
-//        Py_IncRef(self)
-//    }
-//}
 
 extension PythonPointer {
     

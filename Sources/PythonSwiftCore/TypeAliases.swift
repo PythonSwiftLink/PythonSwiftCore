@@ -16,6 +16,9 @@ public typealias PySwiftObjectPointer = UnsafeMutablePointer<PySwiftObject>?
 public typealias PythonPointer = UnsafeMutablePointer<PyObject>//?
 public typealias PyPointer = PythonPointer
 
+public typealias PyConvertible = PyEncodable
+public typealias ConvertibleFromPython = PyDecodable
+
 protocol PyObjectProtocol {}
 extension PythonPointer?: PyObjectProtocol {}
 
@@ -38,6 +41,7 @@ public typealias PySwiftSetter = (@convention(c) (_ s: PySwiftObjectPointer,_ ke
 public typealias PyCFunc = (@convention(c) (_ s: PythonPointer?, _ args: PythonPointer?) -> PythonPointer?)?
 
 public typealias VectorArgs = UnsafePointer<PythonPointer?>?
+public typealias VectorCallArgs = UnsafeMutablePointer<PythonPointer?>
 public typealias PyCVectorCallKeywords = (@convention(c) ( _ s: PythonPointer?, _ args: VectorArgs, _ count: Int, _ kwnames: PythonPointer? ) -> PythonPointer? )?
 public typealias PyCVectorCall = (@convention(c) ( _ s: PythonPointer?, _ args: VectorArgs, _ count: Int ) -> PythonPointer? )?
 public typealias PyCMethodVectorCall = (@convention(c) ( _ s: PythonPointer?, _ type: PythonType, _ args: VectorArgs, _ count: Int, _ kwnames: PythonPointer? ) -> PythonPointer? )?
@@ -67,3 +71,9 @@ public typealias PyBuf_Release = (@convention(c) (_ s: PyPointer?,_ buf: UnsafeM
 
 public typealias PySwiftBuf_Get = (@convention(c) (_ s: PySwiftObjectPointer,_ buf: UnsafeMutablePointer<Py_buffer>?,_ flags: Int32) -> Int32)?
 public typealias PySwiftBuf_Release = (@convention(c) (_ s: PySwiftObjectPointer,_ buf: UnsafeMutablePointer<Py_buffer>?) -> Void )?
+
+
+public typealias PySwift_HashFunc = (@convention(c) (_ s: PySwiftObjectPointer) -> Int)?
+
+public typealias PySwift_ReprFunc = (@convention(c) (_ s: PySwiftObjectPointer) -> PyPointer?)?
+

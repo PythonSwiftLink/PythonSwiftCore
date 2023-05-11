@@ -4,52 +4,38 @@ import PythonLib
 #endif
 
 
-    func optionalPyPointer<T: PyConvertible>(_ v: T?) -> PyPointer {
+    func optionalPyPointer<T: PyEncodable>(_ v: T?) -> PyPointer {
         if let this = v {
             return this.pyPointer
         }
         return .PyNone
     }
 
-@inlinable
-public func UnPackPySwiftObject<T: AnyObject>(with self: PySwiftObjectPointer, as: T.Type) -> T {
-    guard let pointee = self?.pointee else { fatalError("self is not a PySwiftObject") }
-    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
-}
+
+
+//@inlinable
+//public func UnPackPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer?) throws -> T? {
+//    guard
+//        let self = self,
+//        PythonObject_TypeCheck(self, check),
+//        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
+//    else { throw PythonError.attribute }
+//    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
+//}
+
+//@inlinable
+//public func UnPackPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer?) -> T {
+//    guard
+//        let self = self,
+//        PythonObject_TypeCheck(self, check),
+//        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
+//    else { fatalError("self is not a PySwiftObject") }
+//    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
+//}
 
 
 
-@inlinable
-public func UnPackPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer, as: T.Type) -> T {
-    guard
-        PythonObject_TypeCheck(self, check),
-        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
-    else { fatalError("self is not a PySwiftObject") }
-    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
-}
-
-@inlinable
-public func UnPackOptionalPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer, as: T.Type) -> T? {
-    guard
-        PythonObject_TypeCheck(self, check),
-        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
-    else { return nil }
-    
-    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
-}
-
-@inlinable
-public func UnPackOptionalPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer?, as: T.Type) -> T? {
-    guard
-        let self = self,
-        PythonObject_TypeCheck(self, check),
-        let pointee = unsafeBitCast(self, to: PySwiftObjectPointer.self)?.pointee
-    else { fatalError() }
-    
-    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
-}
-
-extension PythonObject : PyConvertible {
+extension PythonObject : PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -62,7 +48,7 @@ extension PythonObject : PyConvertible {
     
 }
 
-extension PyPointer : PyConvertible {
+extension PyPointer : PyEncodable {
     
     
     public var pyObject: PythonObject {
@@ -75,7 +61,7 @@ extension PyPointer : PyConvertible {
     
 }
 
-//extension UnsafeMutablePointer<_object> : PyConvertible {
+//extension UnsafeMutablePointer<_object> : PyEncodable {
 //    public var pyObject: PythonObject {
 //        .init(getter: self)
 //    }
@@ -92,7 +78,7 @@ extension Data? {
     }
 }
 
-extension Data: PyConvertible {
+extension Data: PyEncodable {
     public var pyObject: PythonObject {
         .init(getter: nil)
     }
@@ -112,7 +98,7 @@ extension Data: PyConvertible {
     
 }
 
-extension Bool : PyConvertible {
+extension Bool : PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -140,7 +126,7 @@ extension Bool : PyConvertible {
 //    }
 //}
 
-extension String : PyConvertible {
+extension String : PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -163,7 +149,7 @@ extension String : PyConvertible {
 //    }
 //}
 
-extension URL : PyConvertible {
+extension URL : PyEncodable {
     public var pyObject: PythonObject {
         .init(getter: path.withCString(PyUnicode_FromString))
     }
@@ -174,7 +160,7 @@ extension URL : PyConvertible {
     
 }
 
-extension Int : PyConvertible {
+extension Int : PyEncodable {
     
     public var pyPointer: PyPointer {
         PyLong_FromLong(self)
@@ -186,7 +172,7 @@ extension Int : PyConvertible {
 
 }
 
-extension UInt : PyConvertible {
+extension UInt : PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -198,7 +184,7 @@ extension UInt : PyConvertible {
     }
     
 }
-extension Int64: PyConvertible {
+extension Int64: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -211,7 +197,7 @@ extension Int64: PyConvertible {
     
 }
 
-extension UInt64: PyConvertible {
+extension UInt64: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -224,7 +210,7 @@ extension UInt64: PyConvertible {
     
 }
 
-extension Int32: PyConvertible {
+extension Int32: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -237,7 +223,7 @@ extension Int32: PyConvertible {
     
 }
 
-extension UInt32: PyConvertible {
+extension UInt32: PyEncodable {
     
     public var pyPointer: PyPointer {
         PyLong_FromLong(Int(self))
@@ -249,7 +235,7 @@ extension UInt32: PyConvertible {
     
 }
 
-extension Int16: PyConvertible {
+extension Int16: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -262,7 +248,7 @@ extension Int16: PyConvertible {
     
 }
 
-extension UInt16: PyConvertible {
+extension UInt16: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -275,7 +261,7 @@ extension UInt16: PyConvertible {
     
 }
 
-extension Int8: PyConvertible {
+extension Int8: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -288,7 +274,7 @@ extension Int8: PyConvertible {
     
 }
 
-extension UInt8: PyConvertible {
+extension UInt8: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -301,7 +287,7 @@ extension UInt8: PyConvertible {
     
 }
 
-extension Double: PyConvertible {
+extension Double: PyEncodable {
     
     
     public var pyPointer: PyPointer {
@@ -314,7 +300,20 @@ extension Double: PyConvertible {
     
 }
 
-extension Float32: PyConvertible {
+extension CGFloat: PyEncodable {
+    
+    
+    public var pyPointer: PyPointer {
+        PyFloat_FromDouble(self)
+    }
+    
+    public var pyObject: PythonObject {
+        .init(getter: PyFloat_FromDouble(self))
+    }
+    
+}
+
+extension Float32: PyEncodable {
     
     public var pyPointer: PyPointer {
         PyFloat_FromDouble(Double(self))
@@ -327,7 +326,7 @@ extension Float32: PyConvertible {
 }
 
 
-extension Array: PyConvertible where Element : PyConvertible {
+extension Array: PyEncodable where Element : PyEncodable {
 
     public var pyPointer: PyPointer {
         let list = PyList_New(count)
@@ -355,7 +354,7 @@ extension Array: PyConvertible where Element : PyConvertible {
 }
 
 
-extension Dictionary: PyConvertible where Key == StringLiteralType, Value == PyConvertible  {
+extension Dictionary: PyEncodable where Key == StringLiteralType, Value == PyEncodable  {
     
     
     public var pyObject: PythonObject {
@@ -367,7 +366,7 @@ extension Dictionary: PyConvertible where Key == StringLiteralType, Value == PyC
         for (key,value) in self {
             let v = value.pyPointer
             _ = key.withCString{PyDict_SetItemString(dict, $0, v)}
-            Py_DecRef(v)
+            //Py_DecRef(v)
         }
         return dict ?? .PyNone
     }

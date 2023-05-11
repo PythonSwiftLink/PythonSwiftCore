@@ -108,6 +108,9 @@ public enum PythonError: Error {
     case attribute
     case index
     case sequence
+    case notPySwiftObject
+    case type(String)
+    case memory(String)
 }
 
 extension PythonError: PyConvertible {
@@ -117,20 +120,16 @@ extension PythonError: PyConvertible {
     public var pyPointer: PyPointer {
         switch self {
             
-        case .unicode:
-            return PyExc_UnicodeError
-        case .long:
-            return PyExc_MemoryError
-        case .float:
-            return PyExc_FloatingPointError
-        case .call:
-            return PyExc_RuntimeError
-        case .attribute:
-            return PyExc_AttributeError
-        case .index:
-            return PyExc_IndexError
-        case .sequence:
-            return PyExc_BufferError
+        case .unicode: return PyExc_UnicodeError
+        case .long: return PyExc_MemoryError
+        case .float: return PyExc_FloatingPointError
+        case .call: return PyExc_RuntimeError
+        case .attribute: return PyExc_AttributeError
+        case .index: return PyExc_IndexError
+        case .sequence:         return PyExc_BufferError
+        case .notPySwiftObject: return PyExc_TypeError
+        case .type(_): return PyExc_TypeError
+        case .memory(_): return PyExc_MemoryError
         }
     }
     
@@ -144,6 +143,33 @@ extension Error {
 
 extension PythonError {
     public func triggerError(_ msg: String) {
+        msg.withCString { PyErr_SetString(pyPointer, $0) }
+    }
+    public func raiseError(label: String = "arg") {
+        var msg: String {
+            switch self {
+            case .unicode:
+                return "\(label) is not an <unicode object>"
+            case .long:
+                return "\(label) is not a <int object>"
+            case .float:
+                return "\(label) is not a <float object>"
+            case .call:
+                return "\(label) is not <callable object>"
+            case .attribute:
+                return "\(label) could not assigned."
+            case .index:
+                return "\(label) index out of bound"
+            case .sequence:
+                return "\(label) is not a <sequence object>"
+            case .notPySwiftObject:
+                return "self is not a <PySwiftObject>"
+            case .type(let t):
+                return "\(label) is not the type <\(t)>"
+            case .memory(let t):
+                return "pointer to the type <\(t)> is deallocated"
+            }
+        }
         msg.withCString { PyErr_SetString(pyPointer, $0) }
     }
 }
