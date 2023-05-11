@@ -22,19 +22,6 @@ extension PyPointer : PyDecodable {
 
 }
 
-
-
-
-//extension UnsafeMutablePointer<_object> : PyDecodable {
-//    
-//    public init(object: PyPointer) throws {
-//        guard let o = object else { throw PythonError.attribute }
-//        self = o
-//    }
-//    
-//}
-
-
 extension Data: PyDecodable {
     
     public init(object: PyPointer) throws {

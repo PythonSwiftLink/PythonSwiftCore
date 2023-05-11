@@ -38,3 +38,7 @@ public protocol PyMappingProtocol {
 public protocol PyNumericProtocol {
     
 }
+
+public protocol PyHashable {
+    var __hash__: Int { get }
+}

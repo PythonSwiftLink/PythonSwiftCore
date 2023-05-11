@@ -300,6 +300,19 @@ extension Double: PyEncodable {
     
 }
 
+extension CGFloat: PyEncodable {
+    
+    
+    public var pyPointer: PyPointer {
+        PyFloat_FromDouble(self)
+    }
+    
+    public var pyObject: PythonObject {
+        .init(getter: PyFloat_FromDouble(self))
+    }
+    
+}
+
 extension Float32: PyEncodable {
     
     public var pyPointer: PyPointer {

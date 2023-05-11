@@ -7,7 +7,7 @@ import Foundation
 extension PyPointer {
 
     func callAsFunction<R>() throws -> R where 
-    	R: ConvertibleFromPython {
+    	R: PyDecodable {
         guard let result = PyObject_CallNoArgs(self) else {
             PyErr_Print()
             throw PythonError.call
@@ -34,8 +34,8 @@ extension PyPointer {
     }
 
     func callAsFunction<A, R>(_ a: A) throws -> R where 
-    	A: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	R: PyDecodable {
         let arg = a.pyPointer
         guard let result = PyObject_CallOneArg(self, arg) else {
             PyErr_Print()
@@ -49,7 +49,7 @@ extension PyPointer {
     }
 
     func callAsFunction<A>(_ a: A) throws -> PyPointer where 
-    	A: PyConvertible {
+    	A: PyEncodable {
         let arg = a.pyPointer
         guard let result = PyObject_CallOneArg(self, arg) else {
             PyErr_Print()
@@ -61,7 +61,7 @@ extension PyPointer {
     }
 
     func callAsFunction<A>(_ a: A) throws where 
-    	A: PyConvertible {
+    	A: PyEncodable {
         let arg = a.pyPointer
         guard let result = PyObject_CallOneArg(self, arg) else {
             PyErr_Print()
@@ -73,9 +73,9 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, R>(_ a: A, _ b: B) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 2)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -95,8 +95,8 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B>(_ a: A, _ b: B) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 2)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -114,8 +114,8 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B>(_ a: A, _ b: B) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 2)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -133,10 +133,10 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, R>(_ a: A, _ b: B, _ c: C) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 3)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -159,9 +159,9 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C>(_ a: A, _ b: B, _ c: C) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 3)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -182,9 +182,9 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C>(_ a: A, _ b: B, _ c: C) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 3)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -205,11 +205,11 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, R>(_ a: A, _ b: B, _ c: C, _ d: D) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 4)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -235,10 +235,10 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D>(_ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 4)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -262,10 +262,10 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D>(_ a: A, _ b: B, _ c: C, _ d: D) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 4)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -289,12 +289,12 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 5)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -323,11 +323,11 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 5)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -354,11 +354,11 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 5)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -385,13 +385,13 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 6)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -423,12 +423,12 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 6)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -458,12 +458,12 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 6)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -493,14 +493,14 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 7)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -535,13 +535,13 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 7)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -574,13 +574,13 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 7)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -613,15 +613,15 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G, H, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible, 
-    	H: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable, 
+    	H: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 8)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -659,14 +659,14 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G, H>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible, 
-    	H: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable, 
+    	H: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 8)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -702,14 +702,14 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G, H>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible, 
-    	H: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable, 
+    	H: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 8)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -745,16 +745,16 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G, H, I, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> R where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible, 
-    	H: PyConvertible, 
-    	I: PyConvertible, 
-    	R: ConvertibleFromPython {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable, 
+    	H: PyEncodable, 
+    	I: PyEncodable, 
+    	R: PyDecodable {
         let args = VectorCallArgs.allocate(capacity: 9)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -795,15 +795,15 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G, H, I>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible, 
-    	H: PyConvertible, 
-    	I: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable, 
+    	H: PyEncodable, 
+    	I: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 9)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -842,15 +842,15 @@ extension PyPointer {
     }
 
     func callAsFunction<A, B, C, D, E, F, G, H, I>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws where 
-    	A: PyConvertible, 
-    	B: PyConvertible, 
-    	C: PyConvertible, 
-    	D: PyConvertible, 
-    	E: PyConvertible, 
-    	F: PyConvertible, 
-    	G: PyConvertible, 
-    	H: PyConvertible, 
-    	I: PyConvertible {
+    	A: PyEncodable, 
+    	B: PyEncodable, 
+    	C: PyEncodable, 
+    	D: PyEncodable, 
+    	E: PyEncodable, 
+    	F: PyEncodable, 
+    	G: PyEncodable, 
+    	H: PyEncodable, 
+    	I: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 9)
         args[0] = a.pyPointer
         args[1] = b.pyPointer
@@ -891,7 +891,7 @@ extension PyPointer {
 
 
 func PythonCall < R>(call: PyPointer) throws -> R where 
-	R: ConvertibleFromPython {
+	R: PyDecodable {
     guard let result = PyObject_CallNoArgs(call) else {
         PyErr_Print()
         throw PythonError.call
@@ -918,8 +918,8 @@ func PythonCall(call: PyPointer) throws {
 }
 
 func PythonCall<A, R>(call: PyPointer, _ a: A) throws -> R where 
-	A: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	R: PyDecodable {
     let arg = a.pyPointer
     guard let result = PyObject_CallOneArg(call, arg) else {
         PyErr_Print()
@@ -933,7 +933,7 @@ func PythonCall<A, R>(call: PyPointer, _ a: A) throws -> R where
 }
 
 func PythonCall<A>(call: PyPointer, _ a: A) throws -> PyPointer where 
-	A: PyConvertible {
+	A: PyEncodable {
     let arg = a.pyPointer
     guard let result = PyObject_CallOneArg(call, arg) else {
         PyErr_Print()
@@ -945,7 +945,7 @@ func PythonCall<A>(call: PyPointer, _ a: A) throws -> PyPointer where
 }
 
 func PythonCall<A>(call: PyPointer, _ a: A) throws where 
-	A: PyConvertible {
+	A: PyEncodable {
     let arg = a.pyPointer
     guard let result = PyObject_CallOneArg(call, arg) else {
         PyErr_Print()
@@ -957,9 +957,9 @@ func PythonCall<A>(call: PyPointer, _ a: A) throws where
 }
 
 func PythonCall<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 2)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -979,8 +979,8 @@ func PythonCall<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -> R where
 }
 
 func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 2)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -998,8 +998,8 @@ func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where
 }
 
 func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws where 
-	A: PyConvertible, 
-	B: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 2)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1017,10 +1017,10 @@ func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws where
 }
 
 func PythonCall<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 3)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1043,9 +1043,9 @@ func PythonCall<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> R
 }
 
 func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 3)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1066,9 +1066,9 @@ func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPo
 }
 
 func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 3)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1089,11 +1089,11 @@ func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws where
 }
 
 func PythonCall<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 4)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1119,10 +1119,10 @@ func PythonCall<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) 
 }
 
 func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 4)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1146,10 +1146,10 @@ func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) thr
 }
 
 func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 4)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1173,12 +1173,12 @@ func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) thr
 }
 
 func PythonCall<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 5)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1207,11 +1207,11 @@ func PythonCall<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: 
 }
 
 func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 5)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1238,11 +1238,11 @@ func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, 
 }
 
 func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 5)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1269,13 +1269,13 @@ func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, 
 }
 
 func PythonCall<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 6)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1307,12 +1307,12 @@ func PythonCall<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ 
 }
 
 func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 6)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1342,12 +1342,12 @@ func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: 
 }
 
 func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 6)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1377,14 +1377,14 @@ func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: 
 }
 
 func PythonCall<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 7)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1419,13 +1419,13 @@ func PythonCall<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _ b: B, _ c: C,
 }
 
 func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 7)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1458,13 +1458,13 @@ func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ 
 }
 
 func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 7)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1497,15 +1497,15 @@ func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ 
 }
 
 func PythonCall<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible, 
-	H: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 8)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1543,14 +1543,14 @@ func PythonCall<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A, _ b: B, _ c:
 }
 
 func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible, 
-	H: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 8)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1586,14 +1586,14 @@ func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C,
 }
 
 func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible, 
-	H: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 8)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1629,16 +1629,16 @@ func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C,
 }
 
 func PythonCall<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> R where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible, 
-	H: PyConvertible, 
-	I: PyConvertible, 
-	R: ConvertibleFromPython {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	I: PyEncodable, 
+	R: PyDecodable {
     let args = VectorCallArgs.allocate(capacity: 9)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1679,15 +1679,15 @@ func PythonCall<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a: A, _ b: B, _
 }
 
 func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible, 
-	H: PyConvertible, 
-	I: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	I: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 9)
     args[0] = a.pyPointer
     args[1] = b.pyPointer
@@ -1726,15 +1726,15 @@ func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c:
 }
 
 func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws where 
-	A: PyConvertible, 
-	B: PyConvertible, 
-	C: PyConvertible, 
-	D: PyConvertible, 
-	E: PyConvertible, 
-	F: PyConvertible, 
-	G: PyConvertible, 
-	H: PyConvertible, 
-	I: PyConvertible {
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	I: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 9)
     args[0] = a.pyPointer
     args[1] = b.pyPointer

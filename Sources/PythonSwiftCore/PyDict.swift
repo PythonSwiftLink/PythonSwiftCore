@@ -19,6 +19,7 @@ public func PyDict_GetItem(_ dict: PyPointer, _ key: String) -> PyPointer {
 public func PyDict_GetItem<R: ConvertibleFromPython>(_ dict: PyPointer, _ key: String) throws -> R {
     try key.withCString {
         guard let ptr = PyDict_GetItemString(dict, $0) else { throw PythonError.attribute }
+        defer { Py_DecRef(ptr) }
         return try R(object: ptr) }
 }
 public func PyDict_GetItem<R: ConvertibleFromPython>(_ dict: PyPointer?, _ key: String) throws -> R {
@@ -27,6 +28,7 @@ public func PyDict_GetItem<R: ConvertibleFromPython>(_ dict: PyPointer?, _ key: 
             let dict = dict,
             let ptr = PyDict_GetItemString(dict, $0)
         else { throw PythonError.attribute }
+        defer { Py_DecRef(ptr) }
         return try R(object: ptr) }
 }
 
@@ -60,6 +62,11 @@ public func PyDict_SetItem(_ dict: PyPointer?, _ key: String, _ value: PyPointer
     key.withCString { PyDict_SetItemString(dict, $0, value) }
 }
 
+@discardableResult
+public func PyDict_SetItem(_ dict: PyPointer?, _ key: String, _ value: PyEncodable) -> Int32 {
+    key.withCString { PyDict_SetItemString(dict, $0, value.pyPointer) }
+}
+
 extension PyPointer {
     @discardableResult
     public func setPyDictItem(_ key: String, _ value: PyPointer?) -> Int32 {
@@ -79,14 +86,14 @@ extension PyPointer {
         }
     }
     
-    subscript(index: String) -> PyPointer? {
-        get {
-            index.withCString { PyDict_GetItemString(self, $0) }
-        }
-        set(newValue) {
-            _ = index.withCString { PyDict_SetItemString(self, $0, newValue) }
-        }
-    }
+//    subscript(index: String) -> PyPointer {
+//        get {
+//            index.withCString { PyDict_GetItemString(self, $0) }
+//        }
+//        set(newValue) {
+//            _ = index.withCString { PyDict_SetItemString(self, $0, newValue) }
+//        }
+//    }
     
     subscript<T: ConvertibleFromPython & PyConvertible>(index: String) -> T? {
         get {
@@ -97,6 +104,15 @@ extension PyPointer {
             _ = index.withCString { PyDict_SetItemString(self, $0, newValue.pyPointer) }
         }
     }
+    
+//    subscript<T: ConvertibleFromPython & PyConvertible>(index: String) -> T where T == PyPointer {
+//        get {
+//            index.withCString { PyDict_GetItemString(self, $0) }
+//        }
+//        set(newValue) {
+//            _ = index.withCString { PyDict_SetItemString(self, $0, newValue) }
+//        }
+//    }
     
     subscript(index: String) -> String {
         get {
