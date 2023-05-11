@@ -5,7 +5,7 @@ import PythonLib
 
 
 
-//extension PythonObject : ConvertibleFromPython {
+//extension PythonObject : PyDecodable {
 //    
 //    public init(object: PyPointer) throws {
 //        self = .init(getter: object)
@@ -13,7 +13,7 @@ import PythonLib
 //    
 //}
 
-extension PyPointer : ConvertibleFromPython {
+extension PyPointer : PyDecodable {
 
     public init(object: PyPointer) throws {
         self = object.xINCREF
@@ -22,36 +22,23 @@ extension PyPointer : ConvertibleFromPython {
 
 }
 
-//extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
-//    
-//    public init(object: PyPointer) throws {
-//        guard let o = object else { throw PythonError.attribute }
-//        self = o
-//    }
-//    
-//}
-
-
-
-
-//extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
-//    
-//    public init(object: PyPointer) throws {
-//        guard let o = object else { throw PythonError.attribute }
-//        self = o
-//    }
-//    
-//}
-
-
-extension Data: ConvertibleFromPython {
+extension Data: PyDecodable {
     
     public init(object: PyPointer) throws {
-        self = object.memoryViewAsData() ?? .init()
+        
+        switch object {
+        case let mem where PythonMemoryView_Check(mem):
+            self = mem.memoryViewAsData() ?? .init()
+        case let bytes where PythonBytes_Check(bytes):
+            self = bytes.bytesAsData() ?? .init()
+        case let bytearray where PythonByteArray_Check(bytearray):
+            self = bytearray.bytearrayAsData() ?? .init()
+        default: throw PythonError.memory("object is not a byte or memoryview type")
+        }
     }
 }
 
-extension Bool : ConvertibleFromPython {
+extension Bool : PyDecodable {
     
     public init(object: PyPointer) throws {
         if object == PythonTrue {
@@ -66,7 +53,7 @@ extension Bool : ConvertibleFromPython {
 }
 
 
-extension String : ConvertibleFromPython {
+extension String : PyDecodable {
     
     public init(object: PyPointer) throws {
         //guard object.notNone else { throw PythonError.unicode }
@@ -82,7 +69,7 @@ extension String : ConvertibleFromPython {
 }
 
 
-extension URL : ConvertibleFromPython {
+extension URL : PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonUnicode_Check(object) else { throw PythonError.unicode }
@@ -93,7 +80,7 @@ extension URL : ConvertibleFromPython {
     
 }
 
-extension Int : ConvertibleFromPython {
+extension Int : PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -101,14 +88,14 @@ extension Int : ConvertibleFromPython {
     }
 }
 
-extension UInt : ConvertibleFromPython {
+extension UInt : PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
         self = PyLong_AsUnsignedLong(object)
     }
 }
-extension Int64: ConvertibleFromPython {
+extension Int64: PyDecodable {
     
     
     public init(object: PyPointer) throws {
@@ -117,7 +104,7 @@ extension Int64: ConvertibleFromPython {
     }
 }
 
-extension UInt64:ConvertibleFromPython {
+extension UInt64:PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -125,7 +112,7 @@ extension UInt64:ConvertibleFromPython {
     }
 }
 
-extension Int32: ConvertibleFromPython {
+extension Int32: PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -133,7 +120,7 @@ extension Int32: ConvertibleFromPython {
     }
 }
 
-extension UInt32: ConvertibleFromPython {
+extension UInt32: PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -141,7 +128,7 @@ extension UInt32: ConvertibleFromPython {
     }
 }
 
-extension Int16: ConvertibleFromPython {
+extension Int16: PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -150,7 +137,7 @@ extension Int16: ConvertibleFromPython {
     
 }
 
-extension UInt16: ConvertibleFromPython {
+extension UInt16: PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -159,7 +146,7 @@ extension UInt16: ConvertibleFromPython {
     
 }
 
-extension Int8: ConvertibleFromPython {
+extension Int8: PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -168,7 +155,7 @@ extension Int8: ConvertibleFromPython {
     
 }
 
-extension UInt8: ConvertibleFromPython {
+extension UInt8: PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -176,7 +163,7 @@ extension UInt8: ConvertibleFromPython {
     }
 }
 
-extension Double: ConvertibleFromPython {
+extension Double: PyDecodable {
     
     public init(object: PyPointer) throws {
         if PythonFloat_Check(object){
@@ -189,7 +176,7 @@ extension Double: ConvertibleFromPython {
     }
 }
 
-extension Float32: ConvertibleFromPython {
+extension Float32: PyDecodable {
     
     public init(object: PyPointer) throws {
         guard PythonFloat_Check(object) else { throw PythonError.float }
@@ -199,11 +186,10 @@ extension Float32: ConvertibleFromPython {
 
 
 
-extension Array : ConvertibleFromPython where Element : ConvertibleFromPython {
+extension Array : PyDecodable where Element : PyDecodable {
     
     public init(object: PyPointer) throws {
         if PythonList_Check(object) {
-
             self = try object.map {
                 guard let element = $0 else { throw PythonError.index }
                 return try Element(object: element)
@@ -220,18 +206,6 @@ extension Array : ConvertibleFromPython where Element : ConvertibleFromPython {
     
 }
 
-@inlinable
-public func optionalPyCast<R: ConvertibleFromPython>(from o: PyPointer?) -> R? {
-    guard let object = o, object != PythonNone else { return nil }
-    return try? R(object: object)
-}
 
-
-
-@inlinable
-public func pyCast<R: ConvertibleFromPython>(from o: PyPointer?) throws -> R {
-    guard let object = o, object != PythonNone else { throw PythonError.attribute }
-    return try R(object: object)
-}
 
 
