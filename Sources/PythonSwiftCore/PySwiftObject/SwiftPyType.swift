@@ -15,6 +15,7 @@ public struct PyTypeFunctions {
     //let tp_as_number: UnsafeMutablePointer<PyNumberMethods>!
     //let tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>!
     let tp_call: ternaryfunc!
+
     let tp_str: PySwift_ReprFunc!
     let tp_repr: PySwift_ReprFunc!
     let tp_hash: PySwift_HashFunc!
@@ -28,9 +29,11 @@ public struct PyTypeFunctions {
         //tp_as_number: UnsafeMutablePointer<PyNumberMethods>? = nil,
         //tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>? = nil,
         tp_call: ternaryfunc? = nil,
+
         tp_str: PySwift_ReprFunc? = nil,
         tp_repr: PySwift_ReprFunc? = nil,
         tp_hash: PySwift_HashFunc? = nil) {
+
             self.tp_init = tp_init
             self.tp_new = tp_new
             self.tp_dealloc = tp_dealloc
