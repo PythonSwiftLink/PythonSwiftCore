@@ -5,7 +5,7 @@ import PythonLib
 
 
 
-//extension PythonObject : PyDecodable {
+//extension PythonObject : ConvertibleFromPython {
 //    
 //    public init(object: PyPointer) throws {
 //        self = .init(getter: object)
@@ -13,7 +13,7 @@ import PythonLib
 //    
 //}
 
-extension PyPointer : PyDecodable {
+extension PyPointer : ConvertibleFromPython {
 
     public init(object: PyPointer) throws {
         self = object.xINCREF
@@ -22,7 +22,29 @@ extension PyPointer : PyDecodable {
 
 }
 
-extension Data: PyDecodable {
+//extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
+//    
+//    public init(object: PyPointer) throws {
+//        guard let o = object else { throw PythonError.attribute }
+//        self = o
+//    }
+//    
+//}
+
+
+
+
+//extension UnsafeMutablePointer<_object> : ConvertibleFromPython {
+//    
+//    public init(object: PyPointer) throws {
+//        guard let o = object else { throw PythonError.attribute }
+//        self = o
+//    }
+//    
+//}
+
+
+extension Data: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         
@@ -38,7 +60,7 @@ extension Data: PyDecodable {
     }
 }
 
-extension Bool : PyDecodable {
+extension Bool : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         if object == PythonTrue {
@@ -53,7 +75,7 @@ extension Bool : PyDecodable {
 }
 
 
-extension String : PyDecodable {
+extension String : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         //guard object.notNone else { throw PythonError.unicode }
@@ -69,25 +91,18 @@ extension String : PyDecodable {
 }
 
 
-extension URL : PyDecodable {
+extension URL : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonUnicode_Check(object) else { throw PythonError.unicode }
         let path = String(cString: PyUnicode_AsUTF8(object))
-
-        if path.hasPrefix("http") {
-            guard let url = URL(string: path) else { throw URLError(.badURL) }
-            self = url
-        } else {
-            let url = URL(fileURLWithPath: path)
-            self = url
-        }
-        
+        guard let url = URL(string: path) else { throw URLError(.badURL) }
+        self = url
     }
     
 }
 
-extension Int : PyDecodable {
+extension Int : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -95,14 +110,14 @@ extension Int : PyDecodable {
     }
 }
 
-extension UInt : PyDecodable {
+extension UInt : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
         self = PyLong_AsUnsignedLong(object)
     }
 }
-extension Int64: PyDecodable {
+extension Int64: ConvertibleFromPython {
     
     
     public init(object: PyPointer) throws {
@@ -111,7 +126,7 @@ extension Int64: PyDecodable {
     }
 }
 
-extension UInt64:PyDecodable {
+extension UInt64:ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -119,7 +134,7 @@ extension UInt64:PyDecodable {
     }
 }
 
-extension Int32: PyDecodable {
+extension Int32: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -127,7 +142,7 @@ extension Int32: PyDecodable {
     }
 }
 
-extension UInt32: PyDecodable {
+extension UInt32: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -135,7 +150,7 @@ extension UInt32: PyDecodable {
     }
 }
 
-extension Int16: PyDecodable {
+extension Int16: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -144,7 +159,7 @@ extension Int16: PyDecodable {
     
 }
 
-extension UInt16: PyDecodable {
+extension UInt16: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -153,7 +168,7 @@ extension UInt16: PyDecodable {
     
 }
 
-extension Int8: PyDecodable {
+extension Int8: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -162,7 +177,7 @@ extension Int8: PyDecodable {
     
 }
 
-extension UInt8: PyDecodable {
+extension UInt8: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonLong_Check(object) else { throw PythonError.long }
@@ -170,7 +185,7 @@ extension UInt8: PyDecodable {
     }
 }
 
-extension Double: PyDecodable {
+extension Double: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         if PythonFloat_Check(object){
@@ -183,7 +198,7 @@ extension Double: PyDecodable {
     }
 }
 
-extension Float32: PyDecodable {
+extension Float32: ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         guard PythonFloat_Check(object) else { throw PythonError.float }
@@ -193,10 +208,11 @@ extension Float32: PyDecodable {
 
 
 
-extension Array : PyDecodable where Element : PyDecodable {
+extension Array : ConvertibleFromPython where Element : ConvertibleFromPython {
     
     public init(object: PyPointer) throws {
         if PythonList_Check(object) {
+
             self = try object.map {
                 guard let element = $0 else { throw PythonError.index }
                 return try Element(object: element)
