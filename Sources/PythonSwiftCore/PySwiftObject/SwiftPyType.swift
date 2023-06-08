@@ -15,9 +15,10 @@ public struct PyTypeFunctions {
     //let tp_as_number: UnsafeMutablePointer<PyNumberMethods>!
     //let tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>!
     let tp_call: ternaryfunc!
-    let tp_str: reprfunc!
-    let tp_repr: reprfunc!
-    let tp_hash: hashfunc!
+
+    let tp_str: PySwift_ReprFunc!
+    let tp_repr: PySwift_ReprFunc!
+    let tp_hash: PySwift_HashFunc!
     
     public init(
         tp_init: initproc? = nil,
@@ -28,9 +29,11 @@ public struct PyTypeFunctions {
         //tp_as_number: UnsafeMutablePointer<PyNumberMethods>? = nil,
         //tp_as_sequence: UnsafeMutablePointer<PySequenceMethods>? = nil,
         tp_call: ternaryfunc? = nil,
-        tp_str: reprfunc? = nil,
-        tp_repr: reprfunc? = nil,
-        tp_hash: hashfunc? = nil) {
+
+        tp_str: PySwift_ReprFunc? = nil,
+        tp_repr: PySwift_ReprFunc? = nil,
+        tp_hash: PySwift_HashFunc? = nil) {
+
             self.tp_init = tp_init
             self.tp_new = tp_new
             self.tp_dealloc = tp_dealloc
@@ -143,8 +146,8 @@ public final class SwiftPyType {
         py_type.tp_new = funcs.tp_new
         py_type.tp_init = funcs.tp_init
         
-        py_type.tp_repr = funcs.tp_repr
-        py_type.tp_str = funcs.tp_str
+        py_type.tp_repr = unsafeBitCast(funcs.tp_repr, to: reprfunc.self)
+        py_type.tp_str = unsafeBitCast(funcs.tp_str, to: reprfunc.self)
         //py_type.tp_vectorcall = nil
         //        py_type.tp_vectorcall = {s, a, n, k  in
         //            print("tp_vectorcall")
@@ -161,6 +164,8 @@ public final class SwiftPyType {
         py_type.tp_call = funcs.tp_call
         py_type.tp_getattr = funcs.tp_getattr
         py_type.tp_setattr = funcs.tp_setattr
+        
+        py_type.tp_hash = unsafeBitCast(funcs.tp_hash, to: hashfunc.self)
         
         py_type.tp_getattro = PyObject_GenericGetAttr
         py_type.tp_setattro = PyObject_GenericSetAttr

@@ -5,10 +5,11 @@ import PythonLib
 #endif
 
 public final class PySwiftModuleImport {
-    let name: CString
-    let module: PythonModuleImportFunc
+    public let name: CString
+    public let module: PythonModuleImportFunc
     
-    init(name: String, module: PythonModuleImportFunc) {
+    
+    public init(name: String, module: PythonModuleImportFunc) {
         self.name = makeCString(from: name)
         self.module = module
     }

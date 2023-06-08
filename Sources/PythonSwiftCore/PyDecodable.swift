@@ -74,8 +74,15 @@ extension URL : PyDecodable {
     public init(object: PyPointer) throws {
         guard PythonUnicode_Check(object) else { throw PythonError.unicode }
         let path = String(cString: PyUnicode_AsUTF8(object))
-        guard let url = URL(string: path) else { throw URLError(.badURL) }
-        self = url
+
+        if path.hasPrefix("http") {
+            guard let url = URL(string: path) else { throw URLError(.badURL) }
+            self = url
+        } else {
+            let url = URL(fileURLWithPath: path)
+            self = url
+        }
+        
     }
     
 }

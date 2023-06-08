@@ -71,3 +71,9 @@ public typealias PyBuf_Release = (@convention(c) (_ s: PyPointer?,_ buf: UnsafeM
 
 public typealias PySwiftBuf_Get = (@convention(c) (_ s: PySwiftObjectPointer,_ buf: UnsafeMutablePointer<Py_buffer>?,_ flags: Int32) -> Int32)?
 public typealias PySwiftBuf_Release = (@convention(c) (_ s: PySwiftObjectPointer,_ buf: UnsafeMutablePointer<Py_buffer>?) -> Void )?
+
+
+public typealias PySwift_HashFunc = (@convention(c) (_ s: PySwiftObjectPointer) -> Int)?
+
+public typealias PySwift_ReprFunc = (@convention(c) (_ s: PySwiftObjectPointer) -> PyPointer?)?
+
