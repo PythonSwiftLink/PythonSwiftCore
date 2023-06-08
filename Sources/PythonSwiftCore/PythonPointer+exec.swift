@@ -21,14 +21,14 @@ public enum PyEvalFlag: Int32 {
     
 }
 #if BEEWARE
-public func Py_CompileString(code: String,  filename: String, flag: PyEvalFlag) -> PyPointer {
+public func Py_CompileString(code: String,  filename: String, flag: PyEvalFlag) -> PyPointer? {
     code.withCString { str in
         Py_CompileString(str, filename, flag.rawValue)
     }
 }
 #endif
 
-public func PyRun_String(string: String, flag: PyEvalFlag, globals: PyPointer, locals: PyPointer) -> PyPointer {
+public func PyRun_String(string: String, flag: PyEvalFlag, globals: PyPointer, locals: PyPointer) -> PyPointer? {
     string.withCString { str in
         PyRun_String(str, flag.rawValue, globals, locals)
     }
