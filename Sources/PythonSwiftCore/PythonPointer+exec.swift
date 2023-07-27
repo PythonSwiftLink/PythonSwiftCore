@@ -21,9 +21,39 @@ public enum PyEvalFlag: Int32 {
     
 }
 #if BEEWARE
+
+public func Py_ValidateCode(code: String,  filename: String, flag: PyEvalFlag) -> Bool {
+    print("Py_CompileString:\n", code)
+    PyErr_Clear()
+    return code.withCString { str in
+        //let gil = PyGILState_Ensure()
+        return true
+        
+        if let result = Py_CompileString(str, filename, flag.rawValue) {
+            print(result)
+            result.decref()
+            return true
+        }
+        
+        return false
+        //PyGILState_Release(gil)
+        
+        
+        //return result
+    }
+}
+
 public func Py_CompileString(code: String,  filename: String, flag: PyEvalFlag) -> PyPointer? {
-    code.withCString { str in
-        Py_CompileString(str, filename, flag.rawValue)
+    print("Py_CompileString:\n\n", code)
+    PyErr_Clear()
+    return code.withCString { str in
+        //let gil = PyGILState_Ensure()
+        return .PyNone
+        
+        let result = Py_CompileString(str, filename, flag.rawValue)
+        //PyGILState_Release(gil)
+        print(result)
+        return result
     }
 }
 #endif

@@ -24,6 +24,7 @@ let package = Package(
         //.package(path: "../PythonLib")
         //.package(url: "https://github.com/PythonSwiftLink/PythonLib-iOS", branch: "main")
     ],
+    
     targets: [
         .target(
             name: "PythonSwiftCore",
@@ -38,6 +39,7 @@ let package = Package(
             ],
             swiftSettings: [ .define("BEEWARE", nil)]
         ),
+        
 //        .target(
 //            name: "PythonSwiftCore-iOS",
 //            dependencies: ["PythonLib-iOS"],
