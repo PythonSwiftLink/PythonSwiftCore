@@ -6,7 +6,7 @@ import PythonLib
 import Foundation
 extension PyPointer {
 
-    func callAsFunction<R>() throws -> R where 
+    public func callAsFunction<R>() throws -> R where 
     	R: PyDecodable {
         guard let result = PyObject_CallNoArgs(self) else {
             PyErr_Print()
@@ -17,7 +17,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction() throws -> PyPointer {
+    public func callAsFunction() throws -> PyPointer {
         guard let result = PyObject_CallNoArgs(self) else {
             PyErr_Print()
             throw PythonError.call
@@ -25,7 +25,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction() throws {
+    public func callAsFunction() throws {
         guard let result = PyObject_CallNoArgs(self) else {
             PyErr_Print()
             throw PythonError.call
@@ -33,7 +33,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, R>(_ a: A) throws -> R where 
+    public func callAsFunction<A, R>(_ a: A) throws -> R where 
     	A: PyEncodable, 
     	R: PyDecodable {
         let arg = a.pyPointer
@@ -48,7 +48,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A>(_ a: A) throws -> PyPointer where 
+    public func callAsFunction<A>(_ a: A) throws -> PyPointer where 
     	A: PyEncodable {
         let arg = a.pyPointer
         guard let result = PyObject_CallOneArg(self, arg) else {
@@ -60,7 +60,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A>(_ a: A) throws where 
+    public func callAsFunction<A>(_ a: A) throws where 
     	A: PyEncodable {
         let arg = a.pyPointer
         guard let result = PyObject_CallOneArg(self, arg) else {
@@ -72,7 +72,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, R>(_ a: A, _ b: B) throws -> R where 
+    public func callAsFunction<A, B, R>(_ a: A, _ b: B) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	R: PyDecodable {
@@ -94,7 +94,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B>(_ a: A, _ b: B) throws -> PyPointer where 
+    public func callAsFunction<A, B>(_ a: A, _ b: B) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 2)
@@ -113,7 +113,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B>(_ a: A, _ b: B) throws where 
+    public func callAsFunction<A, B>(_ a: A, _ b: B) throws where 
     	A: PyEncodable, 
     	B: PyEncodable {
         let args = VectorCallArgs.allocate(capacity: 2)
@@ -132,7 +132,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, C, R>(_ a: A, _ b: B, _ c: C) throws -> R where 
+    public func callAsFunction<A, B, C, R>(_ a: A, _ b: B, _ c: C) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -158,7 +158,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B, C>(_ a: A, _ b: B, _ c: C) throws -> PyPointer where 
+    public func callAsFunction<A, B, C>(_ a: A, _ b: B, _ c: C) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable {
@@ -181,7 +181,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B, C>(_ a: A, _ b: B, _ c: C) throws where 
+    public func callAsFunction<A, B, C>(_ a: A, _ b: B, _ c: C) throws where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable {
@@ -204,7 +204,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, C, D, R>(_ a: A, _ b: B, _ c: C, _ d: D) throws -> R where 
+    public func callAsFunction<A, B, C, D, R>(_ a: A, _ b: B, _ c: C, _ d: D) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -234,7 +234,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B, C, D>(_ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
+    public func callAsFunction<A, B, C, D>(_ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -261,7 +261,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B, C, D>(_ a: A, _ b: B, _ c: C, _ d: D) throws where 
+    public func callAsFunction<A, B, C, D>(_ a: A, _ b: B, _ c: C, _ d: D) throws where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -288,7 +288,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, C, D, E, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> R where 
+    public func callAsFunction<A, B, C, D, E, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -322,7 +322,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B, C, D, E>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
+    public func callAsFunction<A, B, C, D, E>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -353,7 +353,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B, C, D, E>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws where 
+    public func callAsFunction<A, B, C, D, E>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -384,7 +384,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, C, D, E, F, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> R where 
+    public func callAsFunction<A, B, C, D, E, F, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -422,7 +422,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B, C, D, E, F>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
+    public func callAsFunction<A, B, C, D, E, F>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -457,7 +457,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B, C, D, E, F>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws where 
+    public func callAsFunction<A, B, C, D, E, F>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -492,7 +492,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, C, D, E, F, G, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> R where 
+    public func callAsFunction<A, B, C, D, E, F, G, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -534,7 +534,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B, C, D, E, F, G>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
+    public func callAsFunction<A, B, C, D, E, F, G>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -573,7 +573,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B, C, D, E, F, G>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws where 
+    public func callAsFunction<A, B, C, D, E, F, G>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -612,7 +612,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, C, D, E, F, G, H, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> R where 
+    public func callAsFunction<A, B, C, D, E, F, G, H, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -658,7 +658,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B, C, D, E, F, G, H>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
+    public func callAsFunction<A, B, C, D, E, F, G, H>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -701,7 +701,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B, C, D, E, F, G, H>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws where 
+    public func callAsFunction<A, B, C, D, E, F, G, H>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -744,7 +744,7 @@ extension PyPointer {
         Py_DecRef(result)
     }
 
-    func callAsFunction<A, B, C, D, E, F, G, H, I, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> R where 
+    public func callAsFunction<A, B, C, D, E, F, G, H, I, R>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> R where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -794,7 +794,7 @@ extension PyPointer {
         return rtn
     }
 
-    func callAsFunction<A, B, C, D, E, F, G, H, I>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
+    public func callAsFunction<A, B, C, D, E, F, G, H, I>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -841,7 +841,7 @@ extension PyPointer {
         return result
     }
 
-    func callAsFunction<A, B, C, D, E, F, G, H, I>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws where 
+    public func callAsFunction<A, B, C, D, E, F, G, H, I>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws where 
     	A: PyEncodable, 
     	B: PyEncodable, 
     	C: PyEncodable, 
@@ -890,7 +890,7 @@ extension PyPointer {
 }
 
 
-func PythonCall < R>(call: PyPointer) throws -> R where 
+public func PythonCall < R>(call: PyPointer) throws -> R where 
 	R: PyDecodable {
     guard let result = PyObject_CallNoArgs(call) else {
         PyErr_Print()
@@ -901,7 +901,7 @@ func PythonCall < R>(call: PyPointer) throws -> R where
     return rtn
 }
 
-func PythonCall(call: PyPointer) throws -> PyPointer {
+public func PythonCall(call: PyPointer) throws -> PyPointer {
     guard let result = PyObject_CallNoArgs(call) else {
         PyErr_Print()
         throw PythonError.call
@@ -909,7 +909,7 @@ func PythonCall(call: PyPointer) throws -> PyPointer {
     return result
 }
 
-func PythonCall(call: PyPointer) throws {
+public func PythonCall(call: PyPointer) throws {
     guard let result = PyObject_CallNoArgs(call) else {
         PyErr_Print()
         throw PythonError.call
@@ -917,7 +917,7 @@ func PythonCall(call: PyPointer) throws {
     Py_DecRef(result)
 }
 
-func PythonCall<A, R>(call: PyPointer, _ a: A) throws -> R where 
+public func PythonCall<A, R>(call: PyPointer, _ a: A) throws -> R where 
 	A: PyEncodable, 
 	R: PyDecodable {
     let arg = a.pyPointer
@@ -932,7 +932,7 @@ func PythonCall<A, R>(call: PyPointer, _ a: A) throws -> R where
     return rtn
 }
 
-func PythonCall<A>(call: PyPointer, _ a: A) throws -> PyPointer where 
+public func PythonCall<A>(call: PyPointer, _ a: A) throws -> PyPointer where 
 	A: PyEncodable {
     let arg = a.pyPointer
     guard let result = PyObject_CallOneArg(call, arg) else {
@@ -944,7 +944,7 @@ func PythonCall<A>(call: PyPointer, _ a: A) throws -> PyPointer where
     return result
 }
 
-func PythonCall<A>(call: PyPointer, _ a: A) throws where 
+public func PythonCall<A>(call: PyPointer, _ a: A) throws where 
 	A: PyEncodable {
     let arg = a.pyPointer
     guard let result = PyObject_CallOneArg(call, arg) else {
@@ -956,7 +956,7 @@ func PythonCall<A>(call: PyPointer, _ a: A) throws where
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -> R where 
+public func PythonCall<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	R: PyDecodable {
@@ -978,7 +978,7 @@ func PythonCall<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -> R where
     return rtn
 }
 
-func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where 
+public func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 2)
@@ -997,7 +997,7 @@ func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where
     return result
 }
 
-func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws where 
+public func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws where 
 	A: PyEncodable, 
 	B: PyEncodable {
     let args = VectorCallArgs.allocate(capacity: 2)
@@ -1016,7 +1016,7 @@ func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws where
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> R where 
+public func PythonCall<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1042,7 +1042,7 @@ func PythonCall<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> R
     return rtn
 }
 
-func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPointer where 
+public func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable {
@@ -1065,7 +1065,7 @@ func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPo
     return result
 }
 
-func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws where 
+public func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable {
@@ -1088,7 +1088,7 @@ func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws where
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> R where 
+public func PythonCall<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1118,7 +1118,7 @@ func PythonCall<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) 
     return rtn
 }
 
-func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
+public func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1145,7 +1145,7 @@ func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) thr
     return result
 }
 
-func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws where 
+public func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1172,7 +1172,7 @@ func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) thr
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> R where 
+public func PythonCall<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1206,7 +1206,7 @@ func PythonCall<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: 
     return rtn
 }
 
-func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
+public func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1237,7 +1237,7 @@ func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, 
     return result
 }
 
-func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws where 
+public func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1268,7 +1268,7 @@ func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, 
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> R where 
+public func PythonCall<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1306,7 +1306,7 @@ func PythonCall<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ 
     return rtn
 }
 
-func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
+public func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1341,7 +1341,7 @@ func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: 
     return result
 }
 
-func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws where 
+public func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1376,7 +1376,7 @@ func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: 
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> R where 
+public func PythonCall<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1418,7 +1418,7 @@ func PythonCall<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _ b: B, _ c: C,
     return rtn
 }
 
-func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
+public func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1457,7 +1457,7 @@ func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ 
     return result
 }
 
-func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws where 
+public func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1496,7 +1496,7 @@ func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ 
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> R where 
+public func PythonCall<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1542,7 +1542,7 @@ func PythonCall<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A, _ b: B, _ c:
     return rtn
 }
 
-func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
+public func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1585,7 +1585,7 @@ func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C,
     return result
 }
 
-func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws where 
+public func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1628,7 +1628,7 @@ func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C,
     Py_DecRef(result)
 }
 
-func PythonCall<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> R where 
+public func PythonCall<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> R where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1678,7 +1678,7 @@ func PythonCall<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a: A, _ b: B, _
     return rtn
 }
 
-func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
+public func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1725,7 +1725,7 @@ func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c:
     return result
 }
 
-func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws where 
+public func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws where 
 	A: PyEncodable, 
 	B: PyEncodable, 
 	C: PyEncodable, 
@@ -1769,5 +1769,937 @@ func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c:
     Py_DecRef(args[7])
     Py_DecRef(args[8])
     args.deallocate()
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil < R>(call: PyPointer) throws -> R where 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    guard let result = PyObject_CallNoArgs(call) else {
+        PyErr_Print()
+        throw PythonError.call
+    }
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil(call: PyPointer) throws -> PyPointer {
+    _ = PyGILState_Ensure()
+    guard let result = PyObject_CallNoArgs(call) else {
+        PyErr_Print()
+        throw PythonError.call
+    }
+    return result
+}
+
+public func PythonCallWithGil(call: PyPointer) throws {
+    let gil = PyGILState_Ensure()
+    guard let result = PyObject_CallNoArgs(call) else {
+        PyErr_Print()
+        throw PythonError.call
+    }
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, R>(call: PyPointer, _ a: A) throws -> R where 
+	A: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let arg = a.pyPointer
+    guard let result = PyObject_CallOneArg(call, arg) else {
+        PyErr_Print()
+        Py_DecRef(arg)
+        throw PythonError.call
+    }
+    Py_DecRef(arg)
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A>(call: PyPointer, _ a: A) throws -> PyPointer where 
+	A: PyEncodable {
+    _ = PyGILState_Ensure()
+    let arg = a.pyPointer
+    guard let result = PyObject_CallOneArg(call, arg) else {
+        PyErr_Print()
+        Py_DecRef(arg)
+        throw PythonError.call
+    }
+    Py_DecRef(arg)
+    return result
+}
+
+public func PythonCallWithGil<A>(call: PyPointer, _ a: A) throws where 
+	A: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let arg = a.pyPointer
+    guard let result = PyObject_CallOneArg(call, arg) else {
+        PyErr_Print()
+        Py_DecRef(arg)
+        throw PythonError.call
+    }
+    Py_DecRef(arg)
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 2)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 2, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 2)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 2, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B>(call: PyPointer, _ a: A, _ b: B) throws where 
+	A: PyEncodable, 
+	B: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 2)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 2, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    args.deallocate()
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 3)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 3, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 3)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 3, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 3)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 3, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    args.deallocate()
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 4)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 4, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 4)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 4, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 4)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 4, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    args.deallocate()
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 5)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 5, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 5)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 5, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 5)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 5, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    args.deallocate()
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 6)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 6, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 6)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 6, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 6)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 6, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    args.deallocate()
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 7)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 7, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 7)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 7, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 7)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 7, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    args.deallocate()
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 8)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    args[7] = h.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 8, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        Py_DecRef(args[7])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    Py_DecRef(args[7])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 8)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    args[7] = h.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 8, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        Py_DecRef(args[7])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    Py_DecRef(args[7])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 8)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    args[7] = h.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 8, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        Py_DecRef(args[7])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    Py_DecRef(args[7])
+    args.deallocate()
+    PyGILState_Release(gil)
+    Py_DecRef(result)
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> R where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	I: PyEncodable, 
+	R: PyDecodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 9)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    args[7] = h.pyPointer
+    args[8] = i.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 9, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        Py_DecRef(args[7])
+        Py_DecRef(args[8])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    Py_DecRef(args[7])
+    Py_DecRef(args[8])
+    args.deallocate()
+    let rtn = try R(object: result)
+    Py_DecRef(result)
+    PyGILState_Release(gil)
+    return rtn
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	I: PyEncodable {
+    _ = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 9)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    args[7] = h.pyPointer
+    args[8] = i.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 9, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        Py_DecRef(args[7])
+        Py_DecRef(args[8])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    Py_DecRef(args[7])
+    Py_DecRef(args[8])
+    args.deallocate()
+    return result
+}
+
+public func PythonCallWithGil<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws where 
+	A: PyEncodable, 
+	B: PyEncodable, 
+	C: PyEncodable, 
+	D: PyEncodable, 
+	E: PyEncodable, 
+	F: PyEncodable, 
+	G: PyEncodable, 
+	H: PyEncodable, 
+	I: PyEncodable {
+    let gil = PyGILState_Ensure()
+    let args = VectorCallArgs.allocate(capacity: 9)
+    args[0] = a.pyPointer
+    args[1] = b.pyPointer
+    args[2] = c.pyPointer
+    args[3] = d.pyPointer
+    args[4] = e.pyPointer
+    args[5] = f.pyPointer
+    args[6] = g.pyPointer
+    args[7] = h.pyPointer
+    args[8] = i.pyPointer
+    guard let result = PyObject_Vectorcall(call, args, 9, nil) else {
+        PyErr_Print()
+        Py_DecRef(args[0])
+        Py_DecRef(args[1])
+        Py_DecRef(args[2])
+        Py_DecRef(args[3])
+        Py_DecRef(args[4])
+        Py_DecRef(args[5])
+        Py_DecRef(args[6])
+        Py_DecRef(args[7])
+        Py_DecRef(args[8])
+        args.deallocate()
+        throw PythonError.call
+    }
+    Py_DecRef(args[0])
+    Py_DecRef(args[1])
+    Py_DecRef(args[2])
+    Py_DecRef(args[3])
+    Py_DecRef(args[4])
+    Py_DecRef(args[5])
+    Py_DecRef(args[6])
+    Py_DecRef(args[7])
+    Py_DecRef(args[8])
+    args.deallocate()
+    PyGILState_Release(gil)
     Py_DecRef(result)
 }
