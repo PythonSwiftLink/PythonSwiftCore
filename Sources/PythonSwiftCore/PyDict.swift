@@ -62,6 +62,15 @@ public func PyDict_SetItem(_ dict: PyPointer?, _ key: String, _ value: PyPointer
     key.withCString { PyDict_SetItemString(dict, $0, value) }
 }
 
+public func PyDict_SetItem_Reduced(_ dict: PyPointer,_ next:  Dictionary<String, PyPointer>.Element) -> PyPointer {
+    _ = next.key.withCString { PyDict_SetItemString(dict, $0, next.value) }
+    return dict
+}
+public func PyDict_SetItem_ReducedIncRef(_ dict: PyPointer,_ next:  Dictionary<String, PyPointer>.Element) -> PyPointer {
+    _ = next.key.withCString { PyDict_SetItemString(dict, $0, next.value.xINCREF) }
+    return dict
+}
+
 @discardableResult
 public func PyDict_SetItem(_ dict: PyPointer?, _ key: String, _ value: PyEncodable) -> Int32 {
     key.withCString { PyDict_SetItemString(dict, $0, value.pyPointer) }

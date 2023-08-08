@@ -20,6 +20,26 @@ public func pyCast<R: ConvertibleFromPython>(from o: PyPointer?) throws -> R {
     return try R(object: object)
 }
 
+@inlinable
+public func UnPackPyPointer<T: AnyObject>(from o: PyPointer?) -> T {
+    guard
+        let object = o, object != PythonNone,
+        let pointee = unsafeBitCast(o, to: PySwiftObjectPointer.self)?.pointee
+    else { fatalError() }
+    
+    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
+}
+
+@inlinable
+public func UnPackOptionalPyPointer<T: AnyObject>(from o: PyPointer?) -> T? {
+    guard
+        let object = o, object != PythonNone,
+        let pointee = unsafeBitCast(o, to: PySwiftObjectPointer.self)?.pointee
+    else { return nil }
+    
+    return Unmanaged.fromOpaque(pointee.swift_ptr).takeUnretainedValue()
+}
+
 
 @inlinable
 public func UnPackOptionalPyPointer<T: AnyObject>(with check: PythonType, from self: PyPointer, as: T.Type) -> T? {

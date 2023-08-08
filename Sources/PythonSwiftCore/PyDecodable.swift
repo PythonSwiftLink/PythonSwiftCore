@@ -213,6 +213,23 @@ extension Array : PyDecodable where Element : PyDecodable {
     
 }
 
+extension Dictionary: PyDecodable where Key == String, Value == PyPointer {
+    public init(object: PyPointer) throws {
+        var d: [Key:Value] = .init()
+        var pos: Int = 0
+        var key: PyPointer?
+        var value: PyPointer?
+        while PyDict_Next(object, &pos, &key, &value) == 1 {
+            if let k = key {
+                d[try String(object: k)] = value
+            }
+        }
+        
+        self = d
+    }
+    
+    
+}
 
 
 
