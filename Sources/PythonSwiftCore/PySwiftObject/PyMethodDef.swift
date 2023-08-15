@@ -191,7 +191,6 @@ public class PyMethodDefHandler {
         }
         methods_ptr[count] = .init()
         
-        //PyModule_AddFunctions(<#T##UnsafeMutablePointer<PyObject>!#>, <#T##UnsafeMutablePointer<PyMethodDef>!#>)
     }
     
     public init(_ methods: PyMethodDefWrap... ) {

@@ -19,7 +19,7 @@ public func GenericPyCFuncCall<A: PyDecodable, B: PyDecodable, C: PyDecodable, R
         return function(
             try A(object: args[0]!),
             try B(object: args[1]!),
-            try C(object: args[1]!)
+            try C(object: args[2]!)
         )
     } catch let err as PythonError {
         err.raiseError()
