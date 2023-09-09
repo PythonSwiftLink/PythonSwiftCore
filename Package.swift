@@ -46,8 +46,13 @@ let package = Package(
 //            path: "./Sources/PythonSwiftCore",
 //            swiftSettings: [ .define("BEEWARE", nil)]
 //        )
-//        .testTarget(
-//            name: "PythonSwiftCoreTests",
-//            dependencies: ["PythonSwiftCore","PythonLib"]),
+        .testTarget(
+            name: "PythonSwiftCoreTests",
+            dependencies: ["PythonSwiftCore","PythonLib"],
+            resources: [
+                .copy("python_stdlib")
+            ]
+        ),
+        
     ]
 )
