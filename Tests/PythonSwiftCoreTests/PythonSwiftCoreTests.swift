@@ -29,7 +29,12 @@ private func initPython() {
     if pythonIsRunning { return }
     pythonIsRunning.toggle()
 //    let resourcePath = "/Users/musicmaker/Library/Mobile Documents/com~apple~CloudDocs/Projects/xcode_projects/touchBay_files/touchBay/touchBay"
-    let resourcePath = pystdlib.path()
+    let resourcePath: String
+    if #available(macOS 13, *) {
+        resourcePath = pystdlib.path()
+    } else {
+        resourcePath = pystdlib.path
+    }
     print(resourcePath)
     print(try! FileManager.default.contentsOfDirectory(atPath: resourcePath))
     var config: PyConfig = .init()
