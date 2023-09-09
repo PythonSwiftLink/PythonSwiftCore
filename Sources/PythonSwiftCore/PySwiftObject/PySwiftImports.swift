@@ -14,3 +14,12 @@ public final class PySwiftModuleImport {
         self.module = module
     }
 }
+
+
+@resultBuilder
+public struct PySwiftModuleImports {
+    public static func buildBlock(_ components: PySwiftModuleImport...) -> [PySwiftModuleImport] {
+        components
+    }
+    
+}

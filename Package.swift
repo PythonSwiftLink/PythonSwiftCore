@@ -48,6 +48,11 @@ let package = Package(
 //        )
         .testTarget(
             name: "PythonSwiftCoreTests",
-            dependencies: ["PythonSwiftCore","PythonLib"]),
+            dependencies: ["PythonSwiftCore","PythonLib"],
+            resources: [
+                .copy("python_stdlib")
+            ]
+        ),
+        
     ]
 )

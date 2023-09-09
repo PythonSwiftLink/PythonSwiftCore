@@ -1,12 +1,41 @@
 import XCTest
 @testable import PythonSwiftCore
 @testable import PythonLib
+fileprivate extension PyPointer {
+    
+    var refCount: Int { _Py_REFCNT(self) }
+}
+private func createPyTestFunction(name: String, _ code: String) throws -> PyPointer? {
+    guard
+        let kw = PyDict_New(),
+        let lkw = PyDict_New(),
+        let result = PyRun_String(string: code, flag: .file, globals: kw, locals: lkw)
+    else {
+        PyErr_Print()
+        throw CocoaError(.coderInvalidValue)
+    }
+    let pyfunc = lkw.getPyDictItem(name)?.xINCREF
+    kw.decref()
+    lkw.decref()
+    result.decref()
+    return pyfunc
+}
+private var pythonIsRunning = false
 
-
-fileprivate var pyfunc: PyPointer = nil
-
+var pystdlib: URL {
+    Bundle.module.url(forResource: "python_stdlib", withExtension: nil)!
+}
 private func initPython() {
-    let resourcePath = "/Users/musicmaker/Library/Mobile Documents/com~apple~CloudDocs/Projects/xcode_projects/touchBay_files/touchBay/touchBay"
+    if pythonIsRunning { return }
+    pythonIsRunning.toggle()
+//    let resourcePath = "/Users/musicmaker/Library/Mobile Documents/com~apple~CloudDocs/Projects/xcode_projects/touchBay_files/touchBay/touchBay"
+    let resourcePath: String
+    if #available(macOS 13, *) {
+        resourcePath = pystdlib.path()
+    } else {
+        resourcePath = pystdlib.path
+    }
+    print(resourcePath)
     print(try! FileManager.default.contentsOfDirectory(atPath: resourcePath))
     var config: PyConfig = .init()
     print("Configuring isolated Python...")
@@ -26,7 +55,7 @@ private func initPython() {
     
     var status: PyStatus
     
-    let python_home = "\(resourcePath)/Python"
+    let python_home = "\(resourcePath)"
     
     var wtmp_str = Py_DecodeLocale(python_home, nil)
     
@@ -42,7 +71,7 @@ private func initPython() {
     
     print("PYTHONPATH:")
     
-    let path = "\(resourcePath)/Python/python-stdlib"
+    let path = "\(resourcePath)"
     //let path = "\(resourcePath)/"
     
     print("- \(path)")
@@ -59,39 +88,64 @@ private func initPython() {
     //let new_obj = NewPyObject(name: "fib", cls: Int.self, _methods: FibMethods)
     print("Initializing Python runtime...")
     status = Py_InitializeFromConfig(&config)
-    let code = """
-    def pyfunc(a):
-        print(a)
-    """.replacingOccurrences(of: "    ", with: "\t")
-    let kw = PyDict_New()
-    let lkw = PyDict_New()
-    PyRun_String(string: code, flag: .file, globals: kw, locals: lkw)
-    PyErr_Print()
-    //pyPrint(lkw)
-    pyfunc = lkw["pyfunc"]
-    
+        
 }
-
 final class PythonSwiftCoreTests: XCTestCase {
     
     
 
     
     
-    func testExample() throws {
+    func test_PythonSwiftCore_callingPyFunction_shouldNotChangeRefCount() throws {
         initPython()
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        let a: PyPointer = 4.56786442134
-        let start_ref = _Py_REFCNT(a)
+ 
+        let pyfunc = try createPyTestFunction(name: "doubleTest", """
+            def doubleTest(a):
+                print(a)
+            """)
+        let a: PyPointer = 4.56786442134.pyPointer
+        let start_ref = a.refCount
         
         //print(_Py_REFCNT(a))
-        
+        XCTAssertNotNil(pyfunc)
         PyObject_CallOneArg(pyfunc, a)
+        
+        XCTAssertEqual(a.refCount, start_ref, "pyobject ref count should be equal after call")
+        
         a.decref()
         //print(_Py_REFCNT(a))
         XCTAssertLessThan(_Py_REFCNT(a), start_ref, "decref required after PyObject_CallOneArg")
         //XCTAssertEqual(start_start, _Py_REFCNT(a))
     }
+    
+    private func newDictionary() throws -> PyPointer {
+        let _dict = PyDict_New()
+        XCTAssertNotNil(_dict, "dictionary should not be nil")
+        return _dict.unsafelyUnwrapped
+    }
+    
+    func test_PythonSwiftCore_pyDict_shouldChangeRefCount() throws {
+        initPython()
+        let dict = try newDictionary()
+        let string = "world!!!!".pyPointer
+        let string_rc = string.refCount
+        PyDict_SetItem(dict, "hello", string)
+        XCTAssertGreaterThan(string.refCount, string_rc)
+        string.decref()
+        dict.decref()
+    }
+    
+    func test_PythonSwiftCore_pyDict_keyValues_afterGC_DidNotChange() throws {
+        initPython()
+        let dict = try newDictionary()
+        let string = "world!!!!".pyPointer
+        let string_rc = string.refCount
+        PyDict_SetItem(dict, "hello", string)
+        dict.decref()
+        XCTAssertEqual(string_rc, string.refCount)
+        XCTAssertEqual(string.refCount, 1)
+        string.decref()
+        
+    }
+    
 }

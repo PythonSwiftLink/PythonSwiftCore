@@ -5,6 +5,7 @@ import PythonLib
 #endif
 
 
+
 public class PyMethodDefWrap {
     
     public struct Flags: RawRepresentable {
@@ -46,9 +47,10 @@ public class PyMethodDefWrap {
         }
     }
     
-    let method_name: UnsafePointer<CChar>
-    let doc_string: UnsafePointer<CChar>!
-    let pyMethod: PyMethodDef
+    public let method_name: UnsafePointer<CChar>
+    public let doc_string: UnsafePointer<CChar>!
+    public var pyMethod: PyMethodDef
+    public var auto_deallocate = true
     
     public convenience init(noArgs name: String,_ function: PyCFunc) {
         self.init(name: name, flag: .NOARGS, doc: nil, meth: function)
@@ -112,25 +114,83 @@ public class PyMethodDefWrap {
     }
     
     deinit {
-        method_name.deallocate()
-        doc_string.deallocate()
+        if auto_deallocate {
+            method_name.deallocate()
+            if let doc_string = doc_string {
+                doc_string.deallocate()
+            }
+        }
     }
+}
+
+@resultBuilder
+public struct PyMethodDefBuilder {
+    static public func buildBlock(_ components: PyMethodDefWrap...) -> ([PyMethodDefWrap], UnsafeMutablePointer<PyMethodDef>) {
+        let count = components.count
+        let methods_ptr: UnsafeMutablePointer<PyMethodDef> = .allocate(capacity: count + 1)
+        
+        for (i, meth) in components.enumerated() {
+            methods_ptr[i] = meth.pyMethod
+        }
+        methods_ptr[count] = .init()
+        return (components, methods_ptr)
+    }
+    static public func buildBlock(_ components: PyMethodDefWrap...) -> [PyMethodDefWrap] {
+        let count = components.count
+        let methods_ptr: UnsafeMutablePointer<PyMethodDef> = .allocate(capacity: count + 1)
+        
+        for (i, meth) in components.enumerated() {
+            methods_ptr[i] = meth.pyMethod
+        }
+        methods_ptr[count] = .init()
+        return (components)
+    }
+    
+}
+
+public func PyModule_AddFunctions(module: PyPointer?, @PyMethodDefBuilder methods: () -> ([PyMethodDefWrap], UnsafeMutablePointer<PyMethodDef>)) -> PyModuleCustomFunctions {
+    let result = methods()
+    PyModule_AddFunctions(module, result.1 )
+    return .init(functions_pointer: result.1, functions: result.0)
+}
+
+public class PyModuleCustomFunctions {
+    
+    let functions_pointer: UnsafeMutablePointer<PyMethodDef>
+    
+    let functions: [PyMethodDefWrap]
+    
+    init(functions_pointer: UnsafeMutablePointer<PyMethodDef>, functions: [PyMethodDefWrap]) {
+        self.functions_pointer = functions_pointer
+        self.functions = functions
+    }
+    
+    deinit {
+        self.functions_pointer.deinitialize(count: functions.count + 1)
+        self.functions_pointer.deallocate()
+    }
+    
+    
 }
 
 public class PyMethodDefHandler {
     
     public let methods_ptr: UnsafeMutablePointer<PyMethodDef>
     var methods_container: [PyMethodDefWrap]
+    var alloc_count: Int
+    public var auto_deallocate = true
     
     public init(methods: [PyMethodDefWrap]) {
         
         methods_container = methods
         let count = methods.count
+        alloc_count = count
         methods_ptr = .allocate(capacity: count + 1)
         for (i, meth) in methods.enumerated() {
             methods_ptr[i] = meth.pyMethod
         }
         methods_ptr[count] = .init()
+        
     }
     
     public init(_ methods: PyMethodDefWrap... ) {
@@ -139,12 +199,26 @@ public class PyMethodDefHandler {
         methods_ptr = .allocate(capacity: count + 1)
         for (i, meth) in methods.enumerated() {
             methods_ptr[i] = meth.pyMethod
+            
         }
         methods_ptr[count] = .init()
+        alloc_count = count
+    }
+    //@PyMethodDefBuilder
+    public init(@PyMethodDefBuilder input: () -> UnsafeMutablePointer<PyMethodDef> ) {
+        methods_container = []
+        methods_ptr = input()
+        alloc_count = 0
     }
     
+    public var methods_name_pointers: [UnsafePointer<CChar>] {
+        methods_container.map(\.method_name)
+    }
     
     deinit {
-        methods_ptr.deallocate()
+        if auto_deallocate {
+            methods_ptr.deinitialize(count: alloc_count + 1)
+            methods_ptr.deallocate()
+        }
     }
 }

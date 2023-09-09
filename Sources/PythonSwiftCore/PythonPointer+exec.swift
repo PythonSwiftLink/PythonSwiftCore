@@ -63,3 +63,10 @@ public func PyRun_String(string: String, flag: PyEvalFlag, globals: PyPointer, l
         PyRun_String(str, flag.rawValue, globals, locals)
     }
 }
+
+public func PyRun_URL(url: URL, flag: PyEvalFlag, globals: PyPointer, locals: PyPointer) -> PyPointer? {
+    let string = try? String(contentsOf: url)
+    return string?.withCString { str in
+        PyRun_String(str, flag.rawValue, globals, locals)
+    }
+}
