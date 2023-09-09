@@ -123,6 +123,18 @@ final class PythonSwiftCoreTests: XCTestCase {
         return _dict.unsafelyUnwrapped
     }
     
+    private func newList() throws -> PyPointer {
+        let object = PyList_New(0)
+        XCTAssertNotNil(object, "list should not be nil")
+        return object.unsafelyUnwrapped
+    }
+    
+    private func newTuple(_ size: Int) throws -> PyPointer {
+        let object = PyTuple_New(size)
+        XCTAssertNotNil(object, "list should not be nil")
+        return object.unsafelyUnwrapped
+    }
+    
     func test_PythonSwiftCore_pyDict_shouldChangeRefCount() throws {
         initPython()
         let dict = try newDictionary()
@@ -147,4 +159,55 @@ final class PythonSwiftCoreTests: XCTestCase {
         
     }
     
+    
+    func test_PythonSwiftCore_pyList_shouldChangeRefCount() throws {
+        initPython()
+        let object = try newList()
+        let string = "hello world!!!!".pyPointer
+        let string_rc = string.refCount
+        PyList_Append(object, string)
+        XCTAssertGreaterThan(string.refCount, string_rc)
+        string.decref()
+        object.decref()
+    }
+    
+    func test_PythonSwiftCore_pyList_Values_afterGC_DidNotChange() throws {
+        initPython()
+        let object = try newList()
+        let string = "hello world!!!!".pyPointer
+        let string_rc = string.refCount
+        PyList_Append(object, string)
+        object.decref()
+        XCTAssertEqual(string_rc, string.refCount)
+        XCTAssertEqual(string.refCount, 1)
+        string.decref()
+        
+    }
+    
+    func test_PythonSwiftCore_pyTupleSetItem_shouldNotChangeRefCount() throws {
+        initPython()
+        let object = try newTuple(1)
+        let string = "hello world!!!!".pyPointer
+        let string_rc = string.refCount
+        PyTuple_SetItem(object, 0, string)
+        XCTAssertEqual(string_rc, string.refCount)
+        object.decref()
+      
+    }
+    
+    func test_PythonSwiftCore_pyTuple_Values_afterGC_DidChange() throws {
+        initPython()
+        let object = try newTuple(1)
+        let string = "hello world!!!!".pyPointer
+        let string_rc = string.refCount
+        PyTuple_SetItem(object, 0, string)
+        let after_rc = string.refCount
+        string.incref()
+        XCTAssertEqual(string.refCount, 2)
+        object.decref()
+        XCTAssertEqual(string.refCount, after_rc)
+        XCTAssertEqual(string.refCount, 1)
+        string.decref()
+        
+    }
 }
