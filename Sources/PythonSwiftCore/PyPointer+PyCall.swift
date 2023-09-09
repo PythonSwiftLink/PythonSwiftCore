@@ -17,6 +17,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction() throws -> PyPointer {
         guard let result = PyObject_CallNoArgs(self) else {
             PyErr_Print()
@@ -48,6 +49,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A>(_ a: A) throws -> PyPointer where 
     	A: PyEncodable {
         let arg = a.pyPointer
@@ -94,6 +96,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B>(_ a: A, _ b: B) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable {
@@ -158,6 +161,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B, C>(_ a: A, _ b: B, _ c: C) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
@@ -234,6 +238,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B, C, D>(_ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
@@ -322,6 +327,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B, C, D, E>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
@@ -422,6 +428,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B, C, D, E, F>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
@@ -534,6 +541,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B, C, D, E, F, G>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
@@ -658,6 +666,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B, C, D, E, F, G, H>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
@@ -794,6 +803,7 @@ extension PyPointer {
         return rtn
     }
 
+    @_disfavoredOverload
     public func callAsFunction<A, B, C, D, E, F, G, H, I>(_ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
     	A: PyEncodable, 
     	B: PyEncodable, 
@@ -901,6 +911,7 @@ public func PythonCall < R>(call: PyPointer) throws -> R where
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall(call: PyPointer) throws -> PyPointer {
     guard let result = PyObject_CallNoArgs(call) else {
         PyErr_Print()
@@ -932,6 +943,7 @@ public func PythonCall<A, R>(call: PyPointer, _ a: A) throws -> R where
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A>(call: PyPointer, _ a: A) throws -> PyPointer where 
 	A: PyEncodable {
     let arg = a.pyPointer
@@ -978,6 +990,7 @@ public func PythonCall<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -> R whe
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable {
@@ -1042,6 +1055,7 @@ public func PythonCall<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: C) thro
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -1118,6 +1132,7 @@ public func PythonCall<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ c: C, _
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -1206,6 +1221,7 @@ public func PythonCall<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B, _ c: C
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -1306,6 +1322,7 @@ public func PythonCall<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b: B, _ c
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -1418,6 +1435,7 @@ public func PythonCall<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _ b: B, 
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -1542,6 +1560,7 @@ public func PythonCall<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A, _ b: 
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -1678,6 +1697,7 @@ public func PythonCall<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a: A, _ 
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCall<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -1785,6 +1805,7 @@ public func PythonCallWithGil < R>(call: PyPointer) throws -> R where
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil(call: PyPointer) throws -> PyPointer {
     _ = PyGILState_Ensure()
     guard let result = PyObject_CallNoArgs(call) else {
@@ -1821,6 +1842,7 @@ public func PythonCallWithGil<A, R>(call: PyPointer, _ a: A) throws -> R where
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A>(call: PyPointer, _ a: A) throws -> PyPointer where 
 	A: PyEncodable {
     _ = PyGILState_Ensure()
@@ -1872,6 +1894,7 @@ public func PythonCallWithGil<A, B, R>(call: PyPointer, _ a: A, _ b: B) throws -
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B>(call: PyPointer, _ a: A, _ b: B) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable {
@@ -1941,6 +1964,7 @@ public func PythonCallWithGil<A, B, C, R>(call: PyPointer, _ a: A, _ b: B, _ c: 
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B, C>(call: PyPointer, _ a: A, _ b: B, _ c: C) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -2022,6 +2046,7 @@ public func PythonCallWithGil<A, B, C, D, R>(call: PyPointer, _ a: A, _ b: B, _ 
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B, C, D>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -2115,6 +2140,7 @@ public func PythonCallWithGil<A, B, C, D, E, R>(call: PyPointer, _ a: A, _ b: B,
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B, C, D, E>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -2220,6 +2246,7 @@ public func PythonCallWithGil<A, B, C, D, E, F, R>(call: PyPointer, _ a: A, _ b:
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B, C, D, E, F>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -2337,6 +2364,7 @@ public func PythonCallWithGil<A, B, C, D, E, F, G, R>(call: PyPointer, _ a: A, _
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B, C, D, E, F, G>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -2466,6 +2494,7 @@ public func PythonCallWithGil<A, B, C, D, E, F, G, H, R>(call: PyPointer, _ a: A
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B, C, D, E, F, G, H>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 
@@ -2607,6 +2636,7 @@ public func PythonCallWithGil<A, B, C, D, E, F, G, H, I, R>(call: PyPointer, _ a
     return rtn
 }
 
+@_disfavoredOverload
 public func PythonCallWithGil<A, B, C, D, E, F, G, H, I>(call: PyPointer, _ a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ f: F, _ g: G, _ h: H, _ i: I) throws -> PyPointer where 
 	A: PyEncodable, 
 	B: PyEncodable, 

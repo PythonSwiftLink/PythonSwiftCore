@@ -12,16 +12,16 @@ import PythonLib
 //    }
 //    
 //}
-
-extension PyPointer : PyDecodable {
-
-    public init(object: PyPointer) throws {
-        self = object.xINCREF
-    }
-
-
-}
-
+//
+//extension PyPointer : PyDecodable {
+//
+//    public init(object: PyPointer) throws {
+//        self = object.xINCREF
+//    }
+//
+//
+//}
+//
 extension Data: PyDecodable {
     
     public init(object: PyPointer) throws {
