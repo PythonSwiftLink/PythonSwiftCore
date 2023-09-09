@@ -7,3 +7,6 @@ Sources/PythonSwiftCore/.DS_Store
 Sources/PythonSwiftCore/PySwiftObject/.DS_Store
 .DS_Store
 Sources/.DS_Store
+Package.resolved
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.swiftpm/xcode/package.xcworkspace/xcuserdata/musicmaker.xcuserdatad/UserInterfaceState.xcuserstate

@@ -36,9 +36,8 @@ private func initPython() {
         resourcePath = pystdlib.path
     }
     print(resourcePath)
-    print(try! FileManager.default.contentsOfDirectory(atPath: resourcePath))
     var config: PyConfig = .init()
-    print("Configuring isolated Python...")
+    print("Configuring isolated Python for Testing...")
     PyConfig_InitIsolatedConfig(&config)
     
     // Configure the Python interpreter:
