@@ -21,7 +21,8 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         //.package(path: "../PythonLib"),
         .package(url: "https://github.com/PythonSwiftLink/PythonLib", from: "0.1.0"),
-        //.package(path: "../PythonLib")
+        .package(url: "https://github.com/PythonSwiftLink/PythonTestSuite", branch: "master"),
+        //.package(path: "../PythonTestSuite")
         //.package(url: "https://github.com/PythonSwiftLink/PythonLib-iOS", branch: "main")
     ],
     
@@ -48,10 +49,14 @@ let package = Package(
 //        )
         .testTarget(
             name: "PythonSwiftCoreTests",
-            dependencies: ["PythonSwiftCore","PythonLib"],
-            resources: [
-                .copy("python_stdlib")
+            dependencies: [
+                "PythonSwiftCore",
+                "PythonLib",
+                "PythonTestSuite"
             ]
+//            resources: [
+//                .copy("python_stdlib")
+//            ]
         ),
         
     ]
