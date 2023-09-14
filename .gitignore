@@ -10,3 +10,4 @@ Sources/.DS_Store
 Package.resolved
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 .swiftpm/xcode/package.xcworkspace/xcuserdata/musicmaker.xcuserdatad/UserInterfaceState.xcuserstate
+.swiftpm/xcode/package.xcworkspace/xcuserdata/codebuilder.xcuserdatad/UserInterfaceState.xcuserstate
