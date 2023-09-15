@@ -16,7 +16,7 @@ import PythonLib
 extension PyPointer : PyDecodable {
 
     public init(object: PyPointer) throws {
-        self = object
+		self = object.xINCREF
     }
 
 
