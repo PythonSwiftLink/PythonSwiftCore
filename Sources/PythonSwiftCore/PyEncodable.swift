@@ -56,7 +56,7 @@ extension PyPointer : PyEncodable {
     }
     
     public var pyPointer: PyPointer {
-        xINCREF
+        self
     }
     
 }
