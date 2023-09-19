@@ -4,12 +4,12 @@ import PythonLib
 #endif
 
 
-    func optionalPyPointer<T: PyEncodable>(_ v: T?) -> PyPointer {
-        if let this = v {
-            return this.pyPointer
-        }
-        return .PyNone
-    }
+public func optionalPyPointer<T: PyEncodable>(_ v: T?) -> PyPointer {
+	if let this = v {
+		return this.pyPointer
+	}
+	return .PyNone
+}
 
 
 
