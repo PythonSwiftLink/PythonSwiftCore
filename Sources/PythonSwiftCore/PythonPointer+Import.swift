@@ -1,14 +1,6 @@
-//
-//  PythonPointer+Import.swift
-//  cam_test
-//
-//  Created by MusicMaker on 11/06/2022.
-//
-
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 private var importedModules = [String: PythonPointer]()
 private var importedModulesItems = [String: PythonPointer]()

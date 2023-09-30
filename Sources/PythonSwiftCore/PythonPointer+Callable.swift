@@ -1,9 +1,6 @@
-
-
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 extension PythonPointer {
     @inlinable public func callAsFunction_<R: PyDecodable>(_ args: [PyEncodable]) throws -> R {

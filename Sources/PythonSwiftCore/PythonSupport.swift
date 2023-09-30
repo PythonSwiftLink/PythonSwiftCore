@@ -1,15 +1,8 @@
-//
-//  PythonSupport.swift
-//  metacam
-//
-//  Created by MusicMaker on 23/02/2022.
-//
 
 import Foundation
 import CoreGraphics
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 extension String {
 //    @inlinable public var python_str: PythonPointer { withCString(PyUnicode_FromString) }

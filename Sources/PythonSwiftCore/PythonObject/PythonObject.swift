@@ -1,14 +1,6 @@
-//
-//  PythonObject_New.swift
-//  metacam
-//
-//  Created by MusicMaker on 01/03/2022.
-//
-
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 
 public class PythonPointerAutoRelease {

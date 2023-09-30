@@ -1,14 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by MusicMaker on 10/10/2022.
-//
-
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 public enum PyEvalFlag: Int32 {
     case single = 256

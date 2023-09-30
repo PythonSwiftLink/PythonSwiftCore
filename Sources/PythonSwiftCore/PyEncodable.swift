@@ -1,7 +1,6 @@
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 
 public func optionalPyPointer<T: PyEncodable>(_ v: T?) -> PyPointer {

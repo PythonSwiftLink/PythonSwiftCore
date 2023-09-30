@@ -1,14 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by MusicMaker on 10/09/2022.
-//
-
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 
 

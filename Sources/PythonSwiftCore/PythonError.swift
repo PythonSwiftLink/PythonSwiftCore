@@ -1,15 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by MusicMaker on 12/10/2022.
-//
-
 import Foundation
-
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 //public func PyErr_Printer() -> (type: PyPointer, value: PyPointer, tb: PyPointer) {
 //    var type: PyPointer = nil

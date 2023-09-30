@@ -1,6 +1,6 @@
-#if BEEWARE
+import Foundation
 import PythonLib
-#endif
+import PythonTypeAlias
 
 extension Collection where Element == PyConvertible {
     public var list_object: PythonPointer {

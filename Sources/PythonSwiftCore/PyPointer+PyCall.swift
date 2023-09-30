@@ -1,7 +1,6 @@
-
-#if BEEWARE
+import Foundation
 import PythonLib
-#endif
+import PythonTypeAlias
 
 import Foundation
 extension PyPointer {

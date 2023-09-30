@@ -1,7 +1,6 @@
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 extension String {
     var object: PythonPointerU { PyUnicode_FromString(self) }

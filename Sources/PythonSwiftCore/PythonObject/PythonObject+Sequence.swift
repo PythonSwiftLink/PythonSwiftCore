@@ -1,15 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by MusicMaker on 08/12/2022.
-//
-
 import Foundation
-
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 class PyArray<T: PyConvertible>: PySequenceProtocol {
     

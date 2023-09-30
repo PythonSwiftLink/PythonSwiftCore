@@ -1,7 +1,7 @@
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
+
 extension PythonPointer {
 
 //    @inlinable

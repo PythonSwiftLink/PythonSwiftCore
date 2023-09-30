@@ -1,14 +1,6 @@
-//
-//  PythonSequence.swift
-//  metacam
-//
-//  Created by MusicMaker on 27/02/2022.
-//
-
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 
 public struct PySequenceIterator: IteratorProtocol {

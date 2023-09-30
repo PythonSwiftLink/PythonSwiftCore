@@ -1,9 +1,6 @@
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
-
-import Foundation
+import PythonTypeAlias
 
 
 @inlinable
@@ -123,12 +120,14 @@ public func UnPackPyPointer<T: AnyObject>(with type: PythonType, from self: PyPo
 @inlinable
 public func UnPackPyPointer<T: AnyObject>(with type: PythonType, from self: PyPointer?) throws -> [T]? {
     guard let self = self else { throw PythonError.notPySwiftObject }
+	if self.isNone { return nil }
     return try self.map { try UnPackPyPointer(with: type, from: $0) }
 }
 
 @inlinable
 public func UnPackPyPointer<T: AnyObject>(with type: PythonType, from self: PyPointer?, as: T.Type) throws -> [T]? {
     guard let self = self else { throw PythonError.notPySwiftObject }
+	if self.isNone { return nil }
     return try self.map { try UnPackPyPointer(with: type, from: $0) }
 }
 

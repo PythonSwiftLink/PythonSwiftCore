@@ -1,15 +1,6 @@
-//
-//  File.swift
-//  
-//
-//  Created by MusicMaker on 26/09/2022.
-//
-
 import Foundation
-
-#if BEEWARE
 import PythonLib
-#endif
+import PythonTypeAlias
 
 extension PythonPointer: ExpressibleByUnicodeScalarLiteral {
     public typealias UnicodeScalarLiteralType = String

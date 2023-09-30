@@ -1,9 +1,6 @@
-
 import Foundation
-#if BEEWARE
 import PythonLib
-#endif
-
+import PythonTypeAlias
 
 
 public protocol PyEncodable {
